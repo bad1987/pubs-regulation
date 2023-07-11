@@ -1,0 +1,4 @@
+.venv
+.env
+.env.cscart
+**/__pycache__/
