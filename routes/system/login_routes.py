@@ -4,19 +4,15 @@ from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from rich.console import Console
 from fastapi.encoders import jsonable_encoder
-from App.core.auth.Configs.OAuth2PasswordBearerWithCookie import OAuth2PasswordBearerWithCookie
-from App.core.auth.Configs.Settings import Settings
-from App.core.use_cases.authentication_use_case import AuthenticationUsecase
-from App.output_ports.db.Connexion import SessionLocal
-from App.output_ports.models.Models import User
-from typing import Dict, List, Optional
-import i18n
-from App.Http.Schema.UserSchema import UserSchema
-
-from App.core.auth import LoginController
+from fastapi.security import OAuth2PasswordRequestForm
 
 from dotenv import load_dotenv
 import os
+from auth.Configs import Settings
+from auth.auth import create_access_token, get_token, verify_token
+
+from dependencies.db_dependencies import get_db
+from models.users import User
 
 load_dotenv()
 secure_cookie = os.getenv('COOKIE_SECURE')
@@ -26,55 +22,43 @@ if secure_cookie.lower() == 'true':
 else:
     secure_cookie = False
 
-# instantiate a new translator class
-translator = i18n.Translator('languages/')
-
 route = APIRouter(prefix='', tags=['Handle account users'], include_in_schema=False)
 # templates = Jinja2Templates(directory="templates")
 console = Console()
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
+@route.post("/login")
+def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # Authenticate the user
+    user = User.authenticate(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid email or password")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    # Create an access token for the user
+    access_token = create_access_token({"sub": user.email})
 
+    # Set the access token as an HTTP-only cookie
+    max_age = Settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    response.set_cookie(key=Settings.COOKIE_NAME, value=access_token, domain='localhost', path='/', max_age=max_age, samesite='None', secure=secure_cookie)
 
-@route.post("token")
-def login_for_access_token(
-    request: Request,
-    form_data: dict,
-    db: Session = Depends(get_db)
-) -> Dict[str, str]:
-    
-    auth_usecase = AuthenticationUsecase(db)
-    result = auth_usecase.login_access_token(request=request, form_data=form_data)
-
-    return result
-
-@route.post("/auth/login")
-async def login_post(request: Request, response: Response, db: Session = Depends(get_db)):
-    credentials = json.loads(await request.body())
- 
-    res = login_for_access_token(request, credentials, db)
-    res.update({'expired_at': Settings.ACCESS_TOKEN_EXPIRE_MINUTES})
-    res.update({'cookie_name': Settings.COOKIE_NAME})
-
-    # setting the cookie
-    max_age = res['expired_at'] * 60
-    response.set_cookie(Settings.COOKIE_NAME, res[Settings.COOKIE_NAME], domain='localhost', path='/', max_age=max_age, samesite='None', secure=secure_cookie)
-    return jsonable_encoder(res)
+    # Return the access token
+    return {Settings.COOKIE_NAME: access_token, "token_type": "bearer"}
 
 # --------------------------------------------------------------------------
 # Logout
 # --------------------------------------------------------------------------
-@route.delete("/auth/logout")
+@route.delete("/logout")
 def logout(request: Request, response: Response):
     response.delete_cookie(Settings.COOKIE_NAME, domain='localhost', path='/', samesite='None', secure=secure_cookie)
     return {"message": "Logged out"}
+
+def get_user_from_token(token: str = Depends(get_token), db: Session = Depends(get_db)):
+    # Decode the access token to get the user's email
+    email = verify_token(token)
+    # Retrieve the user from the database
+    user = User.get_user_by_email(db, email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 @route.get('/auth/refresh')
 async def refresh_token(request: Request, db: Session = Depends(get_db)):
@@ -100,19 +84,3 @@ async def forgot_password(request: Request, db_local: Session = Depends(get_db))
 async def reset_password(token: str, request: Request, db_local: Session = Depends(get_db)):
     auth_usecase = AuthenticationUsecase(db_local)
     return auth_usecase.reset_password(request=request, token=token)
-
-
-@route.get("/login_as_vendor/{vendor_id}")
-def login_as_vendor(request: Request, response: Response, vendor_id: int, db: Session = Depends(get_db)):
-    response.delete_cookie(Settings.COOKIE_NAME, domain='localhost', path='/', samesite='None', secure=secure_cookie)
-    
-    auth_usecase = AuthenticationUsecase(db)
-    res = auth_usecase.login_access_token_by_vendor(request, vendor_id)
-
-    res.update({'expired_at': Settings.ACCESS_TOKEN_EXPIRE_MINUTES})
-    res.update({'cookie_name': Settings.COOKIE_NAME})
-
-    # setting the cookie
-    max_age = res['expired_at'] * 60
-    response.set_cookie(Settings.COOKIE_NAME, res[Settings.COOKIE_NAME], domain='localhost', path='/', max_age=max_age, samesite='None', secure=secure_cookie)
-    return jsonable_encoder(res)
