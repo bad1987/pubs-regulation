@@ -53,8 +53,9 @@ class ApiSetting(BaseModel):
 class UserCreateSchema(BaseModel):
     username: str
     email: EmailStr
+    password: str
     status: UserStatusEnum
-    permissions: list | None = None
+    permissions: List[int] = []
     roles: UserRoleEnum
 
 

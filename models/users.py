@@ -31,6 +31,10 @@ class User(Base):
         return db.query(cls).filter(cls.id == user_id).first()
 
     @classmethod
+    def get_user_by_username(cls, db: Session, username: str):
+        return db.query(cls).filter(cls.username == username).first()
+
+    @classmethod
     def get_user_by_email(cls, db: Session, email: str):
         return db.query(cls).filter(cls.email == email).first()
 
