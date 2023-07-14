@@ -135,6 +135,10 @@ class User_Permission(Base):
     @classmethod
     def get(cls, db: Session, user_permission_id: int):
         return db.query(cls).filter(cls.id == user_permission_id).first()
+    
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
 
     @classmethod
     def create(cls, db: Session, user_permission):
