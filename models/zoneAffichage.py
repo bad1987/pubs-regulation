@@ -16,3 +16,4 @@ class ZoneAffichage(Base):
 
      # Relation avec la table QuartierAffichage
      quartiers = relationship("QuartierAffichage", back_populates="zone_affichage")
+     

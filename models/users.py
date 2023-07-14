@@ -25,6 +25,7 @@ class User(Base):
 
     permissions = relationship("Permission", secondary='user_permissions', lazy='joined')
 
+
     @classmethod
     def get(cls, db: Session, user_id: int):
         return db.query(cls).filter(cls.id == user_id).first()
