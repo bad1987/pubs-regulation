@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
+from sqlalchemy.orm import Session
 
 class QuartierAffichage(Base):
     __tablename__ = "QuartierAffichage"
@@ -31,3 +32,28 @@ class QuartierAffichage(Base):
 
     # Relation avec la table EmplacementAffichage
     emplacements = relationship("EmplacementAffichage", back_populates="quartier")
+
+    # get an instance of the class
+    @classmethod
+    def get(cls, db: Session, quartierAffichage_id: int):
+        return db.query(cls).filter(cls.IDQuartierAffichage == quartierAffichage_id).first()
+
+    # create an instance of the class
+    @classmethod
+    def create(cls, db: Session, quartierAffichage):
+        db.add(quartierAffichage)
+        db.commit()
+        db.refresh(quartierAffichage)
+        return quartierAffichage
+    
+    # delete an instance of the class
+    @classmethod
+    def delete(cls, db: Session, quartierAffichage_id: int):
+        quartierAffichage = cls.get(db, quartierAffichage_id)
+        if quartierAffichage:
+            db.delete(quartierAffichage)
+            db.commit()
+            return True
+        return False
+    
+    
