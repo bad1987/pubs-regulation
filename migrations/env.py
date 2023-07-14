@@ -22,8 +22,8 @@ if config.config_file_name is not None:
 import sys
 sys.path.append("..")
 # from Database import Connexion, Models
-from App.output_ports.db import Connexion
-from App.output_ports.models import Models
+from db import Connexion
+from models import users,campagne, dispositifs, docentete, docligne, emplacementAffichage, enseignes,panneauAffiche,pieces,produitConcession,quartierAffichage,reglements,repartitionFrais,repDoc,taxes,taxTiers,taxTiersDocEntete,tiers,typeDispositif,typeEnseigne,typePanneau,zoneAffichage
 
 target_metadata = Connexion.Base.metadata
 

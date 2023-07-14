@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, Binary, ForeignKey
+from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
+from sqlalchemy import LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
@@ -31,7 +32,7 @@ class Tiers(Base):
     EmailTiers = Column(String(65))
 
     # Logo du tiers, cas  des régisseurs
-    Logo = Column(Binary)
+    Logo = Column(LargeBinary)
 
     # Sigle
     SigleTiers = Column(String(2))

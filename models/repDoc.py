@@ -5,6 +5,8 @@ from db.Connexion import Base
 class RepDoc(Base):
     __tablename__ = "RepDoc"
 
+    # Clé primaire, identifiant unique de la table Taxe
+    IDRepDoc = Column(Integer, primary_key=True)
     # Montant issue de la répartition
     MontantReparti = Column(Float)
 
