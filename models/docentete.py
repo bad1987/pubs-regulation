@@ -35,9 +35,6 @@ class DocEntete(Base):
     # Clé étrangère, identifiant unique de la table Tiers
     IDTiers = Column(Integer, ForeignKey("TIERS.IDTiers"))
 
-    # clé étrangère, clé unique de la table Tiers 
-    CodeTiers = Column(String(9), ForeignKey("TIERS.CodeTiers"))
-
     # Relation avec la table Tiers
     tiers = relationship("TIERS", back_populates="documents")
     

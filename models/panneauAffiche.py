@@ -26,9 +26,6 @@ class PanneauAffich(Base):
     # Clé etrangère, identifiant unique de la table TypePanneau
     IDTypePanneau = Column(Integer, ForeignKey("TypePanneau.IDTypePanneau"))
 
-    # Clé étrangère, clé unique de la table TypePanneau 
-    CodeTypePanneau = Column(String(6), ForeignKey("TypePanneau.CodeTypePanneau"))
-
     # Relation avec la table TypePanneau
     type_panneau = relationship("TypePanneau", back_populates="panneaux")
 

@@ -20,8 +20,5 @@ class Piece(Base):
     # Clé étrangère, identifiant unique de la table Règlement
     IDReglement = Column(Integer, ForeignKey("Reglement.IDReglement"))
 
-    # Clé étrangère, clé unique de la table Règlement
-    NumReglt = Column(String(9), ForeignKey("Reglement.NumReglt"))
-
     # Relation avec la table Reglement
     reglement = relationship("Reglement", back_populates="pieces")

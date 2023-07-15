@@ -13,9 +13,6 @@ class RepDoc(Base):
     # Clé étrangère identifiant unique de la table DocEntete associé
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
 
-    # Clé étrangère, clé unique de la table DocEntente associé
-    NumDocEntete = Column(String(9), ForeignKey("DocEntete.NumDocEntete"))
-
     # Clé étrangère, identifiant unique de la tables Repartition des frais
     IDRepartitionFrais = Column(Integer, ForeignKey("RepartitionFrais.IDRepartitionFrais"))
 

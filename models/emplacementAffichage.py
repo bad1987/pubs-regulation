@@ -14,9 +14,6 @@ class EmplacementAffichage(Base):
     # Clé étrangère, identifiant unique de la table Quartier
     IDQuartierAffichage = Column(Integer, ForeignKey("Quartier.IDQuartierAffichage"))
 
-    # Clé etrangère, clé unique de la table QuartierAffich
-    NomQuartier = Column(String(25), ForeignKey("Quartier.NomQuartier"))
-
     # Relation avec la table Quartier
     quartier = relationship("Quartier", back_populates="emplacements")
 

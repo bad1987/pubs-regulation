@@ -26,22 +26,13 @@ class DocLigne(Base):
     # Clé etrangère, identifiant unique du Document entete
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
 
-    # Clé étrangère, clé unique de la table DocEntete
-    NumDocEntete = Column(String(9), ForeignKey("DocEntete.NumDocEntete"))
-
     # Clé étrangère, identifiant unique de la table CampagnePub
     IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub"))
 
-    # Clé étrangère, clé unique de la table CampagnePub
-    CodeCampagne = Column(String(9), ForeignKey("CampagnePub.CodeCampagne"))
-
     # Clé étrangère, identifiant unique de la table Produit    
-    IDProduitConcession = Column(Integer, ForeignKey("Produit.IDProduitConcession"))
-
-    # Clé étrangère, clé unique de la table Produit
-    CodeProduitConcession = Column(String(6), ForeignKey("Produit.CodeProduitConcession"))
+    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession"))
 
     # Relations avec les autres tables
     doc_entete = relationship("DocEntete", back_populates="lignes")
     campagne_pub = relationship("CampagnePub", back_populates="lignes")
-    produit = relationship("Produit", back_populates="lignes")
+    produit = relationship("ProduitConcession", back_populates="lignes")

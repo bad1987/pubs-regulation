@@ -29,9 +29,6 @@ class Reglement(Base):
     # Clé étrangère, identifiant unique du DocEntete associé
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
 
-    # Clé etrangère, clé unique du DocEntete
-    NumDocEntete = Column(String(9), ForeignKey("DocEntete.NumDocEntete"))
-
     # Relation avec la table DocEntete
     doc_entete = relationship("DocEntete", back_populates="reglements")
 

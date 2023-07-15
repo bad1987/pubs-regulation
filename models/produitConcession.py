@@ -17,9 +17,6 @@ class ProduitConcession(Base):
     # Clé étrangère, identifiant unique de la table TypDispositif
     IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub"))
 
-    # clé étrangère, clé unique de la table typeDispositif
-    CodeDispositifPub = Column(String(6), ForeignKey("DispositifPub.CodeDispositifPub"))
-
     # Relation avec la table DispositifPub
     dispositif_pub = relationship("DispositifPub", back_populates="produits")
 

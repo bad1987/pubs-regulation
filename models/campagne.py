@@ -24,10 +24,7 @@ class CampagnePub(Base):
     SurfaceDispoitif = Column(Float)
 
     # Clé étrangère identifiant unique de la table Produit
-    IDProduitConcession = Column(Integer, ForeignKey("Produit.IDProduitConcession"))
-
-    # Clé étrangère clé unique ProduitConcession
-    CodeProduitConcession = Column(String(6), ForeignKey("Produit.CodeProduitConcession"))
+    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession"))
 
     # Relation avec la table Produit
-    produit = relationship("Produit", back_populates="campagnes")
+    produit = relationship("ProduitConcession", back_populates="campagnes")

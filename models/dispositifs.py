@@ -23,26 +23,14 @@ class DispositifPub(Base):
     # Clé etrangère identifiant unique de la table TypeDispositif
     IDTypeDispositif = Column(Integer, ForeignKey("TypeDispositif.IDTypeDispositif"))
 
-    # Clé unique table code dispositif
-    CodeTypeDispositif = Column(String(6), ForeignKey("TypeDispositif.CodeTypeDispositif"))
-
     # Clé étrangère table Enseigne
     IDEnseigne = Column(Integer, ForeignKey("Enseigne.IDEnseigne"))
-
-    # Clé étrangère, Clé unique table Enseigne
-    CodeEnseigne = Column(String(6), ForeignKey("Enseigne.CodeEnseigne"))
 
     # Clé étrangère table Panneau d’affichage
     IDPanneauAffich = Column(Integer, ForeignKey("PanneauAffich.IDPanneauAffich"))
 
-    # Clé étrangère, Clé unique table PanneauAffichage
-    CodePanneau = Column(String(15), ForeignKey("PanneauAffich.CodePanneau"))
-
     # Clé étrangère, identifiant unique de la table TIERS
     IDTiers = Column(Integer, ForeignKey("TIERS.IDTiers"))
-
-    # Clé étrangère, clé unique de la table Tiers
-    CodeTiers = Column(String(9), ForeignKey("TIERS.CodeTiers"))
 
     # Clé étrangère, identifiant unique de la table EmplacementAffichage
     IDEmplacementAffichage = Column(Integer, ForeignKey("EmplacementAffichage.IDEmplacementAffichage"))

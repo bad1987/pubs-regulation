@@ -26,9 +26,6 @@ class Enseigne(Base):
     # Clé etrangère, identifiant unique de la table typeEnseigne
     IDTypeEnseigne = Column(Integer, ForeignKey("TypeEnseigne.IDTypeEnseigne"))
 
-    # Clé étrangère, clé unique de la table TypeEnseigne 
-    CodeTypeEnseigne = Column(String(9), ForeignKey("TypeEnseigne.CodeTypeEnseigne"))
-
     # Relation avec la table TypeEnseigne
     type_enseigne = relationship("TypeEnseigne", back_populates="enseignes")
 

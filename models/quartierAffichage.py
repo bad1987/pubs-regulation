@@ -24,9 +24,6 @@ class QuartierAffichage(Base):
     # Clé étrangère, Identifiant unique de la table ZoneAffichage 
     IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage"))
 
-    # clé étrangère, clé unique de la table ZoneAffichage
-    CodeZone = Column(String(6), ForeignKey("ZoneAffichage.CodeZone"))
-
     # Relation avec la table ZoneAffichage
     zone_affichage = relationship("ZoneAffichage", back_populates="quartiers")
 
