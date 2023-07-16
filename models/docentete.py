@@ -33,10 +33,10 @@ class DocEntete(Base):
     PenalitesDoc = Column(Integer)
 
     # Clé étrangère, identifiant unique de la table Tiers
-    IDTiers = Column(Integer, ForeignKey("TIERS.IDTiers"))
+    IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers"))
 
     # Relation avec la table Tiers
-    tiers = relationship("TIERS", back_populates="documents")
+    tiers = relationship("Tiers", back_populates="documents")
     
     # Relation avec la table DocLigne
     lignes = relationship("DocLigne", back_populates="doc_entete")

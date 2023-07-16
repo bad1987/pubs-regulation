@@ -30,7 +30,7 @@ class DispositifPub(Base):
     IDPanneauAffich = Column(Integer, ForeignKey("PanneauAffich.IDPanneauAffich"))
 
     # Clé étrangère, identifiant unique de la table TIERS
-    IDTiers = Column(Integer, ForeignKey("TIERS.IDTiers"))
+    IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers"))
 
     # Clé étrangère, identifiant unique de la table EmplacementAffichage
     IDEmplacementAffichage = Column(Integer, ForeignKey("EmplacementAffichage.IDEmplacementAffichage"))
