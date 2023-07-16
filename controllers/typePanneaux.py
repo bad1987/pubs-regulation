@@ -32,7 +32,7 @@ class TypePanneauController:
     def create(cls, db: Session, type_panneau: TypePanneauCreateSchema) -> TypePanneauSchema:
         try:
             # check if CodeTypePanneau is unique
-            if db.query(TypePanneau).filter_by(CodeTypePanneau=type_panneau.CodeTypePanneau).first():
+            if TypePanneau.getByCode(db, type_panneau.CodeTypePanneau):
                 raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypePanneau already exists")
             type_panneau = TypePanneau.create(db, type_panneau)
             return type_panneau
