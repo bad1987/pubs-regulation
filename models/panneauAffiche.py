@@ -4,6 +4,7 @@ from db.Connexion import Base
 from models.dispositifs import DispositifPub
 
 class PanneauAffich(DispositifPub):
+    __tablename__ = "PanneauAffich"
     
     # Clé primaire, identifiant unique de la table
     IDPanneauAffich = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub"), primary_key=True)
@@ -28,7 +29,7 @@ class PanneauAffich(DispositifPub):
 
     # Mapper argument for inheritance
     __mapper_args__ = {
-        "polymorphic_identity": "panneau_affich"
+        "polymorphic_identity": "PanneauAffich"
     }
 
     # Relation avec la table TypePanneau

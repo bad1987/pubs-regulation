@@ -66,4 +66,3 @@ class TypeEnseigneController:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
-    

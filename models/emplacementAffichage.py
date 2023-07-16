@@ -18,4 +18,4 @@ class EmplacementAffichage(Base):
     quartier = relationship("QuartierAffichage", back_populates="emplacements", cascade="all, delete")
 
     # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="emplacement_affichage", cascade="save-up, merge")
+    dispositifs = relationship("DispositifPub", back_populates="emplacement_affichage", cascade="save-update, merge")

@@ -38,7 +38,7 @@ class Tiers(Base):
     SigleTiers = Column(String(2))
 
     # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="tiers", lazy="joined", cascade="save-and-update, merge")
+    dispositifs = relationship("DispositifPub", back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table DocEntete
     documents = relationship("DocEntete", back_populates="tiers")

@@ -4,6 +4,7 @@ from db.Connexion import Base
 from models.dispositifs import DispositifPub
 
 class Enseigne(DispositifPub):
+    __tablename__ = "Enseigne"
     
     # Clé primaire, identifiant unique
     IDEnseigne = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub"), primary_key=True)
@@ -25,7 +26,7 @@ class Enseigne(DispositifPub):
 
     # Mapper argument for inheritance
     __mapper_args__ = {
-        "polymorphic_identity": "enseigne"
+        "polymorphic_identity": "Enseigne"
     }
 
     # Relation avec la table TypeEnseigne

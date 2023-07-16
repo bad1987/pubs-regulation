@@ -35,7 +35,8 @@ class DispositifPub(Base):
     # Mapper argument for inheritance
     __mapper_args__ = {
         "polymorphic_identity": "dispositif_pub",
-        "polymorphic_on": type
+        "polymorphic_on": type,
+        "with_polymorphic": "*"
     }
 
     # Relations avec les autres tables
