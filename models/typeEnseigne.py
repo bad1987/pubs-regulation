@@ -16,4 +16,4 @@ class TypeEnseigne(Base):
     LibelleTypeEnseigne = Column(String(64))
 
     # Relation avec la table Enseigne
-    enseignes = relationship("Enseigne", back_populates="type_enseigne")
+    enseignes = relationship("Enseigne", back_populates="type_enseigne", lazy="joined", cascade="all, delete")

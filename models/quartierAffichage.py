@@ -22,13 +22,13 @@ class QuartierAffichage(Base):
     ArrondissementQaurtier = Column(String(65))
 
     # Clé étrangère, Identifiant unique de la table ZoneAffichage 
-    IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage"))
+    IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage", ondelete="CASCADE"))
 
     # Relation avec la table ZoneAffichage
     zone_affichage = relationship("ZoneAffichage", back_populates="quartiers")
 
     # Relation avec la table EmplacementAffichage
-    emplacements = relationship("EmplacementAffichage", back_populates="quartier")
+    emplacements = relationship("EmplacementAffichage", back_populates="quartier", cascade="all, delete")
 
     # get an instance of the class
     @classmethod

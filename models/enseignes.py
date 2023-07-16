@@ -1,15 +1,12 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
+from models.dispositifs import DispositifPub
 
-class Enseigne(Base):
-    __tablename__ = "Enseigne"
-
+class Enseigne(DispositifPub):
+    
     # Clé primaire, identifiant unique
-    IDEnseigne = Column(Integer, primary_key=True)
-
-    # Clé unique, Code Enseigne
-    CodeEnseigne = Column(String(6), nullable=False, unique=True)
+    IDEnseigne = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub"), primary_key=True)
 
     # Surface totale de l’Enseigne
     SurfaceEnseigne = Column(Float)
@@ -24,10 +21,12 @@ class Enseigne(Base):
     UniteFacturationEnseigne = Column(String(13))
 
     # Clé etrangère, identifiant unique de la table typeEnseigne
-    IDTypeEnseigne = Column(Integer, ForeignKey("TypeEnseigne.IDTypeEnseigne"))
+    IDTypeEnseigne = Column(Integer, ForeignKey("TypeEnseigne.IDTypeEnseigne", ondelete="CASCADE"))
+
+    # Mapper argument for inheritance
+    __mapper_args__ = {
+        "polymorphic_identity": "enseigne"
+    }
 
     # Relation avec la table TypeEnseigne
-    type_enseigne = relationship("TypeEnseigne", back_populates="enseignes")
-
-    # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="enseigne")
+    type_enseigne = relationship("TypeEnseigne", back_populates="enseignes", lazy="joined", cascade="all, delete")

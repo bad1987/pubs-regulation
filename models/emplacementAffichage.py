@@ -12,10 +12,10 @@ class EmplacementAffichage(Base):
     CodeEmplacement = Column(String(3), unique=True)
 
     # Clé étrangère, identifiant unique de la table Quartier
-    IDQuartierAffichage = Column(Integer, ForeignKey("QuartierAffichage.IDQuartierAffichage"))
+    IDQuartierAffichage = Column(Integer, ForeignKey("QuartierAffichage.IDQuartierAffichage", ondelete="CASCADE"))
 
     # Relation avec la table Quartier
-    quartier = relationship("QuartierAffichage", back_populates="emplacements")
+    quartier = relationship("QuartierAffichage", back_populates="emplacements", cascade="all, delete")
 
     # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="emplacement_affichage")
+    dispositifs = relationship("DispositifPub", back_populates="emplacement_affichage", cascade="save-up, merge")
