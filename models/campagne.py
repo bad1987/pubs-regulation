@@ -28,3 +28,4 @@ class CampagnePub(Base):
 
     # Relation avec la table Produit
     produit = relationship("ProduitConcession", back_populates="campagnes")
+    lignes = relationship("DocLigne", back_populates="campagne_pub")

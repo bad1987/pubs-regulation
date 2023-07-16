@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
+from models.panneauAffiche import PanneauAffich
+
 class TypePanneau(Base):
     __tablename__ = "TypePanneau"
 
@@ -16,7 +18,7 @@ class TypePanneau(Base):
     LibelleType = Column(String(64))
 
     # Relation avec la table PanneauAffich
-    panneaux = relationship("PanneauAffich", back_populates="type_panneau", lazy="joined", cascade="save-update, merge")
+    panneaux = relationship(PanneauAffich.__name__, back_populates="type_panneau", lazy="joined", cascade="save-update, merge")
 
     # get method
     @classmethod

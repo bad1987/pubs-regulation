@@ -34,3 +34,4 @@ class PanneauAffich(DispositifPub):
 
     # Relation avec la table TypePanneau
     type_panneau = relationship("TypePanneau", back_populates="panneaux")
+    

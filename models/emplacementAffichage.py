@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
+from models.quartierAffichage import QuartierAffichage
+
 class EmplacementAffichage(Base):
     __tablename__ = "EmplacementAffichage"
 
@@ -15,7 +17,7 @@ class EmplacementAffichage(Base):
     IDQuartierAffichage = Column(Integer, ForeignKey("QuartierAffichage.IDQuartierAffichage", ondelete="CASCADE"))
 
     # Relation avec la table Quartier
-    quartier = relationship("QuartierAffichage", back_populates="emplacements", cascade="all, delete")
+    quartier = relationship(QuartierAffichage.__name__, back_populates="emplacements", cascade="all, delete")
 
     # Relation avec la table DispositifPub
     dispositifs = relationship("DispositifPub", back_populates="emplacement_affichage", cascade="save-update, merge")

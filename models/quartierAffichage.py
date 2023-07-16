@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
+from models.zoneAffichage import ZoneAffichage
+
 class QuartierAffichage(Base):
     __tablename__ = "QuartierAffichage"
 
@@ -25,7 +27,7 @@ class QuartierAffichage(Base):
     IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage", ondelete="CASCADE"))
 
     # Relation avec la table ZoneAffichage
-    zone_affichage = relationship("ZoneAffichage", back_populates="quartiers")
+    zone_affichage = relationship(ZoneAffichage.__name__, back_populates="quartiers")
 
     # Relation avec la table EmplacementAffichage
     emplacements = relationship("EmplacementAffichage", back_populates="quartier", cascade="all, delete")

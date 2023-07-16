@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, CHAR
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
+from models.docligne import DocLigne
 class DocEntete(Base):
     __tablename__ = "DocEntete"
 
@@ -39,7 +40,7 @@ class DocEntete(Base):
     tiers = relationship("Tiers", back_populates="documents")
     
     # Relation avec la table DocLigne
-    lignes = relationship("DocLigne", back_populates="doc_entete")
+    lignes = relationship(DocLigne.__name__, back_populates="doc_entete")
 
     taxes_doc_entete = relationship("TaxTiersDocEntete", back_populates="doc_entete")
 

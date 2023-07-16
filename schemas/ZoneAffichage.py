@@ -1,7 +1,6 @@
 
 # this class defines a pydantic schema for the zoneAffichage model
-from ast import List
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
 

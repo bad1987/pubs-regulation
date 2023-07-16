@@ -2,6 +2,9 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
+from models.campagne import CampagnePub
+from models.produitConcession import ProduitConcession
+
 class DocLigne(Base):
     __tablename__ = "DocLigne"
 
@@ -34,5 +37,5 @@ class DocLigne(Base):
 
     # Relations avec les autres tables
     doc_entete = relationship("DocEntete", back_populates="lignes")
-    campagne_pub = relationship("CampagnePub", back_populates="lignes")
-    produit = relationship("ProduitConcession", back_populates="lignes")
+    campagne_pub = relationship(CampagnePub.__name__, back_populates="lignes")
+    produit = relationship(ProduitConcession.__name__, back_populates="lignes")

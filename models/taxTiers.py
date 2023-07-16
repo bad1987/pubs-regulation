@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
+from models.taxes import Taxes
+
 class TaxTiers(Base):
     __tablename__ = "TaxTiers"
 
@@ -15,4 +17,4 @@ class TaxTiers(Base):
     tiers = relationship("Tiers", back_populates="taxes")
 
     # Relation avec la table Taxes
-    taxe = relationship("Taxes", back_populates="tiers")
+    taxe = relationship(Taxes.__name__, back_populates="tiers")

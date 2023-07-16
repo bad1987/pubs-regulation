@@ -41,7 +41,7 @@ class TypePanneauController:
         
     # delete
     @classmethod
-    def delete(cls, db: Session, type_panneau_id: int):
+    def delete(cls, db: Session, type_panneau_id: int) -> bool:
         try:
             # check if type_panneau exists
             type_panneau = TypePanneau.get(db, type_panneau_id)
