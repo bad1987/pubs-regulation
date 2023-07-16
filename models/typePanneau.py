@@ -15,4 +15,4 @@ class TypePanneau(Base):
     LibelleType = Column(String(64))
 
     # Relation avec la table PanneauAffich
-    panneaux = relationship("PanneauAffich", back_populates="type_panneau", lazy="joined", cascade="all, delete")
+    panneaux = relationship("PanneauAffich", back_populates="type_panneau", lazy="joined", cascade="save-update, merge")
