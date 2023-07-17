@@ -28,6 +28,11 @@ class ZoneAffichage(Base):
     @classmethod
     def getByCodeZone(cls, db: Session, codeZone: str):
         return db.query(cls).filter(cls.CodeZone == codeZone).first()
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
 
     # create an instance of the class
     @classmethod
@@ -67,8 +72,7 @@ class ZoneAffichage(Base):
             db.commit()
 
             # Return True to indicate that the update was successful
-            return True
+            return cls.get(db, zone_affichage_id)
 
         # Return False to indicate that the update was unsuccessful
-        return False
-     
+        return None

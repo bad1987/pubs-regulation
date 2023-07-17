@@ -47,6 +47,8 @@ class TestTypePanneau(unittest.TestCase):
         ))
         self.assertIsNotNone(new_type_panneau.IDTypePanneau)
 
+        TypePanneau.delete(self.db, new_type_panneau.IDTypePanneau)
+
 
     def test_updateLibelleType(self):
         # Test the updateLibelleType method
