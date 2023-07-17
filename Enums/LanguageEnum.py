@@ -1,5 +1,5 @@
 from enum import Enum
 
 class LanguageEnum(Enum):
-    DE = "de"
+    FR = "fr"
     EN = "en"
