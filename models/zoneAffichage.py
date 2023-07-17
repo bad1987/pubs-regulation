@@ -71,3 +71,4 @@ class ZoneAffichage(Base):
 
         # Return False to indicate that the update was unsuccessful
         return False
+     
