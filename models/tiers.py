@@ -1,8 +1,46 @@
 from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy import LargeBinary
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Session
 from db.Connexion import Base
+
+from models.docentete import DocEntete
+from models.taxTiers import TaxTiers
+from models.taxTiersDocEntete import TaxTiersDocEntete
+
+class TypeTiers(Base):
+    __tablename__ = "TypeTiers"
+    IDTypeTiers = Column(Integer, primary_key=True)
+    LibelleTypeTiers = Column(String(255))
+
+    tiers = relationship("Tiers", back_populates="type_tiers")
+
+    # get method
+    @classmethod
+    def get(cls, db: Session, IDTypeTiers: int):
+        return db.query(cls).filter_by(IDTypeTiers=IDTypeTiers).first()
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, type_tiers):
+        db.add(type_tiers)
+        db.commit()
+        db.refresh(type_tiers)
+        return type_tiers
+    
+    # update libelle
+    @classmethod
+    def updateLibelleType(cls, db: Session, type_tiers: int, libelleType: str):
+        query = db.query(cls).filter_by(IDTypeTiers=type_tiers).update({"LibelleTypeTiers": libelleType})
+        db.commit()
+
+        # Return the updated object
+        return cls.get(db, type_tiers)
 
 class Tiers(Base):
     __tablename__ = "Tiers"
@@ -22,8 +60,8 @@ class Tiers(Base):
     # Téléphone
     TelephoneTiers = Column(SmallInteger)
 
-    # Type de tiers (Régisseur, Régulateur, Annonceur, etc…)  
-    TypeTiers = Column(Integer)
+    # Type de tiers Cle etrangere (Régisseur, Régulateur, Annonceur, etc…)  
+    IDTypeTiers = Column(Integer, ForeignKey("TypeTiers.IDTypeTiers", ondelete="CASCADE"))
 
     # N° Contribuable
     NumCont = Column(String(22))
@@ -41,10 +79,125 @@ class Tiers(Base):
     dispositifs = relationship("DispositifPub", back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table DocEntete
-    documents = relationship("DocEntete", back_populates="tiers")
+    documents = relationship(DocEntete.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table TaxTiers
-    taxes = relationship("TaxTiers", back_populates="tiers")
+    taxes = relationship(TaxTiers.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table TaxTiersDocEntete
-    taxes_doc_entete = relationship("TaxTiersDocEntete", back_populates="tiers")
+    taxes_doc_entete = relationship(TaxTiersDocEntete.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
+
+    # Relation avec la table TypeTiers
+    type_tiers = relationship(TypeTiers.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
+
+    # get method
+    def get(cls, db: Session, type_tiers_id: int):
+        return db.query(cls).filter_by(IDTypeTiers=type_tiers_id).first()
+    
+    # get by code method
+    @classmethod
+    def getByCode(cls, db: Session, codeTiers: str):
+        return db.query(cls).filter_by(CodeTiers=codeTiers).first()
+
+    # get all method
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create method
+    @classmethod
+    def create(cls, db: Session, tiers):
+        db.add(tiers)
+        db.commit()
+        db.refresh(tiers)
+        return tiers
+    
+    # delete method
+    @classmethod
+    def delete(cls, db: Session, tiers_id: int):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        deleted_count = query.delete()
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return True to indicate that the delete was successful
+        return True
+    
+    # update N° Contribuable method
+    @classmethod
+    def updateNumCont(cls, db: Session, tiers_id: int, numCont: str):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        updated_count = query.update({"NumCont": numCont})
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return the updated tiers object
+        return cls.get(db, tiers_id)
+    
+    # update LibelleTiers method
+    @classmethod
+    def updateLibelleTiers(cls, db: Session, tiers_id: int, libelleTiers: str):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        updated_count = query.update({"LibelleTiers": libelleTiers})
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return the updated tiers object
+        return cls.get(db, tiers_id)
+    
+    # update AdresseTiers method
+    @classmethod
+    def updateAdresseTiers(cls, db: Session, tiers_id: int, adresseTiers: str):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        updated_count = query.update({"AdresseTiers": adresseTiers})
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return the updated tiers object
+        return cls.get(db, tiers_id)
+    
+    # update SigleTiers method
+    @classmethod
+    def updateSigleTiers(cls, db: Session, tiers_id: int, sigleTiers: str):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        updated_count = query.update({"SigleTiers": sigleTiers})
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return the updated tiers object
+        return cls.get(db, tiers_id)
+    
+    # update logo method
+    @classmethod
+    def updateLogo(cls, db: Session, tiers_id: int, logo: LargeBinary):
+        # Create a query to retrieve all records in the table that have the given type_panneau_id
+        query = db.query(cls).filter_by(IDTiers=tiers_id)
+        
+        # Execute the query and delete all the retrieved records
+        updated_count = query.update({"Logo": logo})
+        
+        # Commit the changes to the database
+        db.commit()
+        
+        # Return the updated tiers object
+        return cls.get(db, tiers_id)

@@ -1,0 +1,128 @@
+from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
+
+from models.tiers import Tiers, TypeTiers
+from schemas.TiersSchema import TiersCreateSchema, TiersSchema
+
+class TiersController:
+
+    # get by id
+    @classmethod
+    def get(cls, db: Session, tiers_id: int) -> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session) -> list[TiersSchema]:
+        try:
+            return [TiersSchema.from_orm(tiers) for tiers in Tiers.getAll(db)]
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
+    # get by code
+    @classmethod
+    def getByCode(cls, db: Session, codeTiers: str) -> TiersSchema:
+        try:
+            tiers = Tiers.getByCode(db, codeTiers)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
+    # create
+    @classmethod
+    def create(cls, db: Session, tiers: TiersCreateSchema) -> TiersSchema:
+        try:
+            # check if TypeTiers exist
+            type_tiers = TypeTiers.get(db, tiers.IDTypeTiers)
+            if not type_tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid TypeTiers")
+            
+            # check if CodeTiers is unique
+            if Tiers.getByCode(db, tiers.CodeTiers):
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTiers already exists")
+            tiers.type_tiers.append(type_tiers)
+            tiers = Tiers.create(db, tiers)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # update N° Contribuable method
+    @classmethod
+    def updateNumCont(cls, db: Session, tiers_id: int, numCont: str) -> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            tiers = Tiers.updateNumCont(db, tiers_id, numCont)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # update LibelleTiers method
+    @classmethod
+    def updateLibelleTiers(cls, db: Session, tiers_id: int, libelleTiers: str) -> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            tiers = Tiers.updateLibelleTiers(db, tiers_id, libelleTiers)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
+    # update AdresseTiers method
+    @classmethod
+    def updateAdresseTiers(cls, db: Session, tiers_id: int, adresseTiers: str) -> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            tiers = Tiers.updateAdresseTiers(db, tiers_id, adresseTiers)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
+    # update SigleTiers method
+    @classmethod
+    def updateSigleTiers(cls, db: Session, tiers_id: int, sigleTiers: str)-> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            tiers = Tiers.updateSigleTiers(db, tiers_id, sigleTiers)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # update Logo method
+    @classmethod
+    def updateLogo(cls, db: Session, tiers_id: int, logo: bytes) -> TiersSchema:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            tiers = Tiers.updateLogo(db, tiers_id, logo)
+            return tiers.from_orm(tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, tiers_id: int) -> bool:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+            if not tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+            Tiers.delete(db, tiers_id)
+            return True
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
