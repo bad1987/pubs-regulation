@@ -99,8 +99,9 @@ class Tiers(Base):
     type_tiers = relationship(TypeTiers.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # get method
+    @classmethod
     def get(cls, db: Session, type_tiers_id: int):
-        return db.query(cls).filter_by(IDTypeTiers=type_tiers_id).first()
+        return db.query(cls).filter_by(IDTiers=type_tiers_id).first()
     
     # get by code method
     @classmethod
