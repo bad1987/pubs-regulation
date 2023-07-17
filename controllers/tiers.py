@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from models.tiers import Tiers, TypeTiers
-from schemas.TiersSchema import TiersCreateSchema, TiersSchema
+from schemas.TiersSchema import TiersCreateSchema, TiersSchema, TypeTiersSchema
 
 class TiersController:
 
@@ -125,4 +125,45 @@ class TiersController:
             return True
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # get typeTiers by id
+    @classmethod
+    def getTypeTiers(cls, db: Session, typeTiers_id: int) -> TypeTiersSchema:
+        try:
+            type_tiers = TypeTiers.get(db, typeTiers_id)
+            if not type_tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeTiers not found")
+            return type_tiers.from_orm(type_tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # get all typeTiers
+    @classmethod
+    def getAllTypeTiers(cls, db: Session) -> list[TypeTiersSchema]:
+        try:
+            return [TypeTiersSchema.from_orm(type_tiers) for type_tiers in TypeTiers.getAll(db)]
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
+    # create typeTiers
+    @classmethod
+    def createTypeTiers(cls, db: Session, type_tiers: TypeTiersSchema) -> TypeTiersSchema:
+        try:
+            type_tiers = TypeTiers.create(db, type_tiers)
+            return type_tiers.from_orm(type_tiers)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # delete typeTiers
+    @classmethod
+    def deleteTypeTiers(cls, db: Session, typeTiers_id: int) -> bool:
+        try:
+            type_tiers = TypeTiers.get(db, typeTiers_id)
+            if not type_tiers:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeTiers not found")
+            TypeTiers.delete(db, typeTiers_id)
+            return True
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        
     

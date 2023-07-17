@@ -41,6 +41,14 @@ class TypeTiers(Base):
 
         # Return the updated object
         return cls.get(db, type_tiers)
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, type_tiers: int):
+        query = db.query(cls).filter_by(IDTypeTiers=type_tiers).delete()
+        db.commit()
+        
+        return True
 
 class Tiers(Base):
     __tablename__ = "Tiers"
