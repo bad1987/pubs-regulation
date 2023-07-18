@@ -47,4 +47,4 @@ class Tiers(Base):
     taxes = relationship("TaxTiers", back_populates="tiers")
 
     # Relation avec la table TaxTiersDocEntete
-    taxes_doc_entete = relationship(TaxTiersDocEntete.__name__, back_populates="tiers")
+    taxes_doc_entete = relationship("TaxTiersDocEntete", back_populates="tiers")
