@@ -2,6 +2,8 @@ from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
+from routes.system.taxes import router as taxesRouter
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -13,6 +15,9 @@ app = FastAPI(title="REGUL PUB", version="1.0.0", description="tHIS api IS DESIG
 
 @app.get('/', tags=["Welcome"], include_in_schema=False)
 def welcome(): return {"Message": "Welcome to regul pub platform", "Version": "1.0.0", "Build by": "BAD INC"}
+
+# use routes
+app.include_router(taxesRouter)
 
 # cors
 app.add_middleware( 

@@ -12,16 +12,16 @@ class TaxTiers(Base):
     IDTaxTiers = Column(Integer, primary_key=True)
 
     # Clé Etrangère, identifiant unique de la table tiers
-    IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers"))
+    IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la table Taxes
-    IDTaxes = Column(Integer, ForeignKey("Taxes.IDTaxes"))
+    IDTaxes = Column(Integer, ForeignKey("Taxes.IDTaxes", ondelete="CASCADE"))
 
     # Relation avec la table TIERS
     tiers = relationship("Tiers", back_populates="taxes")
 
     # Relation avec la table Taxes
-    taxe = relationship(Taxes.__name__, back_populates="tiers")
+    taxe = relationship("Taxes", back_populates="tiers")
 
     # create
     @classmethod

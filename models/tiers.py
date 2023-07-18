@@ -3,9 +3,6 @@ from sqlalchemy import LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
-
-from models.docentete import DocEntete
-from models.taxTiers import TaxTiers
 from models.taxTiersDocEntete import TaxTiersDocEntete
 
 class Tiers(Base):

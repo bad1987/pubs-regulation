@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
+from models.taxes import Taxes
 
 class TaxTiersDocEntete(Base):
     __tablename__ = "TaxTiersDocEntete"

@@ -8,11 +8,10 @@ class TaxesSchema(BaseModel):
     CodeTaxe: str
     LibelleTaxe: str
     TauxTaxe: float
-    tiers: Optional[list]
-    taxes_doc_entete: Optional[list]
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class TaxesCreateSchema(BaseModel):
     CodeTaxe: str

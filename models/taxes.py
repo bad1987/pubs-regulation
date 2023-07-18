@@ -21,10 +21,10 @@ class Taxes(Base):
     TauxTaxe = Column(Float)
 
     # Define the relationship with the TaxTiers class (one-to-many relationship)
-    tiers = relationship("TaxTiers", back_populates="taxe")
+    # tiers = relationship("TaxTiers", back_populates="taxe")
 
-    # Define the relationship with the TaxTiersDocEntete class (one-to-many relationship)
-    taxes_doc_entete = relationship("TaxTiersDocEntete", back_populates="taxe")
+    # # Define the relationship with the TaxTiersDocEntete class (one-to-many relationship)
+    # taxes_doc_entete = relationship("TaxTiersDocEntete", back_populates="taxe")
 
     # Define a class method to get a Taxes object by its IDTaxes
     @classmethod

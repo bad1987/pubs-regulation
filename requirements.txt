@@ -20,3 +20,4 @@ phpserialize
 sqlalchemy_utils
 python-dotenv
 pytest
+httpx
