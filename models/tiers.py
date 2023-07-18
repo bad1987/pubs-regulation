@@ -3,7 +3,6 @@ from sqlalchemy import LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
-from models.taxTiersDocEntete import TaxTiersDocEntete
 
 class Tiers(Base):
     __tablename__ = "Tiers"
@@ -42,10 +41,10 @@ class Tiers(Base):
     dispositifs = relationship("DispositifPub", back_populates="tiers", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table DocEntete
-    documents = relationship(DocEntete.__name__, back_populates="tiers")
+    documents = relationship("DocEntete", back_populates="tiers")
 
     # Relation avec la table TaxTiers
-    taxes = relationship(TaxTiers.__name__, back_populates="tiers")
+    taxes = relationship("TaxTiers", back_populates="tiers")
 
     # Relation avec la table TaxTiersDocEntete
     taxes_doc_entete = relationship(TaxTiersDocEntete.__name__, back_populates="tiers")

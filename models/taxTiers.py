@@ -3,8 +3,6 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
-from models.taxes import Taxes
-
 class TaxTiers(Base):
     __tablename__ = "TaxTiers"
 
