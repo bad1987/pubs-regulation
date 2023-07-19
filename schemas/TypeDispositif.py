@@ -7,7 +7,6 @@ class TypeDispositifSchema(BaseModel):
     IDTypeDispositif: int
     CodeTypeDispositif: str
     LibelleTypeDispo: str
-    dispositifs: List[int] = []
 
     class Config:
         orm_mode = True

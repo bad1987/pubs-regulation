@@ -8,7 +8,6 @@ class ZoneAffichageSchema(BaseModel):
     IDZoneAffichage: Optional[int]
     CodeZone: Optional[str]
     LibelleZone: Optional[str]
-    quartiers: Optional[list]
 
     class Config:
         orm_mode = True
@@ -16,5 +15,4 @@ class ZoneAffichageSchema(BaseModel):
 class ZoneAffichageCreateSchema(BaseModel):
     CodeZone: Optional[str]
     LibelleZone: Optional[str]
-    quartiers: List[int] = []
 

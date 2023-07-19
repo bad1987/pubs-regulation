@@ -15,9 +15,6 @@ class TypeDispositif(Base):
 
     # Libellé
     LibelleTypeDispo = Column(String(25))
-
-    # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="type_dispositif", lazy="joined", cascade="save-update, merge")
     
     # get method
     @classmethod

@@ -17,9 +17,6 @@ class TypePanneau(Base):
     # Libelle 
     LibelleType = Column(String(64))
 
-    # Relation avec la table PanneauAffich
-    panneaux = relationship(PanneauAffich.__name__, back_populates="type_panneau", lazy="joined", cascade="save-update, merge")
-
     # get method
     @classmethod
     def get(cls, db: Session, type_panneau_id: int):

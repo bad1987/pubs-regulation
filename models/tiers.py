@@ -13,8 +13,6 @@ class TypeTiers(Base):
     IDTypeTiers = Column(Integer, primary_key=True)
     LibelleTypeTiers = Column(String(255))
 
-    tiers = relationship("Tiers", back_populates="type_tiers")
-
     # get method
     @classmethod
     def get(cls, db: Session, IDTypeTiers: int):
@@ -83,20 +81,8 @@ class Tiers(Base):
     # Sigle
     SigleTiers = Column(String(2))
 
-    # Relation avec la table DispositifPub
-    dispositifs = relationship("DispositifPub", back_populates="tiers", lazy="joined", cascade="save-update, merge")
-
-    # Relation avec la table DocEntete
-    documents = relationship(DocEntete.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
-
-    # Relation avec la table TaxTiers
-    taxes = relationship(TaxTiers.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
-
-    # Relation avec la table TaxTiersDocEntete
-    taxes_doc_entete = relationship(TaxTiersDocEntete.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
-
     # Relation avec la table TypeTiers
-    type_tiers = relationship(TypeTiers.__name__, back_populates="tiers", lazy="joined", cascade="save-update, merge")
+    type_tiers = relationship("TypeTiers", backref="tiers", lazy="joined", cascade="save-update, merge")
 
     # get method
     @classmethod

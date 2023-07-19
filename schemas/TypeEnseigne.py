@@ -6,7 +6,6 @@ class TypeEnseigneSchema(BaseModel):
     IDTypeEnseigne: Optional[int]
     CodeTypeEnseigne: Optional[str]
     LibelleTypeEnseigne: Optional[str]
-    enseignes: List[int] = []
 
     class Config:
         orm_mode = True

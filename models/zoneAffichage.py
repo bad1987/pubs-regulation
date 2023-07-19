@@ -16,9 +16,6 @@ class ZoneAffichage(Base):
     # Libellé
     LibelleZone = Column(String(64))
 
-    # Relation avec la table QuartierAffichage
-    quartiers = relationship("QuartierAffichage", back_populates="zone_affichage", cascade="all, delete")
-
     # get an instance of the class
     @classmethod
     def get(cls, db: Session, zoneAffichage_id: int):
@@ -51,11 +48,6 @@ class ZoneAffichage(Base):
             db.commit()
             return True
         return False
-
-    # get all instances of the class where quarter_id is in  quartiers
-    @classmethod
-    def getAllByQuartiers(cls, db: Session, quartier_id: int):
-        return db.query(cls).filter(cls.quartiers.any(quartier_id)).all()
 
     # update libelleZone
     @classmethod

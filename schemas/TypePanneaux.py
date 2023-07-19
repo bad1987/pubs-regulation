@@ -8,7 +8,6 @@ class TypePanneauSchema(BaseModel):
     IDTypePanneau: Optional[int]
     CodeTypePanneau: Optional[str]
     LibelleType: Optional[str]
-    panneaux: List[int] = []
 
     class Config:
         orm_mode = True
