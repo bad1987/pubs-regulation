@@ -25,12 +25,22 @@ class QuartierAffichage(Base):
     IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage", ondelete="CASCADE"))
 
     # Relation avec la table ZoneAffichage
-    zone_affichage = relationship("ZoneAffichage", backref="quartiers")
+    zone_affichage = relationship("ZoneAffichage", backref="quartiers", lazy="joined", cascade="save-update, merge")
 
     # get an instance of the class
     @classmethod
     def get(cls, db: Session, quartierAffichage_id: int):
         return db.query(cls).filter(cls.IDQuartierAffichage == quartierAffichage_id).first()
+
+    # get by NomQuartier
+    @classmethod
+    def get_by_nom_quartier(cls, NomQuartier: str):
+        return cls.query.filter(cls.NomQuartier == NomQuartier).first()
+
+    # get all
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
 
     # create an instance of the class
     @classmethod
@@ -50,4 +60,10 @@ class QuartierAffichage(Base):
             return True
         return False
     
-    
+    # update
+    @classmethod
+    def update(cls, db: Session, quartierAffichage):
+        db.add(quartierAffichage)
+        db.commit()
+        db.refresh(quartierAffichage)
+        return quartierAffichage
