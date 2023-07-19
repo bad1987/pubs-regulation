@@ -12,16 +12,16 @@ class RepDoc(Base):
     MontantReparti = Column(Float)
 
     # Clé étrangère identifiant unique de la table DocEntete associé
-    IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
+    IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la tables Repartition des frais
-    IDRepartitionFrais = Column(Integer, ForeignKey("RepartitionFrais.IDRepartitionFrais"))
+    IDRepartitionFrais = Column(Integer, ForeignKey("RepartitionFrais.IDRepartitionFrais", ondelete="CASCADE"))
 
     # Relation avec la table DocEntete
-    doc_entete = relationship("DocEntete", backref="repartitions")
+    doc_entete = relationship("DocEntete", backref="repartitions", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table RepartitionFrais
-    repartition_frais = relationship("RepartitionFrais", backref="repartitions")
+    repartition_frais = relationship("RepartitionFrais", backref="repartitions", lazy="joined", cascade="save-update, merge")
 
     # get by id
     @classmethod
