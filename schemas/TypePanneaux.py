@@ -11,6 +11,7 @@ class TypePanneauSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class TypePanneauCreateSchema(BaseModel):
     CodeTypePanneau: Optional[str]

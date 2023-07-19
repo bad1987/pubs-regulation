@@ -9,6 +9,7 @@ class TypeEnseigneSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class TypeEnseigneCreateSchema(BaseModel):
     CodeTypeEnseigne: Optional[str]

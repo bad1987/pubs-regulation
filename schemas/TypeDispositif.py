@@ -10,6 +10,7 @@ class TypeDispositifSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class TypeDispositifCreateSchema(BaseModel):
     CodeTypeDispositif: str

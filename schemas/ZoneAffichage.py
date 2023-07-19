@@ -11,6 +11,7 @@ class ZoneAffichageSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class ZoneAffichageCreateSchema(BaseModel):
     CodeZone: Optional[str]

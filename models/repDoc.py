@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
+from sqlalchemy.orm import Session
 
 class RepDoc(Base):
     __tablename__ = "RepDoc"
@@ -21,3 +22,34 @@ class RepDoc(Base):
 
     # Relation avec la table RepartitionFrais
     repartition_frais = relationship("RepartitionFrais", backref="repartitions")
+
+    # get by id
+    @classmethod
+    def get(cls, db: Session, IDRepDoc: int):
+        return db.query(cls).get(IDRepDoc)
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, rep_doc):
+        db.add(rep_doc)
+        db.commit()
+        db.refresh(rep_doc)
+        return rep_doc
+    
+    # update MontantReparti
+    @classmethod
+    def updateMontantReparti(cls, db: Session, IDRepDoc: int, MontantReparti: float):
+        db.query(cls).filter_by(IDRepDoc=IDRepDoc).update({"MontantReparti": MontantReparti})
+        db.commit()
+        return cls.get(db, IDRepDoc)
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, IDRepDoc: int):
+        db.query(cls).filter_by(IDRepDoc=IDRepDoc).delete()
+        db.commit()

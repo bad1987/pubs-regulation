@@ -18,6 +18,7 @@ class UserSchema(BaseModel):
     
     class Config:
         orm_mode = True
+        from_attributes = True
 
     @classmethod
     def from_user(cls, user: User) -> 'UserSchema':

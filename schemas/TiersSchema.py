@@ -24,6 +24,7 @@ class TiersSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class TiersCreateSchema(BaseModel):
     CodeTiers: str
