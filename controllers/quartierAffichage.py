@@ -1,6 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.quartierAffichage import QuartierAffichage
+from models.zoneAffichage import ZoneAffichage
 from schemas.QuartierAffichageSchema import QuartierAffichageSchema, QuartierAffichageCreateSchema
 
 class QuartierAffichageController:
@@ -30,8 +31,14 @@ class QuartierAffichageController:
         # check if CodeTiers is unique
         if QuartierAffichage.get_by_nom_quartier(db, quartierAffichage.NomQuartier):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="NomQuartier already exists")
+        # check if the foreign key IDZoneAffichage is valid
+        zoneAffichage = ZoneAffichage.get(db, quartierAffichage.IDZoneAffichage)
+        if not zoneAffichage:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {quartierAffichage.IDZoneAffichage}")
         try:
-            quartierAffichage = QuartierAffichage.create(db, QuartierAffichage(**quartierAffichage.dict()))
+            quartierAffichage = QuartierAffichage(**quartierAffichage.dict())
+            quartierAffichage.zone_affichage = zoneAffichage
+            quartierAffichage = QuartierAffichage.create(db, quartierAffichage)
             return quartierAffichage.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
