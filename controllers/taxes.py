@@ -10,7 +10,7 @@ class TaxesController:
     def get(cls, db: Session, tax_id: int) -> TaxesSchema:
         try:
             # Query the database to get the tax with the specified ID
-            tax = db.query(Taxes).filter_by(IDTaxes=tax_id).first()
+            tax = Taxes.get(db, tax_id)
         except Exception as e:
             # If there's an exception, raise an HTTPException with status code 500 and the error message
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -26,7 +26,7 @@ class TaxesController:
     def getAll(cls, db: Session) -> list[TaxesSchema]:
         try:
             # Query the database to get all taxes
-            taxes = db.query(Taxes).all()
+            taxes = Taxes.getAll(db)
         except Exception as e:
             # If there's an exception, raise an HTTPException with status code 500 and the error message
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -41,7 +41,7 @@ class TaxesController:
     def getByCodeTaxe(cls, db: Session, CodeTaxe: str) -> TaxesSchema:
         try:
             # Query the database to get the tax with the specified CodeTaxe
-            tax = db.query(Taxes).filter_by(CodeTaxe=CodeTaxe).first()
+            tax = Taxes.getByCodeTaxe(db, CodeTaxe)
         except Exception as e:
             # If there's an exception, raise an HTTPException with status code 500 and the error message
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

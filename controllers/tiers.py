@@ -43,10 +43,10 @@ class TiersController:
         type_tiers = TypeTiers.get(db, tiers.IDTypeTiers)
         if not type_tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid TypeTiers")
+        # check if CodeTiers is unique
+        if Tiers.getByCode(db, tiers.CodeTiers):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTiers already exists")
         try:
-            # check if CodeTiers is unique
-            if Tiers.getByCode(db, tiers.CodeTiers):
-                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTiers already exists")
             tiers.type_tiers = type_tiers
             tiers = Tiers.create(db, tiers)
             return tiers.from_orm(tiers)
