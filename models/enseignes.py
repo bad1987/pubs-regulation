@@ -30,4 +30,4 @@ class Enseigne(DispositifPub):
     }
 
     # Relation avec la table TypeEnseigne
-    type_enseigne = relationship("TypeEnseigne", back_populates="enseignes", lazy="joined", cascade="all, delete")
+    type_enseigne = relationship("TypeEnseigne", backref="enseignes", lazy="joined", cascade="save-update, merge")

@@ -22,13 +22,13 @@ class TaxTiersDocEntete(Base):
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
 
     # Relation avec la table TIERS
-    tiers = relationship("Tiers", back_populates="taxes_doc_entete", lazy="joined")
+    tiers = relationship("Tiers", backref="taxes_doc_entete", lazy="joined")
 
     # Relation avec la table Taxes
-    taxe = relationship("Taxes", back_populates="taxes_doc_entete", lazy="joined")
+    taxe = relationship("Taxes", backref="taxes_doc_entete", lazy="joined")
 
     # Relation avec la table DocEntete
-    doc_entete = relationship("DocEntete", back_populates="taxes_doc_entete", lazy="joined")
+    doc_entete = relationship("DocEntete", backref="taxes_doc_entete", lazy="joined")
 
     # get 
     @classmethod

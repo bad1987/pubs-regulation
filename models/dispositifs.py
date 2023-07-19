@@ -2,10 +2,6 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
-from models.typeDispositif import TypeDispositif
-from models.tiers import Tiers
-from models.emplacementAffichage import EmplacementAffichage
-
 class DispositifPub(Base):
     __tablename__ = "DispositifPub"
 
@@ -44,7 +40,6 @@ class DispositifPub(Base):
     }
 
     # Relations avec les autres tables
-    produits = relationship("ProduitConcession", back_populates="dispositif_pub")
-    type_dispositif = relationship(TypeDispositif.__name__, back_populates="dispositifs", lazy="joined")
-    tiers = relationship(Tiers.__name__, back_populates="dispositifs")
-    emplacement_affichage = relationship(EmplacementAffichage.__name__, back_populates="dispositifs")
+    type_dispositif = relationship("TypeDispositif", backref="dispositifs", lazy="joined", cascade="save-update, merge")
+    tiers = relationship("Tiers", backref="dispositifs", lazy="joined", cascade="save-update, merge")
+    emplacement_affichage = relationship("EmplacementAffichage", backref="dispositifs", cascade="save-update, merge")

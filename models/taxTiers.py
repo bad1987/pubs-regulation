@@ -16,10 +16,10 @@ class TaxTiers(Base):
     IDTaxes = Column(Integer, ForeignKey("Taxes.IDTaxes", ondelete="CASCADE"))
 
     # Relation avec la table TIERS
-    tiers = relationship("Tiers", back_populates="taxes")
+    tiers = relationship("Tiers", backref="taxes")
 
     # Relation avec la table Taxes
-    taxe = relationship("Taxes", back_populates="tiers")
+    taxe = relationship("Taxes", backref="tiers")
 
     # create
     @classmethod

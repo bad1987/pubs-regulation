@@ -17,7 +17,7 @@ class RepDoc(Base):
     IDRepartitionFrais = Column(Integer, ForeignKey("RepartitionFrais.IDRepartitionFrais"))
 
     # Relation avec la table DocEntete
-    doc_entete = relationship("DocEntete", back_populates="repartitions")
+    doc_entete = relationship("DocEntete", backref="repartitions")
 
     # Relation avec la table RepartitionFrais
-    repartition_frais = relationship("RepartitionFrais", back_populates="repartitions")
+    repartition_frais = relationship("RepartitionFrais", backref="repartitions")

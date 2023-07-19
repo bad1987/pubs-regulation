@@ -2,9 +2,6 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 
-from models.campagne import CampagnePub
-from models.produitConcession import ProduitConcession
-
 class DocLigne(Base):
     __tablename__ = "DocLigne"
 
@@ -27,15 +24,15 @@ class DocLigne(Base):
     MontantHTLigne = Column(Integer)
 
     # Clé etrangère, identifiant unique du Document entete
-    IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
+    IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la table CampagnePub
-    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub"))
+    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la table Produit    
-    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession"))
+    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"))
 
     # Relations avec les autres tables
-    doc_entete = relationship("DocEntete", back_populates="lignes")
-    campagne_pub = relationship(CampagnePub.__name__, back_populates="lignes")
-    produit = relationship(ProduitConcession.__name__, back_populates="lignes")
+    doc_entete = relationship("DocEntete", backref="lignes", lazy="joined", cascade="save-update, merge")
+    campagne_pub = relationship("CampagnePub", backref="lignes", lazy="joined", cascade="save-update, merge")
+    produit = relationship("ProduitConcession", backref="lignes", lazy="joined", cascade="save-update, merge")

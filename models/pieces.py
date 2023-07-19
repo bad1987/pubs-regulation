@@ -18,7 +18,7 @@ class Piece(Base):
     TypePiece = Column(String(4))
 
     # Clé étrangère, identifiant unique de la table Règlement
-    IDReglement = Column(Integer, ForeignKey("Reglement.IDReglement"))
+    IDReglement = Column(Integer, ForeignKey("Reglement.IDReglement", ondelete="CASCADE"))
 
     # Relation avec la table Reglement
-    reglement = relationship("Reglement", back_populates="pieces")
+    reglement = relationship("Reglement", backref="pieces", lazy="joined", cascade="save-update, merge")

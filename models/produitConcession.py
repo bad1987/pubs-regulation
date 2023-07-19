@@ -16,13 +16,7 @@ class ProduitConcession(Base):
     ObservationsProduit = Column(String(254))
 
     # Clé étrangère, identifiant unique de la table TypDispositif
-    IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub"))
+    IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub", ondelete="CASCADE"))
 
     # Relation avec la table DispositifPub
-    dispositif_pub = relationship("DispositifPub", back_populates="produits")
-
-    # Relation avec la table CampagnePub
-    campagnes = relationship("CampagnePub", back_populates="produit")
-
-    # Relation avec la table DocLigne
-    lignes = relationship("DocLigne", back_populates="produit")
+    dispositif_pub = relationship("DispositifPub", backref="produits", lazy="joined", cascade="save-update, merge")

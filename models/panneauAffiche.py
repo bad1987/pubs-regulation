@@ -25,7 +25,7 @@ class PanneauAffich(DispositifPub):
     UniteFacturationPanneau = Column(String(13))
 
     # Clé etrangère, identifiant unique de la table TypePanneau
-    IDTypePanneau = Column(Integer, ForeignKey("TypePanneau.IDTypePanneau"))
+    IDTypePanneau = Column(Integer, ForeignKey("TypePanneau.IDTypePanneau", ondelete="CASCADE"), primary_key=True)
 
     # Mapper argument for inheritance
     __mapper_args__ = {
@@ -33,5 +33,5 @@ class PanneauAffich(DispositifPub):
     }
 
     # Relation avec la table TypePanneau
-    type_panneau = relationship("TypePanneau", back_populates="panneaux")
+    type_panneau = relationship("TypePanneau", backref="panneaux", lazy="joined", cascade="save-update, merge")
     

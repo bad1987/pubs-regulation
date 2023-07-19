@@ -30,7 +30,4 @@ class Reglement(Base):
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete"))
 
     # Relation avec la table DocEntete
-    doc_entete = relationship("DocEntete", back_populates="reglements")
-
-    # Relation avec la table Piece
-    pieces = relationship("Piece", back_populates="reglement")
+    doc_entete = relationship("DocEntete", backref="reglements")
