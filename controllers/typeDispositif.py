@@ -29,10 +29,10 @@ class TypeDispositifController:
     # create
     @classmethod
     def create(cls, db: Session, type_dispositif: TypeDispositifSchema) -> TypeDispositifSchema:
+        # check if CodeTypeEnseigne is unique
+        if TypeDispositif.getByCode(db, type_dispositif.CodeTypeDispositif):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeDispositif already exists")
         try:
-            # check if CodeTypeEnseigne is unique
-            if TypeDispositif.getByCode(db, type_dispositif.CodeTypeDispositif):
-                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeDispositif already exists")
             type_dispositif = TypeDispositif.create(db, type_dispositif)
             return type_dispositif
         except Exception as e:
@@ -41,11 +41,11 @@ class TypeDispositifController:
     # delete
     @classmethod
     def delete(cls, db: Session, type_dispositif_id: int):
+        # check if type_dispositif exists
+        type_dispositif = TypeDispositif.get(db, type_dispositif_id)
+        if not type_dispositif:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         try:
-            # check if type_dispositif exists
-            type_dispositif = TypeDispositif.get(db, type_dispositif_id)
-            if not type_dispositif:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
             # delete type_dispositif
             type_dispositif = TypeDispositif.delete(db, type_dispositif_id)
             return type_dispositif
@@ -55,11 +55,11 @@ class TypeDispositifController:
     # update
     @classmethod
     def update(cls, db: Session, type_dispositif_id: int, libelleType: str) -> TypeDispositifSchema:
+        # check if type_dispositif exists
+        type_dispositif = TypeDispositif.get(db, type_dispositif_id)
+        if not type_dispositif:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         try:
-            # check if type_dispositif exists
-            type_dispositif = TypeDispositif.get(db, type_dispositif_id)
-            if not type_dispositif:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
             # update type_dispositif
             type_dispositif = TypeDispositif.updateLibelleTypeDispo(db, type_dispositif_id, libelleType)
             return type_dispositif

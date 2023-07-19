@@ -29,10 +29,10 @@ class TypeEnseigneController:
     # create
     @classmethod
     def create(cls, db: Session, type_enseigne: TypeEnseigneCreateSchema) -> TypeEnseigneSchema:
+        # check if CodeTypeEnseigne is unique
+        if TypeEnseigne.getByCode(db, type_enseigne.CodeTypeEnseigne):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeEnseigne already exists")
         try:
-            # check if CodeTypeEnseigne is unique
-            if TypeEnseigne.getByCode(db, type_enseigne.CodeTypeEnseigne):
-                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeEnseigne already exists")
             type_enseigne = TypeEnseigne.create(db, type_enseigne)
             return type_enseigne
         except Exception as e:
@@ -41,11 +41,11 @@ class TypeEnseigneController:
     # delete
     @classmethod
     def delete(cls, db: Session, type_enseigne_id: int):
+        # check if type_enseigne exists
+        type_enseigne = TypeEnseigne.get(db, type_enseigne_id)
+        if not type_enseigne:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeEnseigne not found")
         try:
-            # check if type_enseigne exists
-            type_enseigne = TypeEnseigne.get(db, type_enseigne_id)
-            if not type_enseigne:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeEnseigne not found")
             # delete type_enseigne
             type_enseigne = TypeEnseigne.delete(db, type_enseigne_id)
             return type_enseigne
@@ -55,11 +55,11 @@ class TypeEnseigneController:
     # update
     @classmethod
     def update(cls, db: Session, type_enseigne_id: int, libelleType: str) -> TypeEnseigneSchema:
+        # check if type_enseigne exists
+        type_enseigne = TypeEnseigne.get(db, type_enseigne_id)
+        if not type_enseigne:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeEnseigne not found")
         try:
-            # check if type_enseigne exists
-            type_enseigne = TypeEnseigne.get(db, type_enseigne_id)
-            if not type_enseigne:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeEnseigne not found")
             # update type_enseigne
             type_enseigne = TypeEnseigne.updateLibelleTypeEnseigne(db, type_enseigne_id, libelleType)
             return type_enseigne

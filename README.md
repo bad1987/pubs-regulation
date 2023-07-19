@@ -9,7 +9,6 @@ SET GLOBAL innodb_file_per_table = on;
 SET GLOBAL innodb_default_row_format = dynamic;
 SET GLOBAL innodb_large_prefix = 1;
 SET GLOBAL innodb_file_format_max = Barracuda;
-Copy
 This will enable the Barracuda file format, which supports longer indexes for dynamic or compressed row formats. You also need to set innodb_large_prefix to 1 to allow index key prefixes longer than 767 bytes. Note that these settings may not be compatible with older versions of MariaDB or MySQL.
 
 After changing these settings, you need to restart the MariaDB server and then run your migrations again.

@@ -30,10 +30,10 @@ class TypePanneauController:
     # create
     @classmethod
     def create(cls, db: Session, type_panneau: TypePanneauCreateSchema) -> TypePanneauSchema:
+        # check if CodeTypePanneau is unique
+        if TypePanneau.getByCode(db, type_panneau.CodeTypePanneau):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypePanneau already exists")
         try:
-            # check if CodeTypePanneau is unique
-            if TypePanneau.getByCode(db, type_panneau.CodeTypePanneau):
-                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypePanneau already exists")
             type_panneau = TypePanneau.create(db, type_panneau)
             return type_panneau
         except Exception as e:
@@ -42,11 +42,11 @@ class TypePanneauController:
     # delete
     @classmethod
     def delete(cls, db: Session, type_panneau_id: int) -> bool:
+        # check if type_panneau exists
+        type_panneau = TypePanneau.get(db, type_panneau_id)
+        if not type_panneau:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypePanneau not found")
         try:
-            # check if type_panneau exists
-            type_panneau = TypePanneau.get(db, type_panneau_id)
-            if not type_panneau:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypePanneau not found")
             # delete type_panneau
             type_panneau = TypePanneau.delete(db, type_panneau_id)
             return type_panneau
@@ -56,11 +56,11 @@ class TypePanneauController:
     # update
     @classmethod
     def update(cls, db: Session, type_panneau_id: int, libelleType: str) -> TypePanneauSchema:
+        # check if type_panneau exists
+        type_panneau = TypePanneau.get(db, type_panneau_id)
+        if not type_panneau:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypePanneau not found")
         try:
-            # check if type_panneau exists
-            type_panneau = TypePanneau.get(db, type_panneau_id)
-            if not type_panneau:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypePanneau not found")
             # update type_panneau
             type_panneau = TypePanneau.updateLibelleType(db, type_panneau_id, libelleType)
             return type_panneau

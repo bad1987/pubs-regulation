@@ -3,8 +3,6 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
-from models.panneauAffiche import PanneauAffich
-
 class TypePanneau(Base):
     __tablename__ = "TypePanneau"
 
