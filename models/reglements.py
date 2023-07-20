@@ -50,6 +50,14 @@ class Reglement(Base):
         db.commit()
         db.refresh(reglement)
         return reglement
+
+    # update
+    @classmethod
+    def update(cls, db: Session, reglement):
+        db.add(reglement)
+        db.commit()
+        db.refresh(reglement)
+        return reglement
     
     # update NumReglt
     @classmethod

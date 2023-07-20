@@ -55,6 +55,24 @@ class ReglementController:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
+    # update
+    @classmethod
+    def update(cls, db: Session, IDReglement: int, reglement: ReglementCreateSchema) -> ReglementSchema:
+        try:
+            reglement = Reglement.get(db, IDReglement)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        if not reglement:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
+        try:
+            update_data = reglement.dict(exclude_unset=True)
+            for key, value in update_data.items():
+                setattr(reglement, key, value)
+            reglement = Reglement.update(db, reglement)
+            return ReglementSchema.from_orm(reglement)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
     # update DateReglt
     @classmethod
     def updateDateReglt(cls, db: Session, IDReglement: int, DateReglt: datetime) -> ReglementSchema:

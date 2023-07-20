@@ -65,7 +65,7 @@ class QuartierAffichageController:
             for key, value in update_data.items():
                 setattr(quartierAffichage, key, value)
             quartierAffichage = QuartierAffichage.update(db, quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -124,9 +124,9 @@ class QuartierAffichageController:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
-    # update ArrondissementQaurtier
+    # update ArrondissementQuartier
     @classmethod
-    def updateArrondissementQaurtier(cls, db: Session, quartierAffichage_id: int, arrondissementQaurtier: str) -> QuartierAffichageSchema:
+    def updateArrondissementQuartier(cls, db: Session, quartierAffichage_id: int, ArrondissementQuartier: str) -> QuartierAffichageSchema:
         try:
             quartierAffichage = QuartierAffichage.get(db, quartierAffichage_id)
         except Exception as e:
@@ -134,7 +134,7 @@ class QuartierAffichageController:
         if not quartierAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QuartierAffichage not found")
         try:
-            quartierAffichage.ArrondissementQaurtier = arrondissementQaurtier
+            quartierAffichage.ArrondissementQuartier = ArrondissementQuartier
             db.add(quartierAffichage)
             db.commit()
             db.refresh(quartierAffichage)

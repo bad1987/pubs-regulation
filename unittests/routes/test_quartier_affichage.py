@@ -22,7 +22,7 @@ class TestQuartierAffichage(TestCase):
         self.zone_1 = ZoneAffichage(CodeZone="ABC", LibelleZone="Test Zone")
         self.db.add(self.zone_1)
         # Create test data for quartierAffichage
-        self.quartier_affich = QuartierAffichage(NomQuartier="Test Quartier", SousQuartierAffich="Test Sous Quartier", ObservationsQuartier="Test Observations", ArrondissementQaurtier="Test Arrondissement", IDZoneAffichage=self.zone_1.IDZoneAffichage)
+        self.quartier_affich = QuartierAffichage(NomQuartier="Test Quartier", SousQuartierAffich="Test Sous Quartier", ObservationsQuartier="Test Observations", ArrondissementQuartier="Test Arrondissement", IDZoneAffichage=self.zone_1.IDZoneAffichage)
         self.quartier_affich.zone_affichage = self.zone_1
         self.db.add(self.quartier_affich)
         self.db.commit()
@@ -41,7 +41,6 @@ class TestQuartierAffichage(TestCase):
         quartier_affichage_id = self.quartier_affich.IDQuartierAffichage
         expected_result = QuartierAffichageSchema(**jsonable_encoder(self.quartier_affich))
         response = self.client.get(f'/quartierAffichages/{quartier_affichage_id}')
-        print(response.json())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result.dict())
 
@@ -59,19 +58,55 @@ class TestQuartierAffichage(TestCase):
             "NomQuartier": "Create Test Quartier",
             "SousQuartierAffich": "Create Test Sous Quartier",
             "ObservationsQuartier": "Create Test Observations",
-            "ArrondissementQaurtier": "Create Test Arrondissement",
+            "ArrondissementQuartier": "Create Test Arrondissement",
             "IDZoneAffichage": self.zone_1.IDZoneAffichage
         }
         response = self.client.post("/quartierAffichages", json=post_data)
         self.assertEqual(response.status_code, 201)
         expected_result = self.client.get(f'/quartierAffichages/nomQuartier', params={"NomQuartier": post_data["NomQuartier"]})
-        print(expected_result.json())
         self.assertEqual(expected_result.status_code, 200)
         self.assertEqual(response.json(), expected_result.json())
 
         # clean up using delete endpoint
         response = self.client.delete(f'/quartierAffichages/{response.json()["IDQuartierAffichage"]}')
         self.assertEqual(response.status_code, 204)
+    
+    # test the put route
+    def test_update_quartier_affichage(self):
+        # update test data
+        put_data = {
+            "IDQuartierAffichage": self.quartier_affich.IDQuartierAffichage,
+            "NomQuartier": "Update Test Quartier",
+            "SousQuartierAffich": "Update Test Sous Quartier",
+            "ObservationsQuartier": "Update Test Observations",
+            "ArrondissementQuartier": "Update Test Arrondissement",
+            "IDZoneAffichage": self.zone_1.IDZoneAffichage
+        }
+        response = self.client.put(f'/quartierAffichages/{self.quartier_affich.IDQuartierAffichage}', json=put_data)
+        self.assertEqual(response.status_code, 200)
+
+        expected_result = self.client.get(f'/quartierAffichages/{self.quartier_affich.IDQuartierAffichage}')
+        self.assertEqual(expected_result.status_code, 200)
+        self.assertEqual(response.json(), expected_result.json())
+    
+    # test the patch route
+    def test_patch_quartier_affichage(self):
+        # patch test data
+        patch_data = {
+            "IDQuartierAffichage": self.quartier_affich.IDQuartierAffichage,
+            "NomQuartier": "Patch Test Quartier",
+            "SousQuartierAffich": "Patch Test Sous Quartier",
+            "ObservationsQuartier": "Patch Test Observations",
+            "ArrondissementQuartier": "Patch Test Arrondissement",
+            "IDZoneAffichage": self.zone_1.IDZoneAffichage
+        }
+        response = self.client.patch(f'/quartierAffichages/{self.quartier_affich.IDQuartierAffichage}', json=patch_data)
+        print(response.json())
+        self.assertEqual(response.status_code, 200)
+
+        expected_result = self.client.get(f'/quartierAffichages/{self.quartier_affich.IDQuartierAffichage}')
+        self.assertEqual(expected_result.status_code, 200)
+        self.assertEqual(response.json(), expected_result.json())
 
 if __name__ == '__main__':
     unittest.main()

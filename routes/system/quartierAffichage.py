@@ -24,14 +24,17 @@ async def get_quartier_affichage_by_id(quartierAffichage_id: int = Path(...), db
 
 
 @router.post("/quartierAffichages", response_model=QuartierAffichageSchema, status_code=status.HTTP_201_CREATED)
-async def create_quartier_affichage(NomQuartier: str = Body(...), SousQuartierAffich: str = Body(...), ObservationsQuartier: str = Body(...), ArrondissementQaurtier: str = Body(...), IDZoneAffichage: int = Body(...), db: Session = Depends(get_db)):
-    quartierAffichage = QuartierAffichageCreateSchema(NomQuartier=NomQuartier, SousQuartierAffich=SousQuartierAffich, ObservationsQuartier=ObservationsQuartier, ArrondissementQaurtier=ArrondissementQaurtier, IDZoneAffichage=IDZoneAffichage)
+async def create_quartier_affichage(NomQuartier: str = Body(...), SousQuartierAffich: str = Body(...), ObservationsQuartier: str = Body(...), ArrondissementQuartier: str = Body(...), IDZoneAffichage: int = Body(...), db: Session = Depends(get_db)):
+    quartierAffichage = QuartierAffichageCreateSchema(NomQuartier=NomQuartier, SousQuartierAffich=SousQuartierAffich, ObservationsQuartier=ObservationsQuartier, ArrondissementQuartier=ArrondissementQuartier, IDZoneAffichage=IDZoneAffichage)
     return await asyncio.to_thread(QuartierAffichageController.create, db, quartierAffichage)
 
 @router.put("/quartierAffichages/{quartierAffichage_id}", response_model=QuartierAffichageSchema, status_code=status.HTTP_200_OK)
 async def update_quartier_affichage(quartierAffichage_id: int = Path(...), quartier: QuartierAffichageUpdateSchema = Body(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(QuartierAffichageController.update, db, quartierAffichage_id, quartier)
 
+@router.patch("/quartierAffichages/{quartierAffichage_id}", response_model=QuartierAffichageSchema, status_code=status.HTTP_200_OK)
+async def update_quartier_affichage(quartierAffichage_id: int = Path(...), quartier: QuartierAffichageUpdateSchema = Body(...), db: Session = Depends(get_db)):
+    return await asyncio.to_thread(QuartierAffichageController.update, db, quartierAffichage_id, quartier)
 
 @router.delete("/quartierAffichages/{quartierAffichage_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_quartier_affichage(quartierAffichage_id: int = Path(...), db: Session = Depends(get_db)):

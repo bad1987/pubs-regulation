@@ -19,7 +19,7 @@ class QuartierAffichage(Base):
     ObservationsQuartier = Column(String(254))
 
     # Arrondissement
-    ArrondissementQaurtier = Column(String(65))
+    ArrondissementQuartier = Column(String(65))
 
     # Clé étrangère, Identifiant unique de la table ZoneAffichage 
     IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage", ondelete="CASCADE"))
