@@ -64,7 +64,7 @@ class Tiers(Base):
     AdresseTiers = Column(String(128))
 
     # Téléphone
-    TelephoneTiers = Column(SmallInteger)
+    TelephoneTiers = Column(Integer)
 
     # Type de tiers Cle etrangere (Régisseur, Régulateur, Annonceur, etc…)  
     IDTypeTiers = Column(Integer, ForeignKey("TypeTiers.IDTypeTiers", ondelete="CASCADE"))
@@ -76,7 +76,7 @@ class Tiers(Base):
     EmailTiers = Column(String(65))
 
     # Logo du tiers, cas  des régisseurs
-    Logo = Column(LargeBinary)
+    Logo = Column(String(255), nullable=True)
 
     # Sigle
     SigleTiers = Column(String(2))
@@ -184,7 +184,7 @@ class Tiers(Base):
     
     # update logo method
     @classmethod
-    def updateLogo(cls, db: Session, tiers_id: int, logo: LargeBinary):
+    def updateLogo(cls, db: Session, tiers_id: int, logo: str):
         # Create a query to retrieve all records in the table that have the given type_panneau_id
         query = db.query(cls).filter_by(IDTiers=tiers_id)
         
@@ -196,3 +196,11 @@ class Tiers(Base):
         
         # Return the updated tiers object
         return cls.get(db, tiers_id)
+
+    # update method
+    @classmethod
+    def update(cls, db: Session, tiers):
+        db.add(tiers)
+        db.commit()
+        db.refresh(tiers)
+        return tiers

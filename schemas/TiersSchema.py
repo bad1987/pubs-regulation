@@ -7,6 +7,11 @@ class TypeTiersSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
+
+class TypeTiersCreateSchema(BaseModel):
+    LibelleTypeTiers: str
+
 
 # Define the schema for the Tiers model
 class TiersSchema(BaseModel):
@@ -18,7 +23,7 @@ class TiersSchema(BaseModel):
     IDTypeTiers: int
     NumCont: Optional[str]
     EmailTiers: Optional[str]
-    Logo: Optional[bytes]
+    Logo: Optional[str]
     SigleTiers: Optional[str]
     type_tiers: TypeTiersSchema
 
@@ -32,6 +37,17 @@ class TiersCreateSchema(BaseModel):
     AdresseTiers: Optional[str]
     TelephoneTiers: Optional[int]
     IDTypeTiers: int
+    NumCont: Optional[str]
+    EmailTiers: Optional[str]
+    SigleTiers: Optional[str]
+
+class TiersUpdateSchema(BaseModel):
+    IDTiers: Optional[int]
+    CodeTiers: Optional[str]
+    LibelleTiers: Optional[str]
+    AdresseTiers: Optional[str]
+    TelephoneTiers: Optional[int]
+    IDTypeTiers: Optional[int]
     NumCont: Optional[str]
     EmailTiers: Optional[str]
     SigleTiers: Optional[str]
