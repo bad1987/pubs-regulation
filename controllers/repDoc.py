@@ -14,13 +14,13 @@ class RepDocController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not rep_doc:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepDoc not found")
-        return rep_doc.from_orm(rep_doc)
+        return RepDocSchema.from_orm(rep_doc)
 
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[RepDocSchema]:
         try:
-            return [rep_doc.from_orm(rep_doc) for rep_doc in RepDoc.getAll(db)]
+            return [RepDocSchema.from_orm(rep_doc) for rep_doc in RepDoc.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -29,7 +29,7 @@ class RepDocController:
     def create(cls, db: Session, rep_doc: RepDocCreateSchema) -> RepDocSchema:
         try:
             rep_doc = RepDoc.create(db, RepDoc(**rep_doc.dict()))
-            return rep_doc.from_orm(rep_doc)
+            return RepDocSchema.from_orm(rep_doc)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -44,7 +44,7 @@ class RepDocController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepDoc not found")
         try:
             rep_doc = RepDoc.updateMontantReparti(db, IDRepDoc, MontantReparti)
-            return rep_doc.from_orm(rep_doc)
+            return RepDocSchema.from_orm(rep_doc)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

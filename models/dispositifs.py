@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
 class DispositifPub(Base):
@@ -43,3 +43,8 @@ class DispositifPub(Base):
     type_dispositif = relationship("TypeDispositif", backref="dispositifs", lazy="joined", cascade="save-update, merge")
     tiers = relationship("Tiers", backref="dispositifs", lazy="joined", cascade="save-update, merge")
     emplacement_affichage = relationship("EmplacementAffichage", backref="dispositifs", cascade="save-update, merge")
+
+    # get method
+    @classmethod
+    def get(cls, db: Session, IDDispositifPub: int):
+        return db.query(cls).filter(cls.IDDispositifPub == IDDispositifPub).first()

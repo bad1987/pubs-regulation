@@ -14,7 +14,7 @@ class RepartitionFraisController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not rep_frais:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
-        return rep_frais.from_orm(rep_frais)
+        return RepartitionFraisSchema.from_orm(rep_frais)
     
     # get all
     @classmethod
@@ -29,7 +29,7 @@ class RepartitionFraisController:
     def create(cls, db: Session, rep_frais: RepartitionFraisCreateSchema) -> RepartitionFraisSchema:
         try:
             rep_frais = RepartitionFrais.create(db, RepartitionFrais(**rep_frais.dict()))
-            return rep_frais.from_orm(rep_frais)
+            return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -47,7 +47,7 @@ class RepartitionFraisController:
             db.add(rep_frais)
             db.commit()
             db.refresh(rep_frais)
-            return rep_frais.from_orm(rep_frais)
+            return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -65,7 +65,7 @@ class RepartitionFraisController:
             db.add(rep_frais)
             db.commit()
             db.refresh(rep_frais)
-            return rep_frais.from_orm(rep_frais)
+            return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -83,7 +83,7 @@ class RepartitionFraisController:
             db.add(rep_frais)
             db.commit()
             db.refresh(rep_frais)
-            return rep_frais.from_orm(rep_frais)
+            return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

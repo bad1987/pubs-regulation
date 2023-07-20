@@ -15,7 +15,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not reglement:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
-        return reglement.from_orm(reglement)
+        return ReglementSchema.from_orm(reglement)
     
     # get all
     @classmethod
@@ -36,7 +36,7 @@ class ReglementController:
             reglement = Reglement(**reglement.dict())
             reglement.doc_entete = doc_entete
             reglement = Reglement.create(db, reglement)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -51,7 +51,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateNumReglt(db, IDReglement, NumReglt)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -66,7 +66,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateDateReglt(db, IDReglement, DateReglt)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -81,7 +81,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateMontantRegle(db, IDReglement, MontantRegle)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -96,7 +96,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateSoldeRglt(db, IDReglement, SoldeRglt)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -111,7 +111,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateStatutRglt(db, IDReglement, StatutRglt)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -126,7 +126,7 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
             reglement = Reglement.updateModeRglt(db, IDReglement, ModeRglt)
-            return reglement.from_orm(reglement)
+            return ReglementSchema.from_orm(reglement)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

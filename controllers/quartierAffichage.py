@@ -15,7 +15,7 @@ class QuartierAffichageController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not quartierAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QuartierAffichage not found")
-        return quartierAffichage.from_orm(quartierAffichage)
+        return QuartierAffichageSchema.from_orm(quartierAffichage)
     
     # get all
     @classmethod
@@ -39,7 +39,7 @@ class QuartierAffichageController:
             quartierAffichage = QuartierAffichage(**quartierAffichage.dict())
             quartierAffichage.zone_affichage = zoneAffichage
             quartierAffichage = QuartierAffichage.create(db, quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -57,7 +57,7 @@ class QuartierAffichageController:
             db.add(quartierAffichage)
             db.commit()
             db.refresh(quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -75,7 +75,7 @@ class QuartierAffichageController:
             db.add(quartierAffichage)
             db.commit()
             db.refresh(quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -93,7 +93,7 @@ class QuartierAffichageController:
             db.add(quartierAffichage)
             db.commit()
             db.refresh(quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -111,7 +111,7 @@ class QuartierAffichageController:
             db.add(quartierAffichage)
             db.commit()
             db.refresh(quartierAffichage)
-            return quartierAffichage.from_orm(quartierAffichage)
+            return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
