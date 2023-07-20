@@ -17,6 +17,17 @@ class ReglementController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         return ReglementSchema.from_orm(reglement)
     
+    # get by NumReglt
+    @classmethod
+    def getByNumReglt(cls, db: Session, NumReglt: str) -> ReglementSchema:
+        try:
+            reglement = Reglement.getByNumReglt(db, NumReglt)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        if not reglement:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
+        return ReglementSchema.from_orm(reglement)
+
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[ReglementSchema]:
@@ -57,7 +68,7 @@ class ReglementController:
     
     # update
     @classmethod
-    def update(cls, db: Session, IDReglement: int, reglement: ReglementCreateSchema) -> ReglementSchema:
+    def update(cls, db: Session, IDReglement: int, updateReglement: ReglementCreateSchema) -> ReglementSchema:
         try:
             reglement = Reglement.get(db, IDReglement)
         except Exception as e:
@@ -65,7 +76,7 @@ class ReglementController:
         if not reglement:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reglement not found")
         try:
-            update_data = reglement.dict(exclude_unset=True)
+            update_data = updateReglement.dict(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(reglement, key, value)
             reglement = Reglement.update(db, reglement)

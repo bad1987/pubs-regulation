@@ -35,8 +35,13 @@ class Reglement(Base):
 
     # get by id
     @classmethod
-    def get_by_id(cls, IDReglement: int):
+    def get(cls, IDReglement: int):
         return cls.query.filter_by(IDReglement=IDReglement).first()
+    
+    # get by NumReglt
+    @classmethod
+    def getByNumReglt(cls, NumReglt: str):
+        return cls.query.filter_by(NumReglt=NumReglt).first()
     
     # get all
     @classmethod

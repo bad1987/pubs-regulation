@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, CHAR
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
 class DocEntete(Base):
@@ -37,3 +37,41 @@ class DocEntete(Base):
 
     # Relation avec la table Tiers
     tiers = relationship("Tiers", backref="documents", lazy="joined", cascade="save-update, merge")
+
+    # get
+    @classmethod
+    def get(cls, db: Session, IDDocEntete: int):
+        return db.query(cls).filter_by(IDDocEntete=IDDocEntete).first()
+    
+    # get by NumDocEntete
+    @classmethod
+    def getByNumDocEntete(cls, db: Session, NumDocEntete: str):
+        return db.query(cls).filter_by(NumDocEntete=NumDocEntete).first()
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, doc_entete):
+        db.add(doc_entete)
+        db.commit()
+        db.refresh(doc_entete)
+        return doc_entete
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, doc_entete):
+        db.add(doc_entete)
+        db.commit()
+        db.refresh(doc_entete)
+        return doc_entete
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, IDDocEntete: int):
+        db.query(cls).filter_by(IDDocEntete=IDDocEntete).delete()
+        db.commit()
+        return True

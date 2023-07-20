@@ -29,3 +29,13 @@ class ReglementCreateSchema(BaseModel):
     StatutRglt: str
     ModeRglt: str
     IDDocEntete: int
+
+class ReglementUpdateSchema(BaseModel):
+    IDReglement: int
+    NumReglt: str
+    DateReglt: date
+    MontantRegle: int
+    SoldeRglt: float
+    StatutRglt: str
+    ModeRglt: str
+    IDDocEntete: int
