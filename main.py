@@ -18,8 +18,8 @@ app = FastAPI(title="REGUL PUB", version="1.0.0", description="tHIS api IS DESIG
 def welcome(): return {"Message": "Welcome to regul pub platform", "Version": "1.0.0", "Build by": "BAD INC"}
 
 # use routes
-app.include_router(taxesRouter)
 app.include_router(quartierAffichageRouter)
+app.include_router(taxesRouter)
 
 # cors
 app.add_middleware( 

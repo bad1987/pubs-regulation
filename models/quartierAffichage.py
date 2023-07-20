@@ -34,13 +34,13 @@ class QuartierAffichage(Base):
 
     # get by NomQuartier
     @classmethod
-    def get_by_nom_quartier(cls, NomQuartier: str):
-        return cls.query.filter(cls.NomQuartier == NomQuartier).first()
+    def get_by_nom_quartier(cls, db: Session, NomQuartier: str):
+        return db.query(cls).filter(cls.NomQuartier == NomQuartier).first()
 
     # get all
     @classmethod
-    def get_all(cls):
-        return cls.query.all()
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
 
     # create an instance of the class
     @classmethod

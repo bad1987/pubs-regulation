@@ -40,10 +40,38 @@ class TestQuartierAffichage(TestCase):
         # Test case 1: Valid quartier_affichage_id
         quartier_affichage_id = self.quartier_affich.IDQuartierAffichage
         expected_result = QuartierAffichageSchema(**jsonable_encoder(self.quartier_affich))
-        response = self.client.get(f'/quartieraffiches/{quartier_affichage_id}')
+        response = self.client.get(f'/quartierAffichages/{quartier_affichage_id}')
         print(response.json())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result.dict())
+
+        # Test case 2: Invalid quartier_affichage_id
+        quartier_affichage_id = 1
+        expected_error = {'detail': 'QuartierAffichage not found'}
+        response = self.client.get(f'/quartierAffichages/{quartier_affichage_id}')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), expected_error)
+    
+    # test the post route
+    def test_create_quartier_affichage(self):
+        # create test data
+        post_data = {
+            "NomQuartier": "Create Test Quartier",
+            "SousQuartierAffich": "Create Test Sous Quartier",
+            "ObservationsQuartier": "Create Test Observations",
+            "ArrondissementQaurtier": "Create Test Arrondissement",
+            "IDZoneAffichage": self.zone_1.IDZoneAffichage
+        }
+        response = self.client.post("/quartierAffichages", json=post_data)
+        self.assertEqual(response.status_code, 201)
+        expected_result = self.client.get(f'/quartierAffichages/nomQuartier', params={"NomQuartier": post_data["NomQuartier"]})
+        print(expected_result.json())
+        self.assertEqual(expected_result.status_code, 200)
+        self.assertEqual(response.json(), expected_result.json())
+
+        # clean up using delete endpoint
+        response = self.client.delete(f'/quartierAffichages/{response.json()["IDQuartierAffichage"]}')
+        self.assertEqual(response.status_code, 204)
 
 if __name__ == '__main__':
     unittest.main()

@@ -24,11 +24,22 @@ class QuartierAffichageController:
             return [QuartierAffichageSchema.from_orm(quartierAffichage) for quartierAffichage in QuartierAffichage.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    
+
+    # get by NomQuartier
+    @classmethod
+    def get_by_nom_quartier(cls, db: Session, NomQuartier: str) -> QuartierAffichageSchema:
+        try:
+            quartierAffichage = QuartierAffichage.get_by_nom_quartier(db, NomQuartier)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        if not quartierAffichage:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QuartierAffichage not found")
+        return QuartierAffichageSchema.from_orm(quartierAffichage)
+
     # create
     @classmethod
     def create(cls, db: Session, quartierAffichage: QuartierAffichageCreateSchema) -> QuartierAffichageSchema:
-        # check if CodeTiers is unique
+        # check if NomQuartier is unique
         if QuartierAffichage.get_by_nom_quartier(db, quartierAffichage.NomQuartier):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="NomQuartier already exists")
         # check if the foreign key IDZoneAffichage is valid
@@ -138,7 +149,7 @@ class QuartierAffichageController:
         if not quartierAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QuartierAffichage not found")
         try:
-            return QuartierAffichage.delete(db, quartierAffichage)
+            return QuartierAffichage.delete(db, quartierAffichage_id)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

@@ -1,6 +1,6 @@
 import asyncio
 from fastapi import APIRouter, Depends, status
-from fastapi.params import Body, Path
+from fastapi.params import Body, Path, Query
 from sqlalchemy.orm import Session
 from controllers.quartierAffichage import QuartierAffichageController
 from dependencies.db_dependencies import get_db
@@ -9,13 +9,19 @@ from schemas.QuartierAffichageSchema import QuartierAffichageSchema, QuartierAff
 
 router = APIRouter()
 
+@router.get("/quartierAffichages", response_model=list[QuartierAffichageSchema], status_code=status.HTTP_200_OK)
+async def get_all_quartier_affichages(db: Session = Depends(get_db)):
+    return await asyncio.to_thread(QuartierAffichageController.getAll, db)
+
+# get by NomQuartier
+@router.get("/quartierAffichages/nomQuartier", response_model=QuartierAffichageSchema, status_code=status.HTTP_200_OK)
+async def get_quartier_affichage_by_nom_quartier(NomQuartier: str = Query(...), db: Session = Depends(get_db)):
+    return await asyncio.to_thread(QuartierAffichageController.get_by_nom_quartier, db, NomQuartier)
+
 @router.get("/quartierAffichages/{quartierAffichage_id}", response_model=QuartierAffichageSchema, status_code=status.HTTP_200_OK)
 async def get_quartier_affichage_by_id(quartierAffichage_id: int = Path(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(QuartierAffichageController.get, db, quartierAffichage_id)
 
-@router.get("/quartierAffichages", response_model=list[QuartierAffichageSchema], status_code=status.HTTP_200_OK)
-async def get_all_quartier_affichages(db: Session = Depends(get_db)):
-    return await asyncio.to_thread(QuartierAffichageController.getAll, db)
 
 @router.post("/quartierAffichages", response_model=QuartierAffichageSchema, status_code=status.HTTP_201_CREATED)
 async def create_quartier_affichage(NomQuartier: str = Body(...), SousQuartierAffich: str = Body(...), ObservationsQuartier: str = Body(...), ArrondissementQaurtier: str = Body(...), IDZoneAffichage: int = Body(...), db: Session = Depends(get_db)):
