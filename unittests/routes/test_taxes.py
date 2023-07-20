@@ -11,7 +11,6 @@ from schemas.TaxesSchema import TaxesSchema
 
 from main import app
 from db.Connexion import SessionLocal
-from models.taxes import Taxes
 
 class TestTaxes(TestCase):
     def setUp(self):

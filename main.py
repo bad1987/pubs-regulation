@@ -3,6 +3,7 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 from routes.system.taxes import router as taxesRouter
+from routes.system.quartierAffichage import router as quartierAffichageRouter
 
 from dotenv import load_dotenv
 import os
@@ -18,6 +19,7 @@ def welcome(): return {"Message": "Welcome to regul pub platform", "Version": "1
 
 # use routes
 app.include_router(taxesRouter)
+app.include_router(quartierAffichageRouter)
 
 # cors
 app.add_middleware( 

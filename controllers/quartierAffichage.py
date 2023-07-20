@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.quartierAffichage import QuartierAffichage
 from models.zoneAffichage import ZoneAffichage
-from schemas.QuartierAffichageSchema import QuartierAffichageSchema, QuartierAffichageCreateSchema
+from schemas.QuartierAffichageSchema import QuartierAffichageSchema, QuartierAffichageCreateSchema, QuartierAffichageUpdateSchema
 
 class QuartierAffichageController:
 
@@ -42,6 +42,22 @@ class QuartierAffichageController:
             return QuartierAffichageSchema.from_orm(quartierAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, quartierAffichage_id: int, updateQuartierAffichage: QuartierAffichageUpdateSchema) -> QuartierAffichageSchema:
+        quartierAffichage = QuartierAffichage.get(db, quartierAffichage_id)
+        if not quartierAffichage:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QuartierAffichage not found")
+        try:
+            update_data = updateQuartierAffichage.dict(exclude_unset=True)
+            for key, value in update_data.items():
+                setattr(quartierAffichage, key, value)
+            quartierAffichage = QuartierAffichage.update(db, quartierAffichage)
+            return quartierAffichage.from_orm(quartierAffichage)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
     
     # update NomQuartier
     @classmethod
