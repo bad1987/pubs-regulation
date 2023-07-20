@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey
+from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -13,7 +13,7 @@ class Reglement(Base):
     NumReglt = Column(String(9), nullable=False, unique=True)
 
     # Date de règlement
-    DateReglt = Column(Date)
+    DateReglt = Column(DateTime)
 
     # Montant Réglé
     MontantRegle = Column(Integer)
@@ -73,7 +73,7 @@ class Reglement(Base):
     
     # update DateReglt
     @classmethod
-    def updateDateReglt(cls, db: Session, IDReglement: int, DateReglt: Date):
+    def updateDateReglt(cls, db: Session, IDReglement: int, DateReglt: DateTime):
         db.query(cls).filter_by(IDReglement=IDReglement).update({"DateReglt": DateReglt})
         db.commit()
         return cls.get(db, IDReglement)

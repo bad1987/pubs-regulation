@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.system.taxes import router as taxesRouter
 from routes.system.quartierAffichage import router as quartierAffichageRouter
 from routes.system.tiers import router as tiersRouter
+from routes.system.reglements import router as ReglementRouter
 
 from dotenv import load_dotenv
 import os
@@ -22,6 +23,7 @@ def welcome(): return {"Message": "Welcome to regul pub platform", "Version": "1
 app.include_router(quartierAffichageRouter)
 app.include_router(taxesRouter)
 app.include_router(tiersRouter)
+app.include_router(ReglementRouter)
 
 # cors
 app.add_middleware( 
