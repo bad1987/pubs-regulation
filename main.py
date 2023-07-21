@@ -6,6 +6,7 @@ from routes.system.taxes import router as taxesRouter
 from routes.system.quartierAffichage import router as quartierAffichageRouter
 from routes.system.tiers import router as tiersRouter
 from routes.system.reglements import router as ReglementRouter
+from routes.system.zoneAffichage import router as zoneAffichageRouter
 
 from dotenv import load_dotenv
 import os
@@ -24,6 +25,7 @@ app.include_router(quartierAffichageRouter)
 app.include_router(taxesRouter)
 app.include_router(tiersRouter)
 app.include_router(ReglementRouter)
+app.include_router(zoneAffichageRouter)
 
 # cors
 app.add_middleware( 
