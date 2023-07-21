@@ -19,17 +19,25 @@ class RepartitionFrais(Base):
 
     # get by id
     @classmethod
-    def get_by_id(cls, IDRepartitionFrais: int):
-        return cls.query.filter_by(IDRepartitionFrais=IDRepartitionFrais).first()
+    def get(cls, db: Session, IDRepartitionFrais: int):
+        return db.query(cls).filter_by(IDRepartitionFrais=IDRepartitionFrais).first()
     
     # get all
     @classmethod
-    def get_all(cls):
-        return cls.query.all()
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
     
     # create
     @classmethod
     def create(cls, db: Session, rep_frais):
+        db.add(rep_frais)
+        db.commit()
+        db.refresh(rep_frais)
+        return rep_frais
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, rep_frais):
         db.add(rep_frais)
         db.commit()
         db.refresh(rep_frais)

@@ -1,8 +1,10 @@
+from http.client import HTTPException, status
 from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
+
+from schemas.TypeDispositif import TypeDispositifSchema
 
 class TypeDispositif(Base):
     __tablename__ = "TypeDispositif"
@@ -69,3 +71,15 @@ class TypeDispositif(Base):
         
         # Return the updated object
         return cls.get(db, type_dispositif_id)
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, type_dispositif):
+        # Add the new type_dispositif to the database session
+        db.add(type_dispositif)
+        # Commit the changes to the database
+        db.commit()
+        # Refresh the type_dispositif object with the latest data from the database
+        db.refresh(type_dispositif)
+        # Return the updated type_dispositif object
+        return type_dispositif

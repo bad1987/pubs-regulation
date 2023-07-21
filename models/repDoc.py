@@ -41,6 +41,14 @@ class RepDoc(Base):
         db.refresh(rep_doc)
         return rep_doc
     
+    # update
+    @classmethod
+    def update(cls, db: Session, rep_doc):
+        db.add(rep_doc)
+        db.commit()
+        db.refresh(rep_doc)
+        return rep_doc
+    
     # update MontantReparti
     @classmethod
     def updateMontantReparti(cls, db: Session, IDRepDoc: int, MontantReparti: float):

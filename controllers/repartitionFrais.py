@@ -20,7 +20,7 @@ class RepartitionFraisController:
     @classmethod
     def getAll(cls, db: Session) -> list[RepartitionFraisSchema]:
         try:
-            return [RepartitionFraisSchema.from_orm(rep_frais) for rep_frais in RepartitionFrais.getAll(db)]
+            return [RepartitionFraisSchema.from_orm(rep_frais) for rep_frais in RepartitionFrais.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -44,9 +44,7 @@ class RepartitionFraisController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
         try:
             rep_frais.IntervenantEntite = IntervenantEntite
-            db.add(rep_frais)
-            db.commit()
-            db.refresh(rep_frais)
+            rep_frais = RepartitionFrais.update(db, rep_frais)
             return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -62,9 +60,7 @@ class RepartitionFraisController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
         try:
             rep_frais.TauxRepartition = TauxRepartition
-            db.add(rep_frais)
-            db.commit()
-            db.refresh(rep_frais)
+            rep_frais = RepartitionFrais.update(db, rep_frais)
             return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -80,9 +76,7 @@ class RepartitionFraisController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
         try:
             rep_frais.AnneeRepart = AnneeRepart
-            db.add(rep_frais)
-            db.commit()
-            db.refresh(rep_frais)
+            rep_frais = RepartitionFrais.update(db, rep_frais)
             return RepartitionFraisSchema.from_orm(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -97,8 +91,6 @@ class RepartitionFraisController:
         if not rep_frais:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
         try:
-            db.delete(rep_frais)
-            db.commit()
-            return True
+            return RepartitionFrais.delete(db, IDRepartitionFrais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
