@@ -48,6 +48,14 @@ class ZoneAffichage(Base):
             db.commit()
             return True
         return False
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, zoneAffichage):
+        db.add(zoneAffichage)
+        db.commit()
+        db.refresh(zoneAffichage)
+        return zoneAffichage
 
     # update libelleZone
     @classmethod

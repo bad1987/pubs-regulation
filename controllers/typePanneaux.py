@@ -17,13 +17,13 @@ class TypePanneauController:
         if not type_panneau:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="TypePanneau not found")
-        return type_panneau
+        return TypePanneauSchema.from_orm(type_panneau)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[TypePanneauSchema]:
         try:
-            return TypePanneau.getAll(db)
+            return [TypePanneauSchema.from_orm(type_panneau) for type_panneau in TypePanneau.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
         
@@ -35,7 +35,7 @@ class TypePanneauController:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypePanneau already exists")
         try:
             type_panneau = TypePanneau.create(db, type_panneau)
-            return type_panneau
+            return TypePanneauSchema.from_orm(type_panneau)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
         
@@ -63,7 +63,7 @@ class TypePanneauController:
         try:
             # update type_panneau
             type_panneau = TypePanneau.updateLibelleType(db, type_panneau_id, libelleType)
-            return type_panneau
+            return TypePanneauSchema.from_orm(type_panneau)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     

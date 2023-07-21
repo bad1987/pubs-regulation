@@ -1,49 +1,55 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.quartierAffichage import QuartierAffichage
-from schemas.ZoneAffichage import ZoneAffichageCreateSchema
-from zoneAffichage import ZoneAffichage
+from schemas.ZoneAffichage import ZoneAffichageCreateSchema, ZoneAffichageSchema, ZoneAffichageUpdateSchema
+from models.zoneAffichage import ZoneAffichage
 
 
 class ZoneAffichageController:
 
     # get zoneAffichage
     @classmethod
-    def get(cls, db: Session, zoneAffichage_id: int):
+    def get(cls, db: Session, zoneAffichage_id: int) -> ZoneAffichageSchema:
         # if zoneAffichage does not exist, throw an error
         zoneAffichage = ZoneAffichage.get(db, zoneAffichage_id)
         if not zoneAffichage:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
-        return zoneAffichage
+        return ZoneAffichageSchema.from_orm(zoneAffichage)
 
-    # get all zoneAffichage by quartier_id
+    # get all zoneAffichage by CodeZone
     @classmethod
-    def getAllByQuartiers(cls, db: Session, quartier_id: int):
-        try:
-            return ZoneAffichage.getAllByQuartiers(db, quartier_id)
-        except Exception as e:
+    def getByCodeZone(cls, db: Session, codeZone: str) -> ZoneAffichageSchema:
+        # if zoneAffichage does not exist, throw an error
+        zoneAffichage = ZoneAffichage.getByCodeZone(db, codeZone)
+        if not zoneAffichage:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+                status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
+        try:
+            return ZoneAffichageSchema.from_orm(ZoneAffichage.getByCodeZone(db, codeZone))
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
+    
+    # get all zoneAffichage
+    @classmethod
+    def getAll(cls, db: Session) -> list[ZoneAffichageSchema]:
+        try:
+            return [ZoneAffichageSchema.from_orm(zoneAffichage) for zoneAffichage in ZoneAffichage.getAll(db)]
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
 
     # create zoneAffichage
     @classmethod
-    def create(cls, db: Session, zoneAffichage: ZoneAffichageCreateSchema):
+    def create(cls, db: Session, zoneAffichage: ZoneAffichageCreateSchema) -> ZoneAffichageSchema:
         # check if CodeZone is unique
         if ZoneAffichage.getByCodeZone(db, zoneAffichage.CodeZone):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="ZoneAffichage already exists with CodeZone")
 
         try:
-            zoneAffichage = ZoneAffichage(**zoneAffichage.model_dump())
-            for quartier_id in zoneAffichage.quartiers:
-                quartierAffichage = QuartierAffichage.get(db, quartier_id)
-                if not quartierAffichage:
-                    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                        detail=f"QuartierAffichage with id {quartier_id} not found")
-                zoneAffichage.quartiers.append(quartierAffichage)
+            zoneAffichage = ZoneAffichage(**zoneAffichage.dict())
             zoneAffichage = ZoneAffichage.create(db, zoneAffichage)
-            return zoneAffichage
+            return ZoneAffichageSchema.from_orm(zoneAffichage)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -52,15 +58,14 @@ class ZoneAffichageController:
 
     # delete zoneAffichage
     @classmethod
-    def delete(cls, db: Session, zoneAffichage_id: int):
+    def delete(cls, db: Session, zoneAffichage_id: int) -> bool:
         # if zoneAffichage does not exist, throw an error
         zoneAffichage = ZoneAffichage.get(db, zoneAffichage_id)
         if not zoneAffichage:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
         try:
-            ZoneAffichage.delete(db, zoneAffichage_id)
-            return True
+            return ZoneAffichage.delete(db, zoneAffichage_id)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -69,9 +74,35 @@ class ZoneAffichageController:
 
     # update libelleZone
     @classmethod
-    def updateLibelleZone(cls, db: Session, zoneAffichage_id: int, libelleZone: str):
+    def updateLibelleZone(cls, db: Session, zoneAffichage_id: int, libelleZone: str) -> ZoneAffichageSchema:
+        # if zoneAffichage does not exist, throw an error
+        zoneAffichage = ZoneAffichage.get(db, zoneAffichage_id)
+        if not zoneAffichage:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
         try:
-            return ZoneAffichage.updateLibelleZone(db, zoneAffichage_id, libelleZone)
+            zoneAffichage = ZoneAffichage.update_libelle_zone(db, zoneAffichage_id, libelleZone)
+            return ZoneAffichageSchema.from_orm(zoneAffichage)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(e)
+            )
+
+    # update
+    @classmethod
+    def update(cls, db: Session, zoneAffichage_id: int, updateZoneAffichage: ZoneAffichageUpdateSchema) -> ZoneAffichageSchema:
+        # if zoneAffichage does not exist, throw an error
+        zoneAffichage = ZoneAffichage.get(db, zoneAffichage_id)
+        if not zoneAffichage:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
+        try:
+            update_data = updateZoneAffichage.dict(exclude_unset=True)
+            for key, value in update_data.items():
+                setattr(zoneAffichage, key, value)
+            zoneAffichage = ZoneAffichage.update(db, zoneAffichage)
+            return ZoneAffichageSchema.from_orm(zoneAffichage)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

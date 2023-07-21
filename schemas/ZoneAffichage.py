@@ -17,3 +17,8 @@ class ZoneAffichageCreateSchema(BaseModel):
     CodeZone: Optional[str]
     LibelleZone: Optional[str]
 
+class ZoneAffichageUpdateSchema(BaseModel):
+    IDZoneAffichage: Optional[int]
+    CodeZone: Optional[str]
+    LibelleZone: Optional[str]
+
