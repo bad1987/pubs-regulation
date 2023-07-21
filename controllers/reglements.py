@@ -32,7 +32,7 @@ class ReglementController:
     @classmethod
     def getAll(cls, db: Session) -> list[ReglementSchema]:
         try:
-            return [ReglementSchema.from_orm(reglement) for reglement in Reglement.getAll(db)]
+            return [ReglementSchema.from_orm(reglement) for reglement in Reglement.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

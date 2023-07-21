@@ -50,7 +50,7 @@ class TestTiers(TestCase):
         self.db.commit()
         self.db.close()
 
-    def test_get_tiers_by_id(self):
+    def test_get_reglement_by_id(self):
         # test case 1: valid reglement_id
         reglement_id = self.reglement.IDReglement
         expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
@@ -66,6 +66,56 @@ class TestTiers(TestCase):
         response = self.client.get(f'/reglements/{reglement_id}')
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(), expected_error)
+
+    def test_get_reglement_by_numreglement(self):
+        # test case 1: valid reglement_numreglement
+        reglement_numreglement = self.reglement.NumReglt
+        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
+        expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
+        expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
+        response = self.client.get(f'/reglements/numreglement', params={'NumReglt': reglement_numreglement})
+        print(response.json())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_result)
+
+        # test case 2: invalid reglement_numreglement
+        reglement_numreglement = "123"
+        expected_error = {'detail': 'Reglement not found'}
+        response = self.client.get(f'/reglements/numreglement', params={'NumReglt': reglement_numreglement})
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), expected_error)
+    
+    def test_get_all(self):
+        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
+        expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
+        expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
+        expected_result = [expected_result]
+        response = self.client.get('/reglements')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_result)
+
+    def test_create(self):
+        post_data = {
+            "NumReglt": "T create",
+            "DateReglt": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S'),
+            "MontantRegle": 1000,
+            "SoldeRglt": 0,
+            "StatutRglt": "AC",
+            "ModeRglt": "Test Mode",
+            "IDDocEntete": self.doc_entete.IDDocEntete
+        }
+        response = self.client.post('/reglements', json=post_data)
+        self.assertEqual(response.status_code, 201)
+        expected_result = self.client.get("/reglements/numreglement", params={'NumReglt': post_data['NumReglt']})
+        self.assertEqual(expected_result.status_code, 200)
+        self.assertEqual(response.json(), expected_result.json())
+
+        # clean up using delete endpoint
+        response = self.client.delete(f'/reglements/{response.json()["IDReglement"]}')
+        self.assertEqual(response.status_code, 204)
+
+    
+    
 
 if __name__ == '__main__':
     unittest.main()
