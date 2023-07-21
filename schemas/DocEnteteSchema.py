@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 from schemas.TiersSchema import TiersSchema
@@ -6,7 +7,7 @@ class DocEnteteSchema(BaseModel):
     IDDocEntete: int
     TypeDocEntete: int
     NumDocEntete: str
-    DateDocEntete: str
+    DateDocEntete: datetime
     MontantHTDoc: int
     MontantTaxeDoc: float
     MontantTTCDoc: float
@@ -22,7 +23,7 @@ class DocEnteteSchema(BaseModel):
 class DocEnteteCreateSchema(BaseModel):
     TypeDocEntete: int
     NumDocEntete: str
-    DateDocEntete: str
+    DateDocEntete: datetime
     MontantHTDoc: int
     MontantTaxeDoc: float
     MontantTTCDoc: float
@@ -34,7 +35,7 @@ class DocEnteteUpdateSchema(BaseModel):
     IDDocEntete: int
     TypeDocEntete: int
     NumDocEntete: str
-    DateDocEntete: str
+    DateDocEntete: datetime
     MontantHTDoc: int
     MontantTaxeDoc: float
     MontantTTCDoc: float

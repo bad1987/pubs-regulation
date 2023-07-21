@@ -23,7 +23,7 @@ class ReglementSchema(BaseModel):
 
 class ReglementCreateSchema(BaseModel):
     NumReglt: str
-    DateReglt: date
+    DateReglt: datetime
     MontantRegle: int
     SoldeRglt: float
     StatutRglt: str
@@ -33,7 +33,7 @@ class ReglementCreateSchema(BaseModel):
 class ReglementUpdateSchema(BaseModel):
     IDReglement: int
     NumReglt: str
-    DateReglt: date
+    DateReglt: datetime
     MontantRegle: int
     SoldeRglt: float
     StatutRglt: str

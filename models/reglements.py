@@ -35,18 +35,18 @@ class Reglement(Base):
 
     # get by id
     @classmethod
-    def get(cls, IDReglement: int):
-        return cls.query.filter_by(IDReglement=IDReglement).first()
+    def get(cls, db: Session, IDReglement: int):
+        return db.query(cls).filter_by(IDReglement=IDReglement).first()
     
     # get by NumReglt
     @classmethod
-    def getByNumReglt(cls, NumReglt: str):
-        return cls.query.filter_by(NumReglt=NumReglt).first()
+    def getByNumReglt(cls, db: Session, NumReglt: str):
+        return db.query(cls).filter_by(NumReglt=NumReglt).first()
     
     # get all
     @classmethod
-    def get_all(cls):
-        return cls.query.all()
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
     
     # create
     @classmethod

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, CHAR
+from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey, CHAR
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
@@ -15,7 +15,7 @@ class DocEntete(Base):
     NumDocEntete = Column(String(9), nullable=False, unique=True)
 
     # Date de création du document, type date
-    DateDocEntete = Column(Date)
+    DateDocEntete = Column(DateTime)
 
     # Montant HT du document, Cas commande ou facture par exemple
     MontantHTDoc = Column(Integer)
@@ -72,6 +72,11 @@ class DocEntete(Base):
     # delete
     @classmethod
     def delete(cls, db: Session, IDDocEntete: int):
-        db.query(cls).filter_by(IDDocEntete=IDDocEntete).delete()
-        db.commit()
-        return True
+        # get by IDDocEntete
+        doc_entete = DocEntete.get(db, IDDocEntete)
+        # delete if exists
+        if doc_entete:
+            db.delete(doc_entete)
+            db.commit()
+            return True
+        return False
