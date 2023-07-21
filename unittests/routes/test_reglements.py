@@ -57,7 +57,6 @@ class TestTiers(TestCase):
         expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
         expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
         response = self.client.get(f'/reglements/{reglement_id}')
-        print(expected_result)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result)
 
