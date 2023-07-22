@@ -7,7 +7,9 @@ from dependencies.db_dependencies import get_db
 from controllers.zoneAffichage import ZoneAffichageController
 from schemas.ZoneAffichage import ZoneAffichageCreateSchema, ZoneAffichageSchema, ZoneAffichageUpdateSchema
 
-router = APIRouter()
+router = APIRouter(
+    tags=["ZoneAffichage"],
+)
 
 @router.get("/zoneAffichages", response_model=list[ZoneAffichageSchema], status_code=status.HTTP_200_OK)
 async def get_all_zone_affichages(db: Session = Depends(get_db)):

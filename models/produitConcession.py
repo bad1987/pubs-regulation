@@ -29,13 +29,13 @@ class ProduitConcession(Base):
     
     # get by CodeProduitConcession
     @classmethod
-    def get_by_code(cls, CodeProduitConcession: str):
-        return cls.query.filter(cls.CodeProduitConcession == CodeProduitConcession).first()
+    def get_by_code(cls, db: Session, CodeProduitConcession: str):
+        return db.query(cls).filter(cls.CodeProduitConcession == CodeProduitConcession).first()
     
     # get all
     @classmethod
-    def get_all(cls):
-        return cls.query.all()
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
     
     # create
     @classmethod

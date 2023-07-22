@@ -7,7 +7,9 @@ from dependencies.db_dependencies import get_db
 
 from schemas.TaxesSchema import TaxesCreateSchema, TaxesSchema
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Taxes"],
+)
 
 # get by id
 @router.get("/taxes/{tax_id}", response_model=TaxesSchema)

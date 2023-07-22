@@ -7,7 +7,9 @@ from dependencies.db_dependencies import get_db
 from controllers.reglements import ReglementController
 from schemas.ReglementSchema import ReglementSchema, ReglementCreateSchema, ReglementUpdateSchema
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Reglements"],
+)
 
 @router.get("/reglements/numreglement", response_model=ReglementSchema, status_code=status.HTTP_200_OK)
 async def get_reglements_by_numreglement(NumReglt: str = Query(...), db: Session = Depends(get_db)):

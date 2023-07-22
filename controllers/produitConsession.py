@@ -18,7 +18,7 @@ class ProduitConcessionController:
     
     # get by CodeProduitConcession
     @classmethod
-    def get_by_code(cls, db: Session, CodeProduitConcession: str):
+    def get_by_code(cls, db: Session, CodeProduitConcession: str) -> ProduitConsessionSchema:
         try:
             produitConcession = ProduitConcession.get_by_code(db, CodeProduitConcession)
         except Exception as e:
@@ -29,14 +29,14 @@ class ProduitConcessionController:
     
     # get all
     @classmethod
-    def get_all(cls, db: Session):
+    def get_all(cls, db: Session) -> list[ProduitConsessionSchema]:
         try:
-            produitConcession = ProduitConcession.get_all(db)
+            produitConcessions = ProduitConcession.get_all(db)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-        if not produitConcession:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession not found")
-        return [ProduitConsessionSchema.from_orm(produitConcession) for produitConcession in produitConcession]
+        if not produitConcessions:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcessions not found")
+        return [ProduitConsessionSchema.from_orm(produitConcession) for produitConcession in produitConcessions]
     
     # create
     @classmethod

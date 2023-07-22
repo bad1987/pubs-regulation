@@ -7,7 +7,9 @@ from dependencies.db_dependencies import get_db
 
 from schemas.QuartierAffichageSchema import QuartierAffichageSchema, QuartierAffichageCreateSchema, QuartierAffichageUpdateSchema
 
-router = APIRouter()
+router = APIRouter(
+    tags=["QuartierAffichage"],
+)
 
 @router.get("/quartierAffichages", response_model=list[QuartierAffichageSchema], status_code=status.HTTP_200_OK)
 async def get_all_quartier_affichages(db: Session = Depends(get_db)):

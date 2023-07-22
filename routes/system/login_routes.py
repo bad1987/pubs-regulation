@@ -22,7 +22,7 @@ if secure_cookie.lower() == 'true':
 else:
     secure_cookie = False
 
-route = APIRouter(prefix='', tags=['Handle account users'], include_in_schema=False)
+route = APIRouter(prefix='', tags=['Handle user accounts'], include_in_schema=False)
 # templates = Jinja2Templates(directory="templates")
 console = Console()
 

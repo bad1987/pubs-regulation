@@ -7,7 +7,9 @@ from dependencies.db_dependencies import get_db
 from controllers.tiers import TiersController
 from schemas.TiersSchema import TiersSchema, TiersCreateSchema, TiersUpdateSchema
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Tiers"],
+)
 
 # get by codeTiers
 @router.get("/tiers/code", response_model=TiersSchema, status_code=status.HTTP_200_OK)

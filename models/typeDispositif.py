@@ -1,4 +1,3 @@
-from http.client import HTTPException, status
 from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
