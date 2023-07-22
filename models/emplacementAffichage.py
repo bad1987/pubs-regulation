@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
 class EmplacementAffichage(Base):
@@ -16,3 +16,49 @@ class EmplacementAffichage(Base):
 
     # Relation avec la table Quartier
     quartier = relationship("QuartierAffichage", backref="emplacements", cascade="save-update, merge")
+
+    # get
+    @classmethod
+    def get(cls, db: Session, IDEmplacementAffichage: int):
+        return db.query(cls).filter(cls.IDEmplacementAffichage == IDEmplacementAffichage).first()
+    
+    # get by CodeEmplacement
+    @classmethod
+    def get_by_code(cls, db: Session, CodeEmplacement: str):
+        return db.query(cls).filter(cls.CodeEmplacement == CodeEmplacement).first()
+    
+    # get all by IDQuartierAffichage
+    @classmethod
+    def get_all_by_id_quartier(cls, db: Session, IDQuartierAffichage: int):
+        return db.query(cls).filter(cls.IDQuartierAffichage == IDQuartierAffichage).all()
+
+    # get all
+    @classmethod
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, emplacementAffichage):
+        db.add(emplacementAffichage)
+        db.commit()
+        db.refresh(emplacementAffichage)
+        return emplacementAffichage
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, emplacementAffichage):
+        db.add(emplacementAffichage)
+        db.commit()
+        db.refresh(emplacementAffichage)
+        return emplacementAffichage
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, IDEmplacementAffichage: int):
+        emplacementAffichage = EmplacementAffichage.get(db, IDEmplacementAffichage)
+        if emplacementAffichage:
+            db.delete(emplacementAffichage)
+            db.commit()
+            return True
+        return False
