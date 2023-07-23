@@ -39,7 +39,7 @@ async def create(emplacementAffichage: EmplacementAffichageCreateSchema, db: Ses
 # update
 @router.put("/emplacementAffichage/{IDEmplacementAffichage}", response_model=EmplacementAffichageSchema, status_code=status.HTTP_200_OK, description="Update emplacementAffichage")
 async def update(IDEmplacementAffichage: int = Path(...), emplacementAffichage: EmplacementAffichageUpdateSchema = Body(...), db: Session = Depends(get_db)):
-    return await asyncio.to_thread(EmplacementAffichageController.update, db, IDEmplacementAffichage, emplacementAffichage)
+    return await asyncio.to_thread(EmplacementAffichageController.update, db, emplacementAffichage)
 
 # delete
 @router.delete("/emplacementAffichage/{IDEmplacementAffichage}", status_code=status.HTTP_204_NO_CONTENT, description="Delete emplacementAffichage")

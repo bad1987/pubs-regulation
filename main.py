@@ -29,6 +29,7 @@ app.include_router(tiersRouter)
 app.include_router(ReglementRouter)
 app.include_router(zoneAffichageRouter)
 app.include_router(produitConcessionRouter)
+app.include_router(emplacementAffichageRouter)
 
 # cors
 app.add_middleware( 

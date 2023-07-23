@@ -35,11 +35,9 @@ class EmplacementAffichageController:
     def get_all_by_IDQuartierAffichage(cls, db: Session, IDQuartierAffichage: int) -> list[EmplacementAffichageSchema]:
         try:
             emplacementAffichages = EmplacementAffichage.get_all_by_id_quartier(db, IDQuartierAffichage)
+            return [EmplacementAffichageSchema.from_orm(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-        if not emplacementAffichages:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="EmplacementAffichages not found")
-        return [EmplacementAffichageSchema.from_orm(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
     
     # get all
     @classmethod

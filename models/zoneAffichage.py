@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
-
 class ZoneAffichage(Base):
     __tablename__ = "ZoneAffichage"
 

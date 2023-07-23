@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
+from models.typeDispositif import TypeDispositif
 
 class DispositifPub(Base):
     __tablename__ = "DispositifPub"
