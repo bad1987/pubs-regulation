@@ -8,6 +8,7 @@ from routes.system.tiers import router as tiersRouter
 from routes.system.reglements import router as ReglementRouter
 from routes.system.zoneAffichage import router as zoneAffichageRouter
 from routes.system.produitConcession import router as produitConcessionRouter
+from routes.system.emplacementAffichage import router as emplacementAffichageRouter
 
 from dotenv import load_dotenv
 import os
