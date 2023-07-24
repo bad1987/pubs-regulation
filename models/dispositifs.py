@@ -49,3 +49,40 @@ class DispositifPub(Base):
     @classmethod
     def get(cls, db: Session, IDDispositifPub: int):
         return db.query(cls).filter(cls.IDDispositifPub == IDDispositifPub).first()
+    
+    # get by CodeDispositifPub
+    @classmethod
+    def get_by_code(cls, db: Session, CodeDispositifPub: str):
+        return db.query(cls).filter(cls.CodeDispositifPub == CodeDispositifPub).first()
+    
+    # get all
+    @classmethod
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db:Session, dispositif_pub):
+        db.add(dispositif_pub)
+        db.commit()
+        db.refresh(dispositif_pub)
+        return dispositif_pub
+    
+    # update
+    @classmethod
+    def update(cls, db:Session, dispositif_pub):
+        db.add(dispositif_pub)
+        db.commit()
+        db.refresh(dispositif_pub)
+        return dispositif_pub
+    
+    # delete
+    @classmethod
+    def delete(cls, db:Session, IDDispositifPub):
+        # get dispositif_pub
+        dispositif_pub = cls.get(db, IDDispositifPub)
+        if dispositif_pub:
+            db.delete(dispositif_pub)
+            db.commit()
+            return True
+        return False

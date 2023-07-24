@@ -9,6 +9,7 @@ from routes.system.reglements import router as ReglementRouter
 from routes.system.zoneAffichage import router as zoneAffichageRouter
 from routes.system.produitConcession import router as produitConcessionRouter
 from routes.system.emplacementAffichage import router as emplacementAffichageRouter
+from routes.system.dispositif import router as dispositifRouter
 
 from dotenv import load_dotenv
 import os
@@ -30,6 +31,7 @@ app.include_router(ReglementRouter)
 app.include_router(zoneAffichageRouter)
 app.include_router(produitConcessionRouter)
 app.include_router(emplacementAffichageRouter)
+app.include_router(dispositifRouter)
 
 # cors
 app.add_middleware( 

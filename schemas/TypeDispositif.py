@@ -15,3 +15,8 @@ class TypeDispositifSchema(BaseModel):
 class TypeDispositifCreateSchema(BaseModel):
     CodeTypeDispositif: str
     LibelleTypeDispo: str
+
+class TypeDispositifUpdateSchema(BaseModel):
+    IDTypeDispositif: int
+    CodeTypeDispositif: Optional[str] = None
+    LibelleTypeDispo: Optional[str] = None

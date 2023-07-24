@@ -3,8 +3,6 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
-from schemas.TypeDispositif import TypeDispositifSchema
-
 class TypeDispositif(Base):
     __tablename__ = "TypeDispositif"
 
@@ -41,24 +39,21 @@ class TypeDispositif(Base):
             db.add(type_dispositif)
             # Flush the session to persist the changes to the database
             db.flush()
+            db.refresh(type_dispositif)
         # Return the 'type_dispositif' object
         return type_dispositif
     
     # delete method
     @classmethod
     def delete(cls, db: Session, type_dispositif_id: int):
-        # Create a query to retrieve all records in the table that have the given type_dispositif_id
-        query = db.query(cls).filter_by(IDTypeDispositif=type_dispositif_id)
-        
-        # Execute the query and delete all the retrieved records
-        deleted_count = query.delete()
-        
-        # Commit the changes to the database
-        db.commit()
-        
-        # Return True to indicate that the delete was successful
-        return True
-    
+        # Get the type_dispositif
+        type_dispositif = cls.get(db, type_dispositif_id)
+        if type_dispositif:
+            db.delete(type_dispositif)
+            db.commit()
+            return True
+        return False
+
     # update LibelleTypeDispo method
     @classmethod
     def updateLibelleTypeDispo(cls, db: Session, type_dispositif_id: int, LibelleTypeDispo: str):
