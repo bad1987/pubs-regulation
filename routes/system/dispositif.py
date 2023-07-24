@@ -12,8 +12,8 @@ router = APIRouter(
 )
 
 @router.get("/dispositif/code", response_model=DispositifPubSchema, status_code=status.HTTP_200_OK, description="Get dispositif by Code")
-async def get_by_code(CodeDispositif: str = Query(...), db: Session = Depends(get_db)):
-    return await asyncio.to_thread(DispositifPubController.get_by_code, db, CodeDispositif)
+async def get_by_code(CodeDispositifPub: str = Query(...), db: Session = Depends(get_db)):
+    return await asyncio.to_thread(DispositifPubController.get_by_code, db, CodeDispositifPub)
 
 @router.get("/dispositif/{IDDispositif}", response_model=DispositifPubSchema, status_code=status.HTTP_200_OK, description="Get dispositif by ID")
 async def get_by_ID(IDDispositif: int = Path(...), db: Session = Depends(get_db)):

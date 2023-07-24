@@ -11,7 +11,9 @@ from models.tiers import Tiers
 from schemas.DispositifPubSchema import DispositifPubSchema, DispositifPubCreateSchema, DispositifPubUpdateSchema
 
 class DispositifPubController:
-    def get(self, db: Session, IDDispositifPub: int) -> DispositifPubSchema:
+
+    @classmethod
+    def get(cls, db: Session, IDDispositifPub: int) -> DispositifPubSchema:
         try:
             dispositifPub = DispositifPub.get(db, IDDispositifPub)
         except Exception as e:
@@ -20,7 +22,8 @@ class DispositifPubController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
         return DispositifPubSchema.from_orm(dispositifPub)
     
-    def get_by_code(self, db: Session, CodeDispositifPub: str) -> DispositifPubSchema:
+    @classmethod
+    def get_by_code(cls, db: Session, CodeDispositifPub: str) -> DispositifPubSchema:
         try:
             dispositifPub = DispositifPub.get_by_code(db, CodeDispositifPub)
         except Exception as e:
@@ -29,14 +32,16 @@ class DispositifPubController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
         return DispositifPubSchema.from_orm(dispositifPub)
     
-    def get_all(self, db: Session) -> list[DispositifPubSchema]:
+    @classmethod
+    def get_all(cls, db: Session) -> list[DispositifPubSchema]:
         try:
             dispositifsPub = DispositifPub.get_all(db)
             return [DispositifPubSchema.from_orm(dispositifPub) for dispositifPub in dispositifsPub]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-        
-    def create(self, db: Session, dispositifPub: DispositifPubCreateSchema) -> DispositifPubSchema:
+    
+    @classmethod
+    def create(cls, db: Session, dispositifPub: DispositifPubCreateSchema) -> DispositifPubSchema:
         # check if CodeDispositifPub is unique
         if DispositifPub.get_by_code(db, dispositifPub.CodeDispositifPub):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeDispositifPub already exists")
@@ -62,7 +67,8 @@ class DispositifPubController:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
-    def update(self, db: Session, updateDispositifPub: DispositifPubUpdateSchema) -> DispositifPubSchema:
+    @classmethod
+    def update(cls, db: Session, updateDispositifPub: DispositifPubUpdateSchema) -> DispositifPubSchema:
         try:
             dispositifPub = DispositifPub.get(db, updateDispositifPub.IDDispositifPub)
         except Exception as e:
@@ -70,7 +76,7 @@ class DispositifPubController:
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
         try:
-            update_data = updateDispositifPub.dict(unset_unset=True)
+            update_data = updateDispositifPub.dict(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(dispositifPub, key, value)
             dispositifPub = DispositifPub.update(db, dispositifPub)
@@ -78,7 +84,8 @@ class DispositifPubController:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
-    def delete(self, db: Session, IDDispositifPub: int) -> bool:
+    @classmethod
+    def delete(cls, db: Session, IDDispositifPub: int) -> bool:
         try:
             dispositifPub = DispositifPub.get(db, IDDispositifPub)
         except Exception as e:
@@ -86,7 +93,7 @@ class DispositifPubController:
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
         try:
-            return DispositifPub.delete(db, dispositifPub)
+            return DispositifPub.delete(db, IDDispositifPub)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
