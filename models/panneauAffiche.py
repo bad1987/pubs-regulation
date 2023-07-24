@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from models.dispositifs import DispositifPub
+from sqlalchemy.orm import Session
 
 from models.typePanneau import TypePanneau
 
@@ -37,3 +38,44 @@ class PanneauAffich(DispositifPub):
     # Relation avec la table TypePanneau
     type_panneau = relationship("TypePanneau", backref="panneaux", lazy="joined", cascade="save-update, merge")
     
+    # get by ID
+    @classmethod
+    def get(cls, db: Session, IDPanneauAffich: int):
+        return db.query(cls).filter_by(IDPanneauAffich=IDPanneauAffich).first()
+    
+    # get by CodePanneau
+    @classmethod
+    def getByCode(cls, db: Session, codePanneau: str):
+        return db.query(cls).filter_by(CodePanneau=codePanneau).first()
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, panneauAffich):
+        db.add(panneauAffich)
+        db.commit()
+        db.refresh(panneauAffich)
+        return panneauAffich
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, panneauAffich):
+        db.add(panneauAffich)
+        db.commit()
+        db.refresh(panneauAffich)
+        return panneauAffich
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, IDPanneauAffich):
+        # get the object
+        panneauAffich = cls.get(db, IDPanneauAffich)
+        if panneauAffich:
+            db.delete(panneauAffich)
+            db.commit()
+            return True
+        return False
