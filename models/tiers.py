@@ -55,7 +55,7 @@ class Tiers(Base):
     IDTiers = Column(Integer, primary_key=True)
 
     # Clé unique, Code Tiers
-    CodeTiers = Column(String(9), nullable=False, unique=True)
+    CodeTiers = Column(String(20), nullable=False, unique=True)
 
     # Libelle tiers
     LibelleTiers = Column(String(64))
@@ -79,7 +79,7 @@ class Tiers(Base):
     Logo = Column(String(255), nullable=True)
 
     # Sigle
-    SigleTiers = Column(String(2))
+    SigleTiers = Column(String(20))
 
     # Relation avec la table TypeTiers
     type_tiers = relationship("TypeTiers", backref="tiers", lazy="joined", cascade="save-update, merge")

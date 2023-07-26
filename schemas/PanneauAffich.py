@@ -6,7 +6,7 @@ from schemas.TypePanneaux import TypePanneauSchema
 class PanneauAffichSchema(DispositifPubSchema):
     IDPanneauAffich: int
     CodePanneau: str
-    SuerfacePanneau: float
+    SurfacePanneau: float
     NbreFacePanneau: int
     SpecificiteFact: bool
     UniteFacturationPanneau: str
@@ -26,7 +26,7 @@ class PanneauAffichCreateSchema(BaseModel):
     IDEmplacementAffichage: int 
     IDTiers: int 
     CodePanneau: str
-    SuerfacePanneau: float
+    SurfacePanneau: float
     NbreFacePanneau: int
     SpecificiteFact: bool
     UniteFacturationPanneau: str
@@ -42,7 +42,7 @@ class PanneauAffichUpdateSchema(BaseModel):
     IDEmplacementAffichage: Optional[int] = None
     IDTiers: Optional[int] = None
     CodePanneau: Optional[str] = None
-    SuerfacePanneau: Optional[float] = None
+    SurfacePanneau: Optional[float] = None
     NbreFacePanneau: Optional[int] = None
     SpecificiteFact: Optional[bool] = None
     UniteFacturationPanneau: Optional[str] = None

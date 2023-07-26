@@ -11,6 +11,7 @@ from routes.system.produitConcession import router as produitConcessionRouter
 from routes.system.emplacementAffichage import router as emplacementAffichageRouter
 from routes.system.dispositif import router as dispositifRouter
 from routes.system.enseigne import router as enseigneRouter
+from routes.system.panneauAffich import router as panneauAffichageRouter
 
 from dotenv import load_dotenv
 import os
@@ -34,6 +35,7 @@ app.include_router(produitConcessionRouter)
 app.include_router(emplacementAffichageRouter)
 app.include_router(dispositifRouter)
 app.include_router(enseigneRouter)
+app.include_router(panneauAffichageRouter)
 
 # cors
 app.add_middleware( 
