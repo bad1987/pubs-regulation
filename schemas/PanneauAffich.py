@@ -13,6 +13,10 @@ class PanneauAffichSchema(DispositifPubSchema):
     IDTypePanneau: int
     type_panneau: TypePanneauSchema
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
 class PanneauAffichCreateSchema(BaseModel):
     CodeDispositifPub: str 
     LibelleDispoPub: str 
