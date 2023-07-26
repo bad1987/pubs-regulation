@@ -28,7 +28,7 @@ async def get_all(db: Session = Depends(get_db)):
 
 # create
 @router.post("/panneauAffich", response_model=PanneauAffichSchema, status_code=status.HTTP_201_CREATED, description="Create panneauAffich")
-async def create(panneauAffich: PanneauAffichCreateSchema, db: Session = Depends(get_db)):
+async def create(panneauAffich: PanneauAffichCreateSchema = Body(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(PanneauAffichController.create, db, panneauAffich)
 
 # update

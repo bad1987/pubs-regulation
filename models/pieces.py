@@ -4,8 +4,46 @@ from db.Connexion import Base
 
 class TypePiece(Base):
     __tablename__ = "TypePiece"
+
     IDTypePiece = Column(Integer, primary_key=True)
     LibelleTypePiece = Column(String(255))
+
+    # get by ID
+    @classmethod
+    def get(cls, db: Session, IDTypePiece: int):
+        return db.query(cls).filter_by(IDTypePiece=IDTypePiece).first()
+    
+    # get all
+    @classmethod
+    def getAll(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, type_piece):
+        db.add(type_piece)
+        db.commit()
+        db.refresh(type_piece)
+        return type_piece
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, type_piece):
+        db.add(type_piece)
+        db.commit()
+        db.refresh(type_piece)
+        return type_piece
+    
+    # delete
+    @classmethod
+    def delete(cls, db: Session, IDTypePiece):
+        # get the object
+        type_piece = cls.get(db, IDTypePiece)
+        if type_piece:
+            db.delete(type_piece)
+            db.commit()
+            return True
+        return False
 
 class Piece(Base):
     __tablename__ = "Piece"

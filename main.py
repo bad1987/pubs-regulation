@@ -12,6 +12,7 @@ from routes.system.emplacementAffichage import router as emplacementAffichageRou
 from routes.system.dispositif import router as dispositifRouter
 from routes.system.enseigne import router as enseigneRouter
 from routes.system.panneauAffich import router as panneauAffichageRouter
+from routes.system.pieces import router as PiecesRouter
 
 from dotenv import load_dotenv
 import os
@@ -36,6 +37,7 @@ app.include_router(emplacementAffichageRouter)
 app.include_router(dispositifRouter)
 app.include_router(enseigneRouter)
 app.include_router(panneauAffichageRouter)
+app.include_router(PiecesRouter)
 
 # cors
 app.add_middleware( 

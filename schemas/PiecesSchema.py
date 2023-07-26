@@ -35,7 +35,7 @@ class PiecesSchema(BaseModel):
         orm_mode = True
         from_attributes = True
     
-    @validator('DateDocEntete', pre=True)
+    @validator('DateEmmission', pre=True)
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -48,7 +48,7 @@ class PiecesCreateSchema(BaseModel):
     IDReglement: int
     IDTypePiece: int
 
-    @validator('DateDocEntete', pre=True)
+    @validator('DateEmmission', pre=True)
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -62,7 +62,7 @@ class PiecesUpdateSchema(BaseModel):
     IDReglement: int
     IDTypePiece: int
 
-    @validator('DateDocEntete', pre=True)
+    @validator('DateEmmission', pre=True)
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
