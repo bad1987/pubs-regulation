@@ -16,6 +16,10 @@ class ProduitConcession(Base):
     # Observations sur le produit
     ObservationsProduit = Column(String(254))
 
+    # Duree minimale de facturation exprimee en nombre de jours
+    DureeMinimaleFacturation = Column(Integer)
+
+
     # Clé étrangère, identifiant unique de la table TypDispositif
     IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub", ondelete="CASCADE"))
 

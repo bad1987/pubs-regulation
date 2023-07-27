@@ -40,7 +40,7 @@ class ProduitConcessionController:
     
     # create
     @classmethod
-    def create(cls, db: Session, produitConcession: ProduitConsessionCreateSchema):
+    def create(cls, db: Session, produitConcession: ProduitConsessionCreateSchema) -> ProduitConsessionSchema:
         # check if codeProduitConcession is unique
         if ProduitConcession.get_by_code(db, produitConcession.CodeProduitConcession):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeProduitConcession already exists")

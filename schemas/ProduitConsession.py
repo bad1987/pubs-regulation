@@ -9,6 +9,7 @@ class ProduitConsessionSchema(BaseModel):
     IDProduitConcession: int
     CodeProduitConcession: str
     ObservationsProduit: str
+    DureeMinimaleFacturation: int
     IDDispositifPub: int
     dispositif_pub: DispositifPubSchema
 
@@ -19,10 +20,12 @@ class ProduitConsessionSchema(BaseModel):
 class ProduitConsessionCreateSchema(BaseModel):
     CodeProduitConcession: str
     ObservationsProduit: str
+    DureeMinimaleFacturation: int
     IDDispositifPub: int
 
 class ProduitConsessionUpdateSchema(BaseModel):
     IDProduitConcession: int
     CodeProduitConcession: str
     ObservationsProduit: str
-    IDDispositifPub: Optional[int]
+    DureeMinimaleFacturation: int
+    IDDispositifPub: int
