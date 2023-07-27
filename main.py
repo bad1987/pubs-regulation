@@ -15,6 +15,7 @@ from routes.system.panneauAffich import router as panneauAffichageRouter
 from routes.system.pieces import router as PiecesRouter
 from routes.system.typePiece import router as TypePieceRouter
 from routes.system.taxTiersDocEntete import router as taxTiersDocEnteteRouter
+from routes.system.produitConcession import router as ProduitConcessionRouter
 
 from dotenv import load_dotenv
 import os
@@ -42,6 +43,7 @@ app.include_router(panneauAffichageRouter)
 app.include_router(PiecesRouter)
 app.include_router(TypePieceRouter)
 app.include_router(taxTiersDocEnteteRouter)
+app.include_router(ProduitConcessionRouter)
 
 # cors
 app.add_middleware( 
