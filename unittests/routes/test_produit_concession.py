@@ -5,6 +5,8 @@ import unittest
 from fastapi.encoders import jsonable_encoder
 from fastapi.testclient import TestClient
 import sys
+from models.quartierAffichage import QuartierAffichage
+from models.zoneAffichage import ZoneAffichage
 sys.path.append("../..")
 
 from models.quartierAffichage import QuartierAffichage
