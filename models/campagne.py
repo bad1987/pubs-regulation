@@ -15,10 +15,10 @@ class CampagnePub(Base):
     LibelleCampagne = Column(String(254))
 
     # date de début de la campagne
-    DateDeb = Column(DateTime)
+    DateDeb = Column(Date)
 
     # date de fin de la campagne
-    DateFin = Column(DateTime)
+    DateFin = Column(Date)
 
     # Surface à occuper
     SurfaceDispoitif = Column(Float)

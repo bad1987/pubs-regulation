@@ -60,7 +60,7 @@ class TestProduitConcession(TestCase):
         self.produit_concession.dispositif_pub = self.dispositif
         self.db.add(self.produit_concession)
         # create CampagnePub test data
-        self.campagne = CampagnePub(CodeCampagne="XYZ", LibelleCampagne="Test LibelleCampagne", DateDeb=datetime.datetime.utcnow(), DateFin=datetime.datetime.utcnow(), SurfaceDispoitif=1.0, IDProduitConcession=self.produit_concession.IDProduitConcession)
+        self.campagne = CampagnePub(CodeCampagne="XYZ", LibelleCampagne="Test LibelleCampagne", DateDeb=datetime.datetime.utcnow().date().isoformat(), DateFin=datetime.datetime.utcnow().date().isoformat(), SurfaceDispoitif=1.0, IDProduitConcession=self.produit_concession.IDProduitConcession)
         self.campagne.produit = self.produit_concession
         self.db.add(self.campagne)
         self.db.commit()
@@ -90,77 +90,77 @@ class TestProduitConcession(TestCase):
         self.db.commit()
         self.db.close()
 
-    # def test_get_campagne_by_id(self):
-    #     # Test case 1: Valid campagne_id
-    #     campagne_id = self.campagne.IDCampagnePub
-    #     response = self.client.get(f"/campagne/{campagne_id}")
-    #     expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
-    #     expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
-    #     expected_result['DateFin'] = expected_result['DateFin'].isoformat()
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.json(), expected_result)
+    def test_get_campagne_by_id(self):
+        # Test case 1: Valid campagne_id
+        campagne_id = self.campagne.IDCampagnePub
+        response = self.client.get(f"/campagne/{campagne_id}")
+        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
+        expected_result['DateFin'] = expected_result['DateFin'].isoformat()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_result)
 
-    #     # Test case 2: Invalid campagne_id
-    #     campagne_id = 100000
-    #     response = self.client.get(f"/campagne/{campagne_id}")
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertDictEqual(response.json(), {"detail": "Campagne not found"})
+        # Test case 2: Invalid campagne_id
+        campagne_id = 100000
+        response = self.client.get(f"/campagne/{campagne_id}")
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.json(), {"detail": "Campagne not found"})
 
-    # def test_get_campagne_by_code(self):
-    #     # Test case 1: Valid campagne_code
-    #     campagne_code = self.campagne.CodeCampagne
-    #     response = self.client.get(f"/campagne/code", params={"CodeCampagne": campagne_code})
-    #     expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
-    #     expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
-    #     expected_result['DateFin'] = expected_result['DateFin'].isoformat()
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.json(), expected_result)
+    def test_get_campagne_by_code(self):
+        # Test case 1: Valid campagne_code
+        campagne_code = self.campagne.CodeCampagne
+        response = self.client.get(f"/campagne/code", params={"CodeCampagne": campagne_code})
+        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
+        expected_result['DateFin'] = expected_result['DateFin'].isoformat()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_result)
 
-    #     # Test case 2: Invalid campagne_code
-    #     campagne_code = "ZYX"
-    #     response = self.client.get(f"/campagne/code", params={"CodeCampagne": campagne_code})
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertDictEqual(response.json(), {"detail": "Campagne not found"})
+        # Test case 2: Invalid campagne_code
+        campagne_code = "ZYX"
+        response = self.client.get(f"/campagne/code", params={"CodeCampagne": campagne_code})
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.json(), {"detail": "Campagne not found"})
 
-    # def test_get_all_campagne(self):
-    #     response = self.client.get("/campagne")
-    #     expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
-    #     expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
-    #     expected_result['DateFin'] = expected_result['DateFin'].isoformat()
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertListEqual(response.json(), [expected_result])
+    def test_get_all_campagne(self):
+        response = self.client.get("/campagne")
+        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
+        expected_result['DateFin'] = expected_result['DateFin'].isoformat()
+        self.assertEqual(response.status_code, 200)
+        self.assertListEqual(response.json(), [expected_result])
     
-    # def test_create_campagne(self):
-    #     post_data = {
-    #         "CodeCampagne": "LMN",
-    #         "LibelleCampagne": "Test LibelleCampagne",
-    #         "DateDeb": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S'),
-    #         "DateFin": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S'),
-    #         "SurfaceDispoitif": 1.0,
-    #         "IDProduitConcession": self.produit_concession.IDProduitConcession
-    #     }
-    #     response = self.client.post("/campagne", json=post_data)
-    #     self.assertEqual(response.status_code, 201)
-    #     expected_result = self.client.get(f"/campagne/{response.json()['IDCampagnePub']}")
-    #     self.assertEqual(expected_result.status_code, 200)
-    #     self.assertDictEqual(expected_result.json(), response.json())
+    def test_create_campagne(self):
+        post_data = {
+            "CodeCampagne": "LMN",
+            "LibelleCampagne": "Test LibelleCampagne",
+            "DateDeb": datetime.datetime.utcnow().date().isoformat(),
+            "DateFin": datetime.datetime.utcnow().date().isoformat(),
+            "SurfaceDispoitif": 1.0,
+            "IDProduitConcession": self.produit_concession.IDProduitConcession
+        }
+        response = self.client.post("/campagne", json=post_data)
+        self.assertEqual(response.status_code, 201)
+        expected_result = self.client.get(f"/campagne/{response.json()['IDCampagnePub']}")
+        self.assertEqual(expected_result.status_code, 200)
+        self.assertDictEqual(expected_result.json(), response.json())
 
-    #     # clean up through delete endpoint
-    #     response = self.client.delete(f"/campagne/{response.json()['IDCampagnePub']}")
-    #     self.assertEqual(response.status_code, 204)
+        # clean up through delete endpoint
+        response = self.client.delete(f"/campagne/{response.json()['IDCampagnePub']}")
+        self.assertEqual(response.status_code, 204)
     
     def test_update_campagne(self):
+        modiftime = datetime.datetime.utcnow().date().isoformat()
         post_data = {
             "IDCampagnePub": self.campagne.IDCampagnePub,
             "CodeCampagne": self.campagne.CodeCampagne,
             "LibelleCampagne": "Test U LibelleCampagne",
-            "DateDeb": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S'),
-            "DateFin": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S'),
+            "DateDeb": modiftime,
+            "DateFin": modiftime,
             "SurfaceDispoitif": 1.0,
             "IDProduitConcession": self.campagne.IDProduitConcession
         }
         response = self.client.put(f"/campagne/{self.campagne.IDCampagnePub}", json=post_data)
-        print(response.json())
         self.assertEqual(response.status_code, 200)
         expected_result = self.client.get(f"/campagne/{self.campagne.IDCampagnePub}")
         self.assertEqual(expected_result.status_code, 200)
