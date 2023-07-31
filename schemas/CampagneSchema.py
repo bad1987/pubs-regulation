@@ -1,8 +1,8 @@
 from datetime import date, datetime
-from typing import List
+from typing import List, ForwardRef, get_args
 from pydantic import BaseModel, field_validator, validator
 
-from schemas.ProduitConsession import ProduitConsessionSchema
+# from schemas import ProduitConsession
 
 class CampagnePubSchema(BaseModel):
     IDCampagnePub: int
@@ -11,12 +11,18 @@ class CampagnePubSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispoitif: float
-    produits: List[ProduitConsessionSchema]
+
+    @validator('produits', pre=True)
+    def validate_produits(cls, v):
+        from schemas.ProduitConsession import ProduitConsessionSchema
+        return [ProduitConsessionSchema(**produit) for produit in v]
+    
+    produits: List['ProduitConsessionSchema'] = []
 
     class Config:
         orm_mode = True
         from_attributes = True
-    
+
     @field_validator('DateDeb', 'DateFin')
     def parse_date(cls, v):
         if isinstance(v, str):
@@ -25,7 +31,7 @@ class CampagnePubSchema(BaseModel):
             return v
         else:
             raise ValueError('Invalid date format')
-
+        
 class CampagnePubCreateSchema(BaseModel):
     CodeCampagne: str
     LibelleCampagne: str
