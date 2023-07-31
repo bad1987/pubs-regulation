@@ -27,11 +27,11 @@ class DocLigne(Base):
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la table CampagneProduit
-    IDCampagneProduit = Column(Integer, ForeignKey("CampagneProduit.IDCampagneProduit", ondelete="CASCADE"))
+    IDCampagneProduit = Column(Integer, ForeignKey("CampagneProduit.IDCampagneProduit", ondelete="CASCADE"), unique=True)
 
     # Relations avec les autres tables
     doc_entete = relationship("DocEntete", backref="lignes", lazy="joined", cascade="save-update, merge")
-    campagne_produit = relationship("CampagneProduit", backref="lignes", lazy="joined", cascade="save-update, merge")
+    campagne_produit = relationship("CampagneProduit", uselist=False, backref="ligne", lazy="joined", cascade="save-update, merge")
 
     # get by id
     @classmethod
