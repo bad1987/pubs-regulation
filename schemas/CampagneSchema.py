@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import List
 from pydantic import BaseModel, field_validator, validator
 
 from schemas.ProduitConsession import ProduitConsessionSchema
@@ -10,8 +11,7 @@ class CampagnePubSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispoitif: float
-    IDProduitConcession: int
-    produit: ProduitConsessionSchema
+    produits: List[ProduitConsessionSchema]
 
     class Config:
         orm_mode = True
@@ -32,7 +32,6 @@ class CampagnePubCreateSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispoitif: float
-    IDProduitConcession: int
 
     @field_validator('DateDeb', 'DateFin')
     def parse_date(cls, v):
@@ -50,7 +49,6 @@ class CampagnePubUpdateSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispoitif: float
-    IDProduitConcession: int
 
     @field_validator('DateDeb', 'DateFin')
     def parse_date(cls, v):

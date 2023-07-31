@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, Column, Float, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -19,12 +19,23 @@ class ProduitConcession(Base):
     # Duree minimale de facturation exprimee en nombre de jours
     DureeMinimaleFacturation = Column(Integer)
 
+    # Le produit a des specificites de facturation
+    HasSpecificiteFacturation = Column(Boolean)
+
+    # Surface minimale de la specificite de facturation
+    SurfaceMinSpecificiteFact = Column(Float, nullable=True)
+
+    # Taux applicable de la specificite de facturation
+    TauxApplicableSpecificiteFact = Column(Float, nullable=True)
 
     # Clé étrangère, identifiant unique de la table TypDispositif
     IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub", ondelete="CASCADE"))
 
     # Relation avec la table DispositifPub
     dispositif_pub = relationship("DispositifPub", backref="produits", lazy="joined", cascade="save-update, merge")
+
+    # Relation avec la table CampagnePub
+    campagnes = relationship("CampagnePub", secondary="CampagneProduit", lazy="joined", cascade="save-update, merge")
 
     # get method
     @classmethod
@@ -66,13 +77,3 @@ class ProduitConcession(Base):
         db.commit()
         db.refresh(produitConcession)
         return produitConcession
-            
-    # to_dict
-    def to_dict(self):
-        return {
-            "IDProduitConcession": self.IDProduitConcession,
-            "CodeProduitConcession": self.CodeProduitConcession,
-            "ObservationsProduit": self.ObservationsProduit,
-            "IDDispositifPub": self.IDDispositifPub,
-            "dispositif_pub": self.dispositif_pub.dict()
-        }

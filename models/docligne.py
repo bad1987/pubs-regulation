@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
 class DocLigne(Base):
@@ -26,13 +26,56 @@ class DocLigne(Base):
     # Clé etrangère, identifiant unique du Document entete
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
 
-    # Clé étrangère, identifiant unique de la table CampagnePub
-    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"))
-
-    # Clé étrangère, identifiant unique de la table Produit    
-    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"))
+    # Clé étrangère, identifiant unique de la table CampagneProduit
+    IDCampagneProduit = Column(Integer, ForeignKey("CampagneProduit.IDCampagneProduit", ondelete="CASCADE"))
 
     # Relations avec les autres tables
     doc_entete = relationship("DocEntete", backref="lignes", lazy="joined", cascade="save-update, merge")
-    campagne_pub = relationship("CampagnePub", backref="lignes", lazy="joined", cascade="save-update, merge")
-    produit = relationship("ProduitConcession", backref="lignes", lazy="joined", cascade="save-update, merge")
+    campagne_produit = relationship("CampagneProduit", backref="lignes", lazy="joined", cascade="save-update, merge")
+
+    # get by id
+    @classmethod
+    def get(cls, db: Session, IDDocLigne: int):
+        return db.query(cls).filter(cls.IDDocLigne == IDDocLigne).first()
+    
+    # get by IDCampagnePub
+    @classmethod
+    def get_by_id_campagne_pub(cls, db: Session, IDCampagnePub: int):
+        return db.query(cls).filter(cls.IDCampagnePub == IDCampagnePub).first()
+    
+    # get by IDDocEntete
+    @classmethod
+    def get_by_id_doc_entete(cls, db: Session, IDDocEntete: int):
+        return db.query(cls).filter(cls.IDDocEntete == IDDocEntete).first()
+    
+    # get all
+    @classmethod
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
+    
+    # create
+    @classmethod
+    def create(cls, db: Session, doc_ligne):
+        db.add(doc_ligne)
+        db.commit()
+        db.refresh(doc_ligne)
+        return doc_ligne
+    
+    # update
+    @classmethod
+    def update(cls, db:Session, doc_ligne):
+        db.add(doc_ligne)
+        db.commit()
+        db.refresh(doc_ligne)
+        return doc_ligne
+    
+    # delete
+    @classmethod
+    def delete(cls, db:Session, IDDocLigne):
+        # get doc_ligne
+        doc_ligne = cls.get(db, IDDocLigne)
+        if doc_ligne:
+            db.delete(doc_ligne)
+            db.commit()
+            return True
+        return False

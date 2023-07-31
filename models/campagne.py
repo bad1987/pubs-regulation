@@ -23,11 +23,8 @@ class CampagnePub(Base):
     # Surface à occuper
     SurfaceDispoitif = Column(Float)
 
-    # Clé étrangère identifiant unique de la table Produit
-    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"))
-
     # Relation avec la table Produit
-    produit = relationship("ProduitConcession", backref="campagnes", lazy="joined", cascade="save-update, merge")
+    produits = relationship("ProduitConcession", secondary="CampagneProduit", lazy="joined", cascade="save-update, merge")
 
     # get by ID
     @classmethod

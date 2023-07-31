@@ -17,6 +17,7 @@ from routes.system.typePiece import router as TypePieceRouter
 from routes.system.taxTiersDocEntete import router as taxTiersDocEnteteRouter
 from routes.system.produitConcession import router as ProduitConcessionRouter
 from routes.system.campagne import router as CampagneRouter
+from routes.system.docligne import router as DocLigneRouter
 
 from dotenv import load_dotenv
 import os
@@ -46,6 +47,7 @@ app.include_router(TypePieceRouter)
 app.include_router(taxTiersDocEnteteRouter)
 app.include_router(ProduitConcessionRouter)
 app.include_router(CampagneRouter)
+app.include_router(DocLigneRouter)
 
 # cors
 app.add_middleware( 
