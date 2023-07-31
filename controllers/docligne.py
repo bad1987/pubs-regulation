@@ -19,17 +19,6 @@ class DocLigneController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DocLigne not found")
         return DocLigneSchema.from_orm(docligne)
     
-    # get by IDCampagnePub
-    @classmethod
-    def getByIDCampagnePub(cls, db: Session, IDCampagnePub: int) -> DocLigneSchema:
-        try:
-            docligne = DocLigne.get_by_id_campagne_pub(db, IDCampagnePub)
-        except Exception as e:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-        if not docligne:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DocLigne not found")
-        return DocLigneSchema.from_orm(docligne)
-    
     # get by IDDocEntete
     @classmethod
     def getByIDDocEntete(cls, db: Session, IDDocEntete: int) -> list[DocLigneSchema]:

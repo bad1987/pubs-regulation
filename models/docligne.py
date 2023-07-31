@@ -38,10 +38,6 @@ class DocLigne(Base):
     def get(cls, db: Session, IDDocLigne: int):
         return db.query(cls).filter(cls.IDDocLigne == IDDocLigne).first()
     
-    # get by IDCampagnePub
-    @classmethod
-    def get_by_id_campagne_pub(cls, db: Session, IDCampagnePub: int):
-        return db.query(cls).filter(cls.IDCampagnePub == IDCampagnePub).first()
     
     # get by IDDocEntete
     @classmethod
