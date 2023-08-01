@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from dependencies.db_dependencies import get_db
 
 from controllers.produitConsession import ProduitConcessionController
-from schemas.ProduitConsession import ProduitConsessionSchema, ProduitConsessionUpdateSchema, ProduitConsessionCreateSchema
+from schemas.CampagneProduitSchema import ProduitConsessionSchema, ProduitConsessionUpdateSchema, ProduitConsessionCreateSchema
 
 router = APIRouter(
     tags=["ProduitConcession"],

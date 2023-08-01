@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
+from models.campagneProduit import CampagneProduit
 
 class ProduitConcession(Base):
     __tablename__ = "ProduitConcession"
@@ -20,7 +21,7 @@ class ProduitConcession(Base):
     DureeMinimaleFacturation = Column(Integer)
 
     # Le produit a des specificites de facturation
-    HasSpecificiteFacturation = Column(Boolean)
+    HasSpecificiteFacturation = Column(Boolean, default=False)
 
     # Surface minimale de la specificite de facturation
     SurfaceMinSpecificiteFact = Column(Float, nullable=True)

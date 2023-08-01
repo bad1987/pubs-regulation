@@ -21,7 +21,7 @@ class CampagnePub(Base):
     DateFin = Column(Date)
 
     # Surface à occuper
-    SurfaceDispoitif = Column(Float)
+    SurfaceDispositif = Column(Float)
 
     # Relation avec la table Produit
     produits = relationship("ProduitConcession", secondary="CampagneProduit", lazy="joined", cascade="save-update, merge")

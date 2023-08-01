@@ -5,7 +5,7 @@ from models.emplacementAffichage import EmplacementAffichage
 from models.typeDispositif import TypeDispositif
 from models.dispositifs import DispositifPub
 from models.produitConcession import ProduitConcession
-from schemas.ProduitConsession import ProduitConsessionSchema
+from schemas.CampagneProduitSchema import ProduitConsessionSchema
 import asyncio
 import datetime
 from unittest import TestCase

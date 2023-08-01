@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.produitConcession import ProduitConcession
 from models.dispositifs import DispositifPub
-from schemas.ProduitConsession import ProduitConsessionCreateSchema, ProduitConsessionSchema, ProduitConsessionUpdateSchema
+from schemas.CampagneProduitSchema import ProduitConsessionCreateSchema, ProduitConsessionSchema, ProduitConsessionUpdateSchema
 
 class ProduitConcessionController:
     # get

@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 
 from models.campagne import CampagnePub
 from models.produitConcession import ProduitConcession
+from models.campagneProduit import CampagneProduit
 
-from schemas.CampagneSchema import CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema
+from schemas.CampagneProduitSchema import CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema
 
 class CampagnePubController:
     # get
@@ -40,15 +41,24 @@ class CampagnePubController:
     
     # create
     @classmethod
-    def create(cls, db: Session, campagne: CampagnePubCreateSchema) -> CampagnePubSchema:
-        # check if IDProduitConcession exists
-        produit_concession = ProduitConcession.get(db, campagne.IDProduitConcession)
-        if not produit_concession:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {campagne.IDProduitConcession}")
+    def create(cls, db: Session, campagne_data: CampagnePubCreateSchema) -> CampagnePubSchema:
+        # check if the products for this campagne exist
+        for produit_concession_id in campagne_data.produits_ids:
+            produit_concession = ProduitConcession.get(db, produit_concession_id)
+            if not produit_concession:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession does not exist")
         try:
-            campagne = CampagnePub(**campagne.dict())
-            campagne.produit = produit_concession
+            campagne = CampagnePub(**campagne_data.dict(exclude={"produits_ids"}))
             campagne = CampagnePub.create(db, campagne)
+
+            # create campagne produits for this campagne
+            for produit_concession_id in campagne_data.produits_ids:
+                campagne_produit = CampagneProduit(**{
+                    "IDCampagnePub": campagne.IDCampagnePub,
+                    "IDProduitConcession": produit_concession_id
+                })
+                CampagneProduit.create(db, campagne_produit)
+
             return CampagnePubSchema.from_orm(campagne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

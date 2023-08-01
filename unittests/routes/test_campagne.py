@@ -16,8 +16,9 @@ from models.produitConcession import ProduitConcession
 from models.quartierAffichage import QuartierAffichage
 from models.zoneAffichage import ZoneAffichage
 from models.campagne import CampagnePub
+from models.campagneProduit import CampagneProduit
 
-from schemas.CampagneSchema import CampagnePubSchema
+from schemas.CampagneProduitSchema import CampagnePubSchema
 class TestProduitConcession(TestCase):
     def setUp(self):
         self.client = TestClient(app)
@@ -60,8 +61,11 @@ class TestProduitConcession(TestCase):
         self.produit_concession.dispositif_pub = self.dispositif
         self.db.add(self.produit_concession)
         # create CampagnePub test data
-        self.campagne = CampagnePub(CodeCampagne="XYZ", LibelleCampagne="Test LibelleCampagne", DateDeb=datetime.datetime.utcnow().date().isoformat(), DateFin=datetime.datetime.utcnow().date().isoformat(), SurfaceDispoitif=1.0, IDProduitConcession=self.produit_concession.IDProduitConcession)
-        self.campagne.produit = self.produit_concession
+        self.campagne = CampagnePub(CodeCampagne="XYZ", LibelleCampagne="Test LibelleCampagne", DateDeb=datetime.datetime.utcnow().date().isoformat(), DateFin=datetime.datetime.utcnow().date().isoformat(), SurfaceDispositif=1.0)
+        # self.campagne.produit = self.produit_concession
+        # create campagneProduit test data
+        self.campagneProduit = CampagneProduit(IDCampagnePub=self.campagne.IDCampagnePub, IDProduitConcession=self.produit_concession.IDProduitConcession)
+        self.db.add(self.campagneProduit)
         self.db.add(self.campagne)
         self.db.commit()
         self.db.refresh(self.tiers)
@@ -73,6 +77,7 @@ class TestProduitConcession(TestCase):
         self.db.refresh(self.dispositif)
         self.db.refresh(self.produit_concession)
         self.db.refresh(self.campagne)
+        self.db.refresh(self.campagneProduit)
 
     def tearDown(self):
         # Remove test data
@@ -86,7 +91,8 @@ class TestProduitConcession(TestCase):
         TypeDispositif.delete(self.db, self.type_dispositif.IDTypeDispositif)
         # DispositifPub.delete(self.db, self.dispositif.IDDispositifPub)
         # ProduitConcession.delete(self.db, self.produit_concession.IDProduitConcession)
-        # CampagnePub.delete(self.db, self.campagne.IDCampagnePub)
+        CampagnePub.delete(self.db, self.campagne.IDCampagnePub)
+        CampagneProduit.delete(self.db, self.campagneProduit.IDCampagneProduit)
         self.db.commit()
         self.db.close()
 
@@ -136,10 +142,11 @@ class TestProduitConcession(TestCase):
             "LibelleCampagne": "Test LibelleCampagne",
             "DateDeb": datetime.datetime.utcnow().date().isoformat(),
             "DateFin": datetime.datetime.utcnow().date().isoformat(),
-            "SurfaceDispoitif": 1.0,
-            "IDProduitConcession": self.produit_concession.IDProduitConcession
+            "SurfaceDispositif": 1.0,
+            "produits_ids": [self.produit_concession.IDProduitConcession]
         }
         response = self.client.post("/campagne", json=post_data)
+        print(response.json())
         self.assertEqual(response.status_code, 201)
         expected_result = self.client.get(f"/campagne/{response.json()['IDCampagnePub']}")
         self.assertEqual(expected_result.status_code, 200)
@@ -157,8 +164,7 @@ class TestProduitConcession(TestCase):
             "LibelleCampagne": "Test U LibelleCampagne",
             "DateDeb": modiftime,
             "DateFin": modiftime,
-            "SurfaceDispoitif": 1.0,
-            "IDProduitConcession": self.campagne.IDProduitConcession
+            "SurfaceDispositif": 1.0,
         }
         response = self.client.put(f"/campagne/{self.campagne.IDCampagnePub}", json=post_data)
         self.assertEqual(response.status_code, 200)
