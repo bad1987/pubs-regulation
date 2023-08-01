@@ -20,7 +20,7 @@ class DispositifPubController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
-        return DispositifPubSchema.from_orm(dispositifPub)
+        return DispositifPubSchema.model_validate(dispositifPub)
     
     @classmethod
     def get_by_code(cls, db: Session, CodeDispositifPub: str) -> DispositifPubSchema:
@@ -30,13 +30,13 @@ class DispositifPubController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
-        return DispositifPubSchema.from_orm(dispositifPub)
+        return DispositifPubSchema.model_validate(dispositifPub)
     
     @classmethod
     def get_all(cls, db: Session) -> list[DispositifPubSchema]:
         try:
             dispositifsPub = DispositifPub.get_all(db)
-            return [DispositifPubSchema.from_orm(dispositifPub) for dispositifPub in dispositifsPub]
+            return [DispositifPubSchema.model_validate(dispositifPub) for dispositifPub in dispositifsPub]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -58,12 +58,12 @@ class DispositifPubController:
         if not typeDispositif:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         try:
-            dispositifPub = DispositifPub(**dispositifPub.dict())
+            dispositifPub = DispositifPub(**dispositifPub.model_dump())
             dispositifPub.tiers = tiers
             dispositifPub.emplacement_affichage = emplacementAffichage
             dispositifPub.type_dispositif = typeDispositif
             dispositifPub = DispositifPub.create(db, dispositifPub)
-            return DispositifPubSchema.from_orm(dispositifPub)
+            return DispositifPubSchema.model_validate(dispositifPub)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -76,11 +76,11 @@ class DispositifPubController:
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DispositifPub not found")
         try:
-            update_data = updateDispositifPub.dict(exclude_unset=True)
+            update_data = updateDispositifPub.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(dispositifPub, key, value)
             dispositifPub = DispositifPub.update(db, dispositifPub)
-            return DispositifPubSchema.from_orm(dispositifPub)
+            return DispositifPubSchema.model_validate(dispositifPub)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

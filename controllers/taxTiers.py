@@ -17,7 +17,7 @@ class TaxTiersController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not tax_tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiers not found")
-        return TaxTiersSchema.from_orm(tax_tiers)
+        return TaxTiersSchema.model_validate(tax_tiers)
     
     # get by id tiers and id taxes
     @classmethod
@@ -28,14 +28,14 @@ class TaxTiersController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not tax_tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiers not found")
-        return TaxTiersSchema.from_orm(tax_tiers)
+        return TaxTiersSchema.model_validate(tax_tiers)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[TaxTiersSchema]:
         try:
             tax_tiers = TaxTiers.getAll(db)
-            return [TaxTiersSchema.from_orm(tax_tiers) for tax_tiers in tax_tiers]
+            return [TaxTiersSchema.model_validate(tax_tiers) for tax_tiers in tax_tiers]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -54,11 +54,11 @@ class TaxTiersController:
         if not taxes:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key IDTaxes: {tax_tiers.IDTaxes}")
         try:
-            tax_tiers = TaxTiers(**tax_tiers.dict())
+            tax_tiers = TaxTiers(**tax_tiers.model_dump())
             tax_tiers.tiers = tiers
             tax_tiers.taxe = taxes
             tax_tiers = TaxTiers.create(db, tax_tiers)
-            return TaxTiersSchema.from_orm(tax_tiers) 
+            return TaxTiersSchema.model_validate(tax_tiers) 
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

@@ -16,13 +16,13 @@ class TypeEnseigneController:
         if not type_enseigne:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="TypeEnseigne not found")
-        return TypeEnseigneSchema.from_orm(type_enseigne)
+        return TypeEnseigneSchema.model_validate(type_enseigne)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[TypeEnseigneSchema]:
         try:
-            return [TypeEnseigneSchema.from_orm(type_enseigne) for type_enseigne in TypeEnseigne.getAll(db)]
+            return [TypeEnseigneSchema.model_validate(type_enseigne) for type_enseigne in TypeEnseigne.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
@@ -34,7 +34,7 @@ class TypeEnseigneController:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeEnseigne already exists")
         try:
             type_enseigne = TypeEnseigne.create(db, type_enseigne)
-            return TypeEnseigneSchema.from_orm(type_enseigne)
+            return TypeEnseigneSchema.model_validate(type_enseigne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
         
@@ -48,7 +48,7 @@ class TypeEnseigneController:
         try:
             # delete type_enseigne
             type_enseigne = TypeEnseigne.delete(db, type_enseigne_id)
-            return TypeEnseigneSchema.from_orm(type_enseigne)
+            return TypeEnseigneSchema.model_validate(type_enseigne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
@@ -62,7 +62,7 @@ class TypeEnseigneController:
         try:
             # update type_enseigne
             type_enseigne = TypeEnseigne.updateLibelleTypeEnseigne(db, type_enseigne_id, libelleType)
-            return TypeEnseigneSchema.from_orm(type_enseigne)
+            return TypeEnseigneSchema.model_validate(type_enseigne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     

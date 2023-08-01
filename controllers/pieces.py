@@ -15,7 +15,7 @@ class PiecesController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not piece:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Piece not found")
-        return PiecesSchema.from_orm(piece)
+        return PiecesSchema.model_validate(piece)
     
     # get by NumPiece
     @classmethod
@@ -26,14 +26,14 @@ class PiecesController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not piece:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Piece not found")
-        return PiecesSchema.from_orm(piece)
+        return PiecesSchema.model_validate(piece)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[PiecesSchema]:
         try:
             pieces = Piece.getAll(db)
-            return [PiecesSchema.from_orm(piece) for piece in pieces]
+            return [PiecesSchema.model_validate(piece) for piece in pieces]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -52,11 +52,11 @@ class PiecesController:
         if not type_piece:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key IDTypePiece: {piece.IDTypePiece}")
         try:
-            piece = Piece(**piece.dict())
+            piece = Piece(**piece.model_dump())
             piece.reglement = reglement
             piece.type_piece = type_piece
             piece = Piece.create(db, piece)
-            return PiecesSchema.from_orm(piece) 
+            return PiecesSchema.model_validate(piece) 
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -70,11 +70,11 @@ class PiecesController:
         if not piece:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Piece not found")
         try:
-            update_data = updatePiece.dict(exclude_unset=True)
+            update_data = updatePiece.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(piece, key, value)
             piece = Piece.update(db, piece)
-            return PiecesSchema.from_orm(piece)
+            return PiecesSchema.model_validate(piece)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

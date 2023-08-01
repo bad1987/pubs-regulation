@@ -42,7 +42,7 @@ class TestQuartierAffichage(TestCase):
         expected_result = QuartierAffichageSchema(**jsonable_encoder(self.quartier_affich))
         response = self.client.get(f'/quartierAffichages/{quartier_affichage_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected_result.dict())
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid quartier_affichage_id
         quartier_affichage_id = 1

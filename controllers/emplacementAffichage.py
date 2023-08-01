@@ -17,7 +17,7 @@ class EmplacementAffichageController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not emplacementAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="EmplacementAffichage not found")
-        return EmplacementAffichageSchema.from_orm(emplacementAffichage)
+        return EmplacementAffichageSchema.model_validate(emplacementAffichage)
     
     # get by CodeEmplacement
     @classmethod
@@ -28,14 +28,14 @@ class EmplacementAffichageController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not emplacementAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="EmplacementAffichage not found")
-        return EmplacementAffichageSchema.from_orm(emplacementAffichage)
+        return EmplacementAffichageSchema.model_validate(emplacementAffichage)
     
     # get all by IDQuartierAffichage
     @classmethod
     def get_all_by_IDQuartierAffichage(cls, db: Session, IDQuartierAffichage: int) -> list[EmplacementAffichageSchema]:
         try:
             emplacementAffichages = EmplacementAffichage.get_all_by_id_quartier(db, IDQuartierAffichage)
-            return [EmplacementAffichageSchema.from_orm(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
+            return [EmplacementAffichageSchema.model_validate(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -48,7 +48,7 @@ class EmplacementAffichageController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not emplacementAffichages:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="EmplacementAffichages not found")
-        return [EmplacementAffichageSchema.from_orm(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
+        return [EmplacementAffichageSchema.model_validate(emplacementAffichage) for emplacementAffichage in emplacementAffichages]
     
     # create
     @classmethod
@@ -61,10 +61,10 @@ class EmplacementAffichageController:
         if not quartierAffichage:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key IDQuartierAffichage: {emplacementAffichage.IDQuartierAffichage}")
         try:
-            emplacementAffichage = EmplacementAffichage(**emplacementAffichage.dict())
+            emplacementAffichage = EmplacementAffichage(**emplacementAffichage.model_dump())
             emplacementAffichage.quartier = quartierAffichage
             emplacementAffichage = EmplacementAffichage.create(db, emplacementAffichage)
-            return EmplacementAffichageSchema.from_orm(emplacementAffichage)
+            return EmplacementAffichageSchema.model_validate(emplacementAffichage)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -78,11 +78,11 @@ class EmplacementAffichageController:
         if not emplacementAffichage_to_update:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="EmplacementAffichage not found")
         try:
-            update_data = emplacementAffichage.dict(exclude_unset=True)
+            update_data = emplacementAffichage.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(emplacementAffichage_to_update, key, value)
             emplacementAffichage_to_update = EmplacementAffichage.update(db, emplacementAffichage_to_update)
-            return EmplacementAffichageSchema.from_orm(emplacementAffichage_to_update)
+            return EmplacementAffichageSchema.model_validate(emplacementAffichage_to_update)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

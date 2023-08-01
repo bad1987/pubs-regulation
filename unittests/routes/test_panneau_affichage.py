@@ -81,8 +81,8 @@ class TestPanneauAffichage(TestCase):
         code_panneau = self.panneau_affich.CodePanneau
         response = self.client.get(f"/panneauAffich/code", params={"CodePanneau": code_panneau})
         self.assertEqual(response.status_code, 200)
-        exepected_result = PanneauAffichSchema.from_orm(self.panneau_affich)
-        self.assertEqual(response.json(), exepected_result.dict())
+        exepected_result = PanneauAffichSchema.model_validate(self.panneau_affich)
+        self.assertEqual(response.json(), exepected_result.model_dump())
 
         # Test case 2: Invalid code
         code_panneau = "ZYX"
@@ -95,8 +95,8 @@ class TestPanneauAffichage(TestCase):
         id_panneau = self.panneau_affich.IDPanneauAffich
         response = self.client.get(f"/panneauAffich/{id_panneau}")
         self.assertEqual(response.status_code, 200)
-        exepected_result = PanneauAffichSchema.from_orm(self.panneau_affich)
-        self.assertEqual(response.json(), exepected_result.dict())
+        exepected_result = PanneauAffichSchema.model_validate(self.panneau_affich)
+        self.assertEqual(response.json(), exepected_result.model_dump())
 
         # Test case 2: Invalid ID
         id_panneau = 10000
@@ -107,7 +107,7 @@ class TestPanneauAffichage(TestCase):
     def test_get_all(self):
         response = self.client.get("/panneauAffich")
         self.assertEqual(response.status_code, 200)
-        expected_result = [PanneauAffichSchema.from_orm(self.panneau_affich).dict()]
+        expected_result = [PanneauAffichSchema.model_validate(self.panneau_affich).model_dump()]
         self.assertEqual(response.json(), expected_result)
     
     async def test_create_panneau_affiche(self):

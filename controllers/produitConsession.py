@@ -14,7 +14,7 @@ class ProduitConcessionController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not produitConcession:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession not found")
-        return ProduitConsessionSchema.from_orm(produitConcession)
+        return ProduitConsessionSchema.model_validate(produitConcession)
     
     # get by CodeProduitConcession
     @classmethod
@@ -25,7 +25,7 @@ class ProduitConcessionController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not produitConcession:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession not found")
-        return ProduitConsessionSchema.from_orm(produitConcession)
+        return ProduitConsessionSchema.model_validate(produitConcession)
     
     # get all
     @classmethod
@@ -36,7 +36,7 @@ class ProduitConcessionController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not produitConcessions:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcessions not found")
-        return [ProduitConsessionSchema.from_orm(produitConcession) for produitConcession in produitConcessions]
+        return [ProduitConsessionSchema.model_validate(produitConcession) for produitConcession in produitConcessions]
     
     # create
     @classmethod
@@ -49,10 +49,10 @@ class ProduitConcessionController:
         if not dispositifPub:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {produitConcession.IDDispositifPub}")
         try:
-            produitConcession = ProduitConcession(**produitConcession.dict())
+            produitConcession = ProduitConcession(**produitConcession.model_dump())
             produitConcession.dispositif_pub = dispositifPub
             produitConcession = ProduitConcession.create(db, produitConcession)
-            return ProduitConsessionSchema.from_orm(produitConcession)
+            return ProduitConsessionSchema.model_validate(produitConcession)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -67,12 +67,12 @@ class ProduitConcessionController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession not found")
         try:
             # extract the fields to update
-            update_data = produitConcession.dict(exclude_unset=True)
+            update_data = produitConcession.model_dump(exclude_unset=True)
             # update the fields with a loop
             for key, value in update_data.items():
                 setattr(produitConcession_to_update, key, value)
             ProduitConcession.update(db, produitConcession_to_update)
-            return ProduitConsessionSchema.from_orm(produitConcession_to_update)
+            return ProduitConsessionSchema.model_validate(produitConcession_to_update)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

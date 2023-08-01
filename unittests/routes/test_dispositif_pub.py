@@ -70,8 +70,8 @@ class TestDispositifPub(TestCase):
         code_dispositif_pub = self.dispositif.CodeDispositifPub
         response = self.client.get(f'/dispositif/code', params={'CodeDispositifPub': code_dispositif_pub})
         self.assertEqual(response.status_code, 200)
-        expected_result = DispositifPubSchema.from_orm(self.dispositif)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = DispositifPubSchema.model_validate(self.dispositif)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid code
         code_dispositif_pub = "ZYX"
@@ -84,8 +84,8 @@ class TestDispositifPub(TestCase):
         ID_dispositif_pub = self.dispositif.IDDispositifPub
         response = self.client.get(f'/dispositif/{ID_dispositif_pub}')
         self.assertEqual(response.status_code, 200)
-        expected_result = DispositifPubSchema.from_orm(self.dispositif)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = DispositifPubSchema.model_validate(self.dispositif)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid ID
         ID_dispositif_pub = 10000
@@ -96,8 +96,8 @@ class TestDispositifPub(TestCase):
     def test_get_all(self):
         response = self.client.get(f'/dispositif')
         self.assertEqual(response.status_code, 200)
-        expected_result = DispositifPubSchema.from_orm(self.dispositif)
-        self.assertEqual(response.json(), [expected_result.dict()])
+        expected_result = DispositifPubSchema.model_validate(self.dispositif)
+        self.assertEqual(response.json(), [expected_result.model_dump()])
 
     def test_create_dispositif_pub(self):
         post_data = {

@@ -53,7 +53,7 @@ class TestTiers(TestCase):
     def test_get_reglement_by_id(self):
         # test case 1: valid reglement_id
         reglement_id = self.reglement.IDReglement
-        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
+        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).model_dump()
         expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
         expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
         response = self.client.get(f'/reglements/{reglement_id}')
@@ -70,7 +70,7 @@ class TestTiers(TestCase):
     def test_get_reglement_by_numreglement(self):
         # test case 1: valid reglement_numreglement
         reglement_numreglement = self.reglement.NumReglt
-        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
+        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).model_dump()
         expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
         expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
         response = self.client.get(f'/reglements/numreglement', params={'NumReglt': reglement_numreglement})
@@ -86,7 +86,7 @@ class TestTiers(TestCase):
         self.assertEqual(response.json(), expected_error)
     
     def test_get_all(self):
-        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).dict()
+        expected_result = ReglementSchema(**jsonable_encoder(self.reglement)).model_dump()
         expected_result['DateReglt'] = expected_result['DateReglt'].isoformat()
         expected_result['doc_entete']['DateDocEntete'] = expected_result['doc_entete']['DateDocEntete'].isoformat()
         expected_result = [expected_result]

@@ -20,7 +20,7 @@ class PanneauAffichController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not panneauAffich:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="PanneauAffich not found")
-        return PanneauAffichSchema.from_orm(panneauAffich)
+        return PanneauAffichSchema.model_validate(panneauAffich)
     
     # get by CodePanneau
     @classmethod
@@ -31,14 +31,14 @@ class PanneauAffichController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not panneauAffich:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="PanneauAffich not found")
-        return PanneauAffichSchema.from_orm(panneauAffich)
+        return PanneauAffichSchema.model_validate(panneauAffich)
     
     # get all
     @classmethod
     def get_all(cls, db: Session) -> list[PanneauAffichSchema]:
         try:
             panneauAffichs = PanneauAffich.get_all(db)
-            return [PanneauAffichSchema.from_orm(panneauAffich) for panneauAffich in panneauAffichs]
+            return [PanneauAffichSchema.model_validate(panneauAffich) for panneauAffich in panneauAffichs]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -69,13 +69,13 @@ class PanneauAffichController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         
         try:
-            panneauAffich = PanneauAffich(**panneauAffich.dict())
+            panneauAffich = PanneauAffich(**panneauAffich.model_dump())
             panneauAffich.tiers = tiers
             panneauAffich.emplacement_affichage = emplacementAffichage
             panneauAffich.type_panneau = typePanneau
             panneauAffich.type_dispositif = type_dispositif
             panneauAffich = PanneauAffich.create(db, panneauAffich)
-            return PanneauAffichSchema.from_orm(panneauAffich)
+            return PanneauAffichSchema.model_validate(panneauAffich)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -89,11 +89,11 @@ class PanneauAffichController:
         if not panneauAffich:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="PanneauAffich not found")
         try:
-            update_data = updatePanneauAffich.dict(exclude_unset=True)
+            update_data = updatePanneauAffich.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(panneauAffich, key, value)
             panneauAffich = PanneauAffich.update(db, panneauAffich)
-            return PanneauAffichSchema.from_orm(panneauAffich)
+            return PanneauAffichSchema.model_validate(panneauAffich)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

@@ -33,7 +33,7 @@ class TestZoneAffichage(TestCase):
         # test case 1 : valid zone_affichage_id
         response = self.client.get(f"/zoneAffichages/{self.zone_affichage.IDZoneAffichage}")
         self.assertEqual(response.status_code, 200)
-        expected_result = ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).dict()
+        expected_result = ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).model_dump()
         self.assertEqual(response.json(), expected_result)
 
         # test case 2 : invalid zone_affichage_id
@@ -45,7 +45,7 @@ class TestZoneAffichage(TestCase):
         # test case 1 : valid zone_affichage_code
         response = self.client.get(f"/zoneAffichages/codeZone", params={'codeZone': self.zone_affichage.CodeZone})
         self.assertEqual(response.status_code, 200)
-        expected_result = ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).dict()
+        expected_result = ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).model_dump()
         self.assertEqual(response.json(), expected_result)
 
         # test case 2 : invalid zone_affichage_code
@@ -54,7 +54,7 @@ class TestZoneAffichage(TestCase):
         self.assertEqual(response.json(), {'detail': 'ZoneAffichage not found'})
 
     def test_get_all(self):
-        expected_result = [ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).dict()]
+        expected_result = [ZoneAffichageSchema(**jsonable_encoder(self.zone_affichage)).model_dump()]
         response = self.client.get("/zoneAffichages")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result)

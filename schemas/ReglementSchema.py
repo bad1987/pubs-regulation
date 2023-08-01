@@ -1,7 +1,7 @@
 
 from datetime import date, datetime
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, validator
 
 from schemas.DocEnteteSchema import DocEnteteSchema
 
@@ -21,7 +21,7 @@ class ReglementSchema(BaseModel):
         orm_mode = True
         from_attributes = True
     
-    @validator('DateReglt', pre=True)
+    @field_validator('DateReglt')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -37,7 +37,7 @@ class ReglementCreateSchema(BaseModel):
     ModeRglt: str
     IDDocEntete: int
         
-    @validator('DateReglt', pre=True)
+    @field_validator('DateReglt')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -54,7 +54,7 @@ class ReglementUpdateSchema(BaseModel):
     ModeRglt: str
     IDDocEntete: int
         
-    @validator('DateReglt', pre=True)
+    @field_validator('DateReglt')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format

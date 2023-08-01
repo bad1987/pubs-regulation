@@ -13,7 +13,7 @@ class TiersController:
         if not tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -21,7 +21,7 @@ class TiersController:
     @classmethod
     def getAll(cls, db: Session) -> list[TiersSchema]:
         try:
-            return [TiersSchema.from_orm(tiers) for tiers in Tiers.getAll(db)]
+            return [TiersSchema.model_validate(tiers) for tiers in Tiers.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -32,7 +32,7 @@ class TiersController:
         if not tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -47,10 +47,10 @@ class TiersController:
         if Tiers.getByCode(db, tiers.CodeTiers):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTiers already exists")
         try:
-            tiers = Tiers(**tiers.dict())
+            tiers = Tiers(**tiers.model_dump())
             tiers.type_tiers = type_tiers
             tiers = Tiers.create(db, tiers)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -64,11 +64,11 @@ class TiersController:
         if not tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
-            update_data = updateTiers.dict(exclude_unset=True)
+            update_data = updateTiers.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(tiers, key, value)
             tiers = Tiers.update(db, tiers)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -80,7 +80,7 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
             tiers = Tiers.updateNumCont(db, tiers_id, numCont)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -92,7 +92,7 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
             tiers = Tiers.updateLibelleTiers(db, tiers_id, libelleTiers)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -104,7 +104,7 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
             tiers = Tiers.updateAdresseTiers(db, tiers_id, adresseTiers)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -116,7 +116,7 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
             tiers = Tiers.updateSigleTiers(db, tiers_id, sigleTiers)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -128,7 +128,7 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
             tiers = Tiers.updateLogo(db, tiers_id, logo)
-            return TiersSchema.from_orm(tiers)
+            return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -151,7 +151,7 @@ class TiersController:
         if not type_tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeTiers not found")
         try:
-            return TiersSchema.from_orm(type_tiers)
+            return TiersSchema.model_validate(type_tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -159,7 +159,7 @@ class TiersController:
     @classmethod
     def getAllTypeTiers(cls, db: Session) -> list[TypeTiersSchema]:
         try:
-            return [TypeTiersSchema.from_orm(type_tiers) for type_tiers in TypeTiers.getAll(db)]
+            return [TypeTiersSchema.model_validate(type_tiers) for type_tiers in TypeTiers.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -168,7 +168,7 @@ class TiersController:
     def createTypeTiers(cls, db: Session, type_tiers: TypeTiersSchema) -> TypeTiersSchema:
         try:
             type_tiers = TypeTiers.create(db, type_tiers)
-            return TiersSchema.from_orm(type_tiers)
+            return TiersSchema.model_validate(type_tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

@@ -42,7 +42,7 @@ class TestTiers(TestCase):
         print(response.json())
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.json(), expected_result.dict())
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid tiers_id
         tiers_id = 1000000
@@ -53,7 +53,7 @@ class TestTiers(TestCase):
     
     # test get all
     def test_get_all_tiers(self):
-        expected_result = [TiersSchema(**jsonable_encoder(self.tiers)).dict()]
+        expected_result = [TiersSchema(**jsonable_encoder(self.tiers)).model_dump()]
         response = self.client.get('/tiers')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result)

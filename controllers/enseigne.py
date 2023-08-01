@@ -21,7 +21,7 @@ class EnseigneController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not enseigne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
-        return EnseigneSchema.from_orm(enseigne)
+        return EnseigneSchema.model_validate(enseigne)
     
     # get by CodeEnseigne
     @classmethod
@@ -32,14 +32,14 @@ class EnseigneController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not enseigne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
-        return EnseigneSchema.from_orm(enseigne)
+        return EnseigneSchema.model_validate(enseigne)
     
     # get all
     @classmethod
     def get_all(cls, db: Session) -> list[EnseigneSchema]:
         try:
             enseignes = Enseigne.get_all(db)
-            return [EnseigneSchema.from_orm(enseigne) for enseigne in enseignes]
+            return [EnseigneSchema.model_validate(enseigne) for enseigne in enseignes]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -70,13 +70,13 @@ class EnseigneController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         
         try:
-            enseigne = Enseigne(**enseigne.dict())
+            enseigne = Enseigne(**enseigne.model_dump())
             enseigne.type_dispositif = type_dispositif
             enseigne.type_enseigne = typeEnseigne
             enseigne.emplacement_affichage = emplacementAffichage
             enseigne.tiers = tiers
             enseigne = Enseigne.create(db, enseigne)
-            return EnseigneSchema.from_orm(enseigne)
+            return EnseigneSchema.model_validate(enseigne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -87,11 +87,11 @@ class EnseigneController:
         if not enseigne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
         try:
-            update_data = updateEnseigne.dict(exclude_unset=True)
+            update_data = updateEnseigne.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(enseigne, key, value)
             enseigne = Enseigne.update(db, enseigne)
-            return EnseigneSchema.from_orm(enseigne)
+            return EnseigneSchema.model_validate(enseigne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

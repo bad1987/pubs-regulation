@@ -17,7 +17,7 @@ class DocLigneController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not docligne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DocLigne not found")
-        return DocLigneSchema.from_orm(docligne)
+        return DocLigneSchema.model_validate(docligne)
     
     # get by IDDocEntete
     @classmethod
@@ -28,13 +28,13 @@ class DocLigneController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not docligne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DocLigne not found")
-        return DocLigneSchema.from_orm(docligne)
+        return DocLigneSchema.model_validate(docligne)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[DocLigneSchema]:
         try:
-            return [DocLigneSchema.from_orm(docligne) for docligne in DocLigne.get_all(db)]
+            return [DocLigneSchema.model_validate(docligne) for docligne in DocLigne.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -54,12 +54,12 @@ class DocLigneController:
         if not produit_concession:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {docligne.IDProduitConcession}")
         try:
-            docligne = DocLigne(**docligne.dict())
+            docligne = DocLigne(**docligne.model_dump())
             docligne.doc_entete = docentete
             docligne.campagne_pub = campagne_pub
             docligne.produit = produit_concession
             docligne = DocLigne.create(db, docligne)
-            return DocLigneSchema.from_orm(docligne)
+            return DocLigneSchema.model_validate(docligne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -74,11 +74,11 @@ class DocLigneController:
         if not doc_ligne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"DocLigne not found")
         try:
-            update_data = updateDocLigne.dict(exclude_unset=True)
+            update_data = updateDocLigne.model_dump(exclude_unset=True)
             for key,value in update_data.items():
                 setattr(doc_ligne, key, value)
             doc_ligne = DocLigne.update(db, doc_ligne)
-            return DocLigneSchema.from_orm(doc_ligne)
+            return DocLigneSchema.model_validate(doc_ligne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

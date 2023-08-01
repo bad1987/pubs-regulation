@@ -83,8 +83,8 @@ class TestEnseigne(TestCase):
         code_enseigne = self.enseigne.CodeEnseigne
         response = self.client.get(f"/enseigne/code", params={"CodeEnseigne": code_enseigne})
         self.assertEqual(response.status_code, 200)
-        exepected_result = EnseigneSchema.from_orm(self.enseigne)
-        self.assertEqual(jsonable_encoder(response.json()), exepected_result.dict())
+        exepected_result = EnseigneSchema.model_validate(self.enseigne)
+        self.assertEqual(jsonable_encoder(response.json()), exepected_result.model_dump())
 
         # Test case 2: Invalid code
         code_enseigne = "ZYX"
@@ -97,8 +97,8 @@ class TestEnseigne(TestCase):
         enseigne_id = self.enseigne.IDEnseigne
         response = self.client.get(f"/enseigne/{enseigne_id}")
         self.assertEqual(response.status_code, 200)
-        exepected_result = EnseigneSchema.from_orm(self.enseigne)
-        self.assertEqual(jsonable_encoder(response.json()), exepected_result.dict())
+        exepected_result = EnseigneSchema.model_validate(self.enseigne)
+        self.assertEqual(jsonable_encoder(response.json()), exepected_result.model_dump())
 
         # Test case 2: Invalid ID
         enseigne_id = 10000
@@ -109,7 +109,7 @@ class TestEnseigne(TestCase):
     def test_get_all(self):
         response = self.client.get("/enseigne")
         self.assertEqual(response.status_code, 200)
-        expected_result = [EnseigneSchema.from_orm(self.enseigne).dict()]
+        expected_result = [EnseigneSchema.model_validate(self.enseigne).model_dump()]
         self.assertEqual(jsonable_encoder(response.json()), expected_result)
 
     def test_create_enseigne(self):

@@ -68,7 +68,7 @@ class TestPieces(TestCase):
         num_piece = self.pieces.NumPiece
         response = self.client.get(f"/pieces/numPiece", params={"NumPiece": num_piece})
         self.assertEqual(response.status_code, 200)
-        expected_result = PiecesSchema.from_orm(self.pieces).dict()
+        expected_result = PiecesSchema.model_validate(self.pieces).model_dump()
         expected_result["DateReglt"] = expected_result["DateReglt"].isoformat()
         self.assertEqual(response.json(), expected_result)
 
@@ -83,7 +83,7 @@ class TestPieces(TestCase):
         id_piece = self.pieces.IDPiece
         response = self.client.get(f"/pieces/{id_piece}")
         self.assertEqual(response.status_code, 200)
-        expected_result = PiecesSchema.from_orm(self.pieces).dict()
+        expected_result = PiecesSchema.model_validate(self.pieces).model_dump()
         expected_result["DateReglt"] = expected_result["DateReglt"].isoformat()
         self.assertEqual(response.json(), expected_result)
 
@@ -96,7 +96,7 @@ class TestPieces(TestCase):
     async def test_get_all(self):
         response = self.client.get("/pieces")
         self.assertEqual(response.status_code, 200)
-        expected_result = [PiecesSchema.from_orm(self.pieces).dict()]
+        expected_result = [PiecesSchema.model_validate(self.pieces).model_dump()]
         self.assertEqual(response.json(), expected_result)
 
     async def test_create_piece(self):

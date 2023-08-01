@@ -100,7 +100,7 @@ class TestProduitConcession(TestCase):
         # Test case 1: Valid campagne_id
         campagne_id = self.campagne.IDCampagnePub
         response = self.client.get(f"/campagne/{campagne_id}")
-        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result = CampagnePubSchema.model_validate(self.campagne).model_dump()
         expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
         expected_result['DateFin'] = expected_result['DateFin'].isoformat()
         self.assertEqual(response.status_code, 200)
@@ -116,7 +116,7 @@ class TestProduitConcession(TestCase):
         # Test case 1: Valid campagne_code
         campagne_code = self.campagne.CodeCampagne
         response = self.client.get(f"/campagne/code", params={"CodeCampagne": campagne_code})
-        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result = CampagnePubSchema.model_validate(self.campagne).model_dump()
         expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
         expected_result['DateFin'] = expected_result['DateFin'].isoformat()
         self.assertEqual(response.status_code, 200)
@@ -130,7 +130,7 @@ class TestProduitConcession(TestCase):
 
     def test_get_all_campagne(self):
         response = self.client.get("/campagne")
-        expected_result = CampagnePubSchema.from_orm(self.campagne).dict()
+        expected_result = CampagnePubSchema.model_validate(self.campagne).model_dump()
         expected_result['DateDeb'] = expected_result['DateDeb'].isoformat()
         expected_result['DateFin'] = expected_result['DateFin'].isoformat()
         self.assertEqual(response.status_code, 200)

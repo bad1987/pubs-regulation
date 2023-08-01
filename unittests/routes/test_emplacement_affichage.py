@@ -47,8 +47,8 @@ class TestEmplacementAffichage(TestCase):
         response = self.client.get(f'/emplacementAffichage/{emplacement_affichage_id}')
         print(response.json())
         self.assertEqual(response.status_code, 200)
-        expected_result = EmplacementAffichageSchema.from_orm(self.emplacement_affichage)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = EmplacementAffichageSchema.model_validate(self.emplacement_affichage)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid emplacement_affichage_id
         emplacement_affichage_id = 10000
@@ -63,8 +63,8 @@ class TestEmplacementAffichage(TestCase):
         response = self.client.get(f'/emplacementAffichage/code', params={'CodeEmplacement': emplacement_affichage_code})
         print(response.json())
         self.assertEqual(response.status_code, 200)
-        expected_result = EmplacementAffichageSchema.from_orm(self.emplacement_affichage)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = EmplacementAffichageSchema.model_validate(self.emplacement_affichage)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid emplacement_affichage_code
         emplacement_affichage_code = "AYZ"
@@ -77,8 +77,8 @@ class TestEmplacementAffichage(TestCase):
         quartier_affichage_id = self.emplacement_affichage.IDQuartierAffichage
         response = self.client.get(f'/emplacementAffichage/quartier', params={'IDQuartierAffichage': quartier_affichage_id})
         self.assertEqual(response.status_code, 200)
-        expected_result = EmplacementAffichageSchema.from_orm(self.emplacement_affichage)
-        self.assertEqual(response.json(), [expected_result.dict()])
+        expected_result = EmplacementAffichageSchema.model_validate(self.emplacement_affichage)
+        self.assertEqual(response.json(), [expected_result.model_dump()])
 
         # Test case 2: Invalid quartier_affichage_id
         quartier_affichage_id = 10000
@@ -90,8 +90,8 @@ class TestEmplacementAffichage(TestCase):
     def test_get_all(self):
         response = self.client.get('/emplacementAffichage')
         self.assertEqual(response.status_code, 200)
-        expected_result = EmplacementAffichageSchema.from_orm(self.emplacement_affichage)
-        self.assertEqual(response.json(), [expected_result.dict()])
+        expected_result = EmplacementAffichageSchema.model_validate(self.emplacement_affichage)
+        self.assertEqual(response.json(), [expected_result.model_dump()])
     
     def test_create_emplacement_affichage(self):
         post_data = {

@@ -18,7 +18,7 @@ class CampagnePubController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not campagne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Campagne not found")
-        return CampagnePubSchema.from_orm(campagne)
+        return CampagnePubSchema.model_validate(campagne)
 
     # get by CodeCampagne
     @classmethod
@@ -29,13 +29,13 @@ class CampagnePubController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not campagne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Campagne not found")
-        return CampagnePubSchema.from_orm(campagne)
+        return CampagnePubSchema.model_validate(campagne)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[CampagnePubSchema]:
         try:
-            return [CampagnePubSchema.from_orm(campagne) for campagne in CampagnePub.get_all(db)]
+            return [CampagnePubSchema.model_validate(campagne) for campagne in CampagnePub.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -48,7 +48,7 @@ class CampagnePubController:
             if not produit_concession:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession does not exist")
         try:
-            campagne = CampagnePub(**campagne_data.dict(exclude={"produits_ids"}))
+            campagne = CampagnePub(**campagne_data.model_dump(exclude={"produits_ids"}))
             campagne = CampagnePub.create(db, campagne)
 
             # create campagne produits for this campagne
@@ -59,7 +59,7 @@ class CampagnePubController:
                 })
                 CampagneProduit.create(db, campagne_produit)
 
-            return CampagnePubSchema.from_orm(campagne)
+            return CampagnePubSchema.model_validate(campagne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -73,11 +73,11 @@ class CampagnePubController:
         if not campagne:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Campagne not found")
         try:
-            update_data = updateCampagne.dict(exclude_unset=True)
+            update_data = updateCampagne.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(campagne, key, value)
             campagne = CampagnePub.update(db, campagne)
-            return CampagnePubSchema.from_orm(campagne)
+            return CampagnePubSchema.model_validate(campagne)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

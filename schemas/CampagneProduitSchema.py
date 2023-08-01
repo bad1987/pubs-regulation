@@ -85,6 +85,7 @@ class ProduitConsessionSchema(BaseModel):
         from_attributes = True
 
 CampagnePubSchema.model_rebuild()
+# CampagnePubSchema.update_forward_refs()
 
 class ProduitConsessionCreateSchema(BaseModel):
     CodeProduitConcession: str

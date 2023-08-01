@@ -16,13 +16,13 @@ class TypeDispositifController:
         if not type_dispositif:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
-        return TypeDispositifSchema.from_orm(type_dispositif)
+        return TypeDispositifSchema.model_validate(type_dispositif)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[TypeDispositifSchema]:
         try:
-            return [TypeDispositifSchema.from_orm(type_dispositif) for type_dispositif in TypeDispositif.getAll(db)]
+            return [TypeDispositifSchema.model_validate(type_dispositif) for type_dispositif in TypeDispositif.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
@@ -34,7 +34,7 @@ class TypeDispositifController:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTypeDispositif already exists")
         try:
             type_dispositif = TypeDispositif.create(db, type_dispositif)
-            return TypeDispositifSchema.from_orm(type_dispositif)
+            return TypeDispositifSchema.model_validate(type_dispositif)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
         
@@ -62,7 +62,7 @@ class TypeDispositifController:
         try:
             # update type_dispositif
             type_dispositif = TypeDispositif.updateLibelleTypeDispo(db, type_dispositif_id, libelleType)
-            return TypeDispositifSchema.from_orm(type_dispositif)
+            return TypeDispositifSchema.model_validate(type_dispositif)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
@@ -75,10 +75,10 @@ class TypeDispositifController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TypeDispositif not found")
         try:
             # update type_dispositif
-            update_data = update_type_dispositif.dict(exclude_unset=True)
+            update_data = update_type_dispositif.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(type_dispositif, key, value)
             type_dispositif = TypeDispositif.update(db, type_dispositif)
-            return TypeDispositifSchema.from_orm(type_dispositif)
+            return TypeDispositifSchema.model_validate(type_dispositif)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))

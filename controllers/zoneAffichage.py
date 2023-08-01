@@ -15,7 +15,7 @@ class ZoneAffichageController:
         if not zoneAffichage:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
-        return ZoneAffichageSchema.from_orm(zoneAffichage)
+        return ZoneAffichageSchema.model_validate(zoneAffichage)
 
     # get all zoneAffichage by CodeZone
     @classmethod
@@ -26,7 +26,7 @@ class ZoneAffichageController:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
         try:
-            return ZoneAffichageSchema.from_orm(ZoneAffichage.getByCodeZone(db, codeZone))
+            return ZoneAffichageSchema.model_validate(ZoneAffichage.getByCodeZone(db, codeZone))
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
     
@@ -34,7 +34,7 @@ class ZoneAffichageController:
     @classmethod
     def getAll(cls, db: Session) -> list[ZoneAffichageSchema]:
         try:
-            return [ZoneAffichageSchema.from_orm(zoneAffichage) for zoneAffichage in ZoneAffichage.getAll(db)]
+            return [ZoneAffichageSchema.model_validate(zoneAffichage) for zoneAffichage in ZoneAffichage.getAll(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_NOT_FOUND, detail=str(e))
 
@@ -47,9 +47,9 @@ class ZoneAffichageController:
                                 detail="ZoneAffichage already exists with CodeZone")
 
         try:
-            zoneAffichage = ZoneAffichage(**zoneAffichage.dict())
+            zoneAffichage = ZoneAffichage(**zoneAffichage.model_dump())
             zoneAffichage = ZoneAffichage.create(db, zoneAffichage)
-            return ZoneAffichageSchema.from_orm(zoneAffichage)
+            return ZoneAffichageSchema.model_validate(zoneAffichage)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -82,7 +82,7 @@ class ZoneAffichageController:
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
         try:
             zoneAffichage = ZoneAffichage.update_libelle_zone(db, zoneAffichage_id, libelleZone)
-            return ZoneAffichageSchema.from_orm(zoneAffichage)
+            return ZoneAffichageSchema.model_validate(zoneAffichage)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -98,11 +98,11 @@ class ZoneAffichageController:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="ZoneAffichage not found")
         try:
-            update_data = updateZoneAffichage.dict(exclude_unset=True)
+            update_data = updateZoneAffichage.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(zoneAffichage, key, value)
             zoneAffichage = ZoneAffichage.update(db, zoneAffichage)
-            return ZoneAffichageSchema.from_orm(zoneAffichage)
+            return ZoneAffichageSchema.model_validate(zoneAffichage)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

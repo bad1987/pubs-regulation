@@ -14,13 +14,13 @@ class RepartitionFraisController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not rep_frais:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RepartitionFrais not found")
-        return RepartitionFraisSchema.from_orm(rep_frais)
+        return RepartitionFraisSchema.model_validate(rep_frais)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[RepartitionFraisSchema]:
         try:
-            return [RepartitionFraisSchema.from_orm(rep_frais) for rep_frais in RepartitionFrais.get_all(db)]
+            return [RepartitionFraisSchema.model_validate(rep_frais) for rep_frais in RepartitionFrais.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -28,8 +28,8 @@ class RepartitionFraisController:
     @classmethod
     def create(cls, db: Session, rep_frais: RepartitionFraisCreateSchema) -> RepartitionFraisSchema:
         try:
-            rep_frais = RepartitionFrais.create(db, RepartitionFrais(**rep_frais.dict()))
-            return RepartitionFraisSchema.from_orm(rep_frais)
+            rep_frais = RepartitionFrais.create(db, RepartitionFrais(**rep_frais.model_dump()))
+            return RepartitionFraisSchema.model_validate(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -45,7 +45,7 @@ class RepartitionFraisController:
         try:
             rep_frais.IntervenantEntite = IntervenantEntite
             rep_frais = RepartitionFrais.update(db, rep_frais)
-            return RepartitionFraisSchema.from_orm(rep_frais)
+            return RepartitionFraisSchema.model_validate(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -61,7 +61,7 @@ class RepartitionFraisController:
         try:
             rep_frais.TauxRepartition = TauxRepartition
             rep_frais = RepartitionFrais.update(db, rep_frais)
-            return RepartitionFraisSchema.from_orm(rep_frais)
+            return RepartitionFraisSchema.model_validate(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
@@ -77,7 +77,7 @@ class RepartitionFraisController:
         try:
             rep_frais.AnneeRepart = AnneeRepart
             rep_frais = RepartitionFrais.update(db, rep_frais)
-            return RepartitionFraisSchema.from_orm(rep_frais)
+            return RepartitionFraisSchema.model_validate(rep_frais)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

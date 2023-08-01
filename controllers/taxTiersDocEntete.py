@@ -18,7 +18,7 @@ class TaxTiersDocEnteteController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not tax_tiers_doc_entete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiersDocEntete not found")
-        return TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete)
+        return TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete)
     
     # get by id tiers
     @classmethod
@@ -29,7 +29,7 @@ class TaxTiersDocEnteteController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not tax_tiers_doc_entete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiersDocEntete not found")
-        return TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete)
+        return TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete)
     
     # get by id taxes
     @classmethod
@@ -40,14 +40,14 @@ class TaxTiersDocEnteteController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not tax_tiers_doc_entete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiersDocEntete not found")
-        return TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete)
+        return TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete)
     
     # get all
     @classmethod
     def getAll(cls, db: Session) -> list[TaxTiersDocEnteteSchema]:
         try:
             tax_tiers_doc_entete = TaxTiersDocEntete.getAll(db)
-            return [TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete) for tax_tiers_doc_entete in tax_tiers_doc_entete]
+            return [TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete) for tax_tiers_doc_entete in tax_tiers_doc_entete]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -67,12 +67,12 @@ class TaxTiersDocEnteteController:
         if not doc_entete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key IDDocEntete: {tax_tiers_doc_entete.IDDocEntete}")
         try:
-            tax_tiers_doc_entete = TaxTiersDocEntete(**tax_tiers_doc_entete.dict())
+            tax_tiers_doc_entete = TaxTiersDocEntete(**tax_tiers_doc_entete.model_dump())
             tax_tiers_doc_entete.tiers = tiers
             tax_tiers_doc_entete.taxe = taxes
             tax_tiers_doc_entete.doc_entete = doc_entete
             tax_tiers_doc_entete = TaxTiersDocEntete.create(db, tax_tiers_doc_entete)
-            return TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete)
+            return TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
@@ -86,11 +86,11 @@ class TaxTiersDocEnteteController:
         if not tax_tiers_doc_entete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TaxTiersDocEntete not found")
         try:
-            update_data = update_tax_tiers_doc_entete.dict(exclude_unset=True)
+            update_data = update_tax_tiers_doc_entete.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(tax_tiers_doc_entete, key, value)
             tax_tiers_doc_entete = TaxTiersDocEntete.update(db, tax_tiers_doc_entete)
-            return TaxTiersDocEnteteSchema.from_orm(tax_tiers_doc_entete)
+            return TaxTiersDocEnteteSchema.model_validate(tax_tiers_doc_entete)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         

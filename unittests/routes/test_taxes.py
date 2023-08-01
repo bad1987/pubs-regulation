@@ -36,7 +36,7 @@ class TestTaxes(TestCase):
         expected_result = TaxesSchema(**jsonable_encoder(self.tax_1))
         response = self.client.get(f'/taxes/{tax_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected_result.dict())
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid tax_id
         tax_id = 1
@@ -83,7 +83,7 @@ class TestTaxes(TestCase):
 
         # Check the response content
         expected_result = TaxesSchema(**jsonable_encoder(tax_1))
-        self.assertEqual(response.json(), expected_result.dict())
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Delete test data
         Taxes.delete(self.db, tax_1.IDTaxes)
@@ -114,7 +114,7 @@ class TestTaxes(TestCase):
         self.assertEqual(response.json(), expected_result.json())
 
         # Check that the tax was created in the database
-        tax = TaxesSchema.from_orm(response.json())
+        tax = TaxesSchema.model_validate(response.json())
         self.assertIsNotNone(tax)
         self.assertEqual(tax.CodeTaxe, tax_data["CodeTaxe"])
         self.assertEqual(tax.LibelleTaxe, tax_data["LibelleTaxe"])

@@ -19,7 +19,7 @@ class TaxesController:
             # If tax is not found, raise an HTTPException with status code 404
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tax not found")
         # Convert the tax object to a schema and return it
-        return TaxesSchema.from_orm(tax)
+        return TaxesSchema.model_validate(tax)
 
     # get all
     @classmethod
@@ -34,7 +34,7 @@ class TaxesController:
             # If no taxes are found, raise an HTTPException with status code 404
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Taxes not found")
         # Convert each tax object to a schema and return a list of schemas
-        return [TaxesSchema.from_orm(tax) for tax in taxes]
+        return [TaxesSchema.model_validate(tax) for tax in taxes]
 
     # get by CodeTaxe
     @classmethod
@@ -49,7 +49,7 @@ class TaxesController:
             # If tax is not found, raise an HTTPException with status code 404
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tax not found")
         # Convert the tax object to a schema and return it
-        return TaxesSchema.from_orm(tax)
+        return TaxesSchema.model_validate(tax)
 
     # create
     @classmethod
@@ -60,9 +60,9 @@ class TaxesController:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTaxe already exists")
         try:
             # Create a new tax in the database using the create method of the Taxes model
-            tax = Taxes.create(db, Taxes(**tax.dict()))
+            tax = Taxes.create(db, Taxes(**tax.model_dump()))
             # Convert the created tax object to a schema and return it
-            return TaxesSchema.from_orm(tax)
+            return TaxesSchema.model_validate(tax)
         except Exception as e:
             # If there's an exception, raise an HTTPException with status code 500 and the error message
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -77,7 +77,7 @@ class TaxesController:
 
             # Update the LibelleTaxe of the tax record
             tax = Taxes.updateLibelleTaxe(db, IDTaxes, LibelleTaxe)            
-            return TaxesSchema.from_orm(tax)
+            return TaxesSchema.model_validate(tax)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -91,7 +91,7 @@ class TaxesController:
         try:
             # Update the TauxTaxe of the tax record
             tax = Taxes.updateTauxTaxe(db, IDTaxes, TauxTaxe)            
-            return TaxesSchema.from_orm(tax)
+            return TaxesSchema.model_validate(tax)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -104,7 +104,7 @@ class TaxesController:
         try:
             # Update the CodeTaxe of the tax record
             tax = Taxes.updateCodeTaxe(db, IDTaxes, CodeTaxe)            
-            return TaxesSchema.from_orm(tax)
+            return TaxesSchema.model_validate(tax)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 

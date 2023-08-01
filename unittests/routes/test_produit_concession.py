@@ -84,8 +84,8 @@ class TestProduitConcession(TestCase):
         produit_concession_id = self.produit_concession.IDProduitConcession
         response = self.client.get(f'/produitConcessions/{produit_concession_id}')
         self.assertEqual(response.status_code, 200)
-        expected_result = ProduitConsessionSchema.from_orm(self.produit_concession)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = ProduitConsessionSchema.model_validate(self.produit_concession)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid produit_concession_id
         produit_concession_id = 100000
@@ -98,8 +98,8 @@ class TestProduitConcession(TestCase):
         produit_concession_code = self.produit_concession.CodeProduitConcession
         response = self.client.get(f'/produitConcessions/code', params={"CodeProduitConsession": produit_concession_code})
         self.assertEqual(response.status_code, 200)
-        expected_result = ProduitConsessionSchema.from_orm(self.produit_concession)
-        self.assertEqual(response.json(), expected_result.dict())
+        expected_result = ProduitConsessionSchema.model_validate(self.produit_concession)
+        self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid produit_concession_code
         produit_concession_code = "ZYX"
@@ -110,7 +110,7 @@ class TestProduitConcession(TestCase):
     async def get_all_poduit_concessions(self):
         response = self.client.get(f'/produitConcessions')
         self.assertEqual(response.status_code, 200)
-        expected_result = [ProduitConsessionSchema.from_orm(self.produit_concession).dict()]
+        expected_result = [ProduitConsessionSchema.model_validate(self.produit_concession).model_dump()]
         self.assertEqual(response.json(), expected_result)
     
     async def test_create_produit_concession(self):

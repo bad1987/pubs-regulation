@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, validator
 
 from schemas.TiersSchema import TiersSchema
 
@@ -20,7 +20,7 @@ class DocEnteteSchema(BaseModel):
         orm_mode = True
         from_attributes = True
     
-    @validator('DateDocEntete', pre=True)
+    @field_validator('DateDocEntete')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -38,7 +38,7 @@ class DocEnteteCreateSchema(BaseModel):
     PenalitesDoc: int
     IDTiers: int
 
-    @validator('DateDocEntete', pre=True)
+    @field_validator('DateDocEntete')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
@@ -57,7 +57,7 @@ class DocEnteteUpdateSchema(BaseModel):
     PenalitesDoc: int
     IDTiers: int
 
-    @validator('DateDocEntete', pre=True)
+    @field_validator('DateDocEntete')
     def parse_date(cls, value):
         if isinstance(value, datetime):
             # Parse the string value using the desired format
