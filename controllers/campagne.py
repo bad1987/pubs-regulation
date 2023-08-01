@@ -55,6 +55,8 @@ class CampagnePubController:
                 campagne.produits.append(p)
             campagne = CampagnePub.create(db, campagne)
 
+            # TODO::create doc_ligne and doc_entete
+
             # create campagne produits for this campagne
             for produit_concession_id in campagne_data.produits_ids:
                 campagne_produit = CampagneProduit(**{
