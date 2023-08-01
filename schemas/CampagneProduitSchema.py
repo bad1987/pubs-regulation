@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import date, datetime
 from typing import ForwardRef, List, Optional
 from pydantic import BaseModel, field_validator
@@ -78,14 +79,14 @@ class ProduitConsessionSchema(BaseModel):
     IDDispositifPub: int
     dispositif_pub: DispositifPubSchema
 
-    campagnes: List[CampagnePubSchema] = []
+    # campagnes: List[CampagnePubSchema] = []
 
     class Config:
         orm_mode = True
         from_attributes = True
 
-CampagnePubSchema.model_rebuild()
-# CampagnePubSchema.update_forward_refs()
+# CampagnePubSchema.model_rebuild()
+CampagnePubSchema.update_forward_refs()
 
 class ProduitConsessionCreateSchema(BaseModel):
     CodeProduitConcession: str

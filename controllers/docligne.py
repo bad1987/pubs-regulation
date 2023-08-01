@@ -2,8 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from models.docligne import DocLigne
-from models.produitConcession import ProduitConcession
-from models.campagne import CampagnePub
+from models.campagneProduit import CampagneProduit
 
 from schemas.DocLigneSchema import DocLigneSchema, DocLigneCreateSchema, DocLigneUpdateSchema
 
@@ -45,19 +44,12 @@ class DocLigneController:
         docentete = DocLigne.get_by_id_doc_entete(db, docligne.IDDocEntete)
         if not docentete:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {docligne.IDDocEntete}")
-        # check if IDCampagnePub exists
-        campagne_pub = CampagnePub.get(db, docligne.IDCampagnePub)
-        if not campagne_pub:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {docligne.IDCampagnePub}")
-        # check if IDProduitConcession exists
-        produit_concession = ProduitConcession.get(db, docligne.IDProduitConcession)
-        if not produit_concession:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {docligne.IDProduitConcession}")
+        # check if IDCampagneProduit exists
+        campagne_produit = CampagneProduit.get(db, docligne.IDCampagneProduit)
         try:
             docligne = DocLigne(**docligne.model_dump())
             docligne.doc_entete = docentete
-            docligne.campagne_pub = campagne_pub
-            docligne.produit = produit_concession
+            docligne.campagne_produit = campagne_produit
             docligne = DocLigne.create(db, docligne)
             return DocLigneSchema.model_validate(docligne)
         except Exception as e:
