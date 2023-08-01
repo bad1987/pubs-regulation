@@ -6,7 +6,7 @@ from models.campagne import CampagnePub
 from models.produitConcession import ProduitConcession
 from models.campagneProduit import CampagneProduit
 
-from schemas.CampagneProduitSchema import CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema
+from schemas.CampagneProduitSchema import CampagneProduitSchema, CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema
 
 class CampagnePubController:
     # get
@@ -43,12 +43,16 @@ class CampagnePubController:
     @classmethod
     def create(cls, db: Session, campagne_data: CampagnePubCreateSchema) -> CampagnePubSchema:
         # check if the products for this campagne exist
+        valid_products = []
         for produit_concession_id in campagne_data.produits_ids:
             produit_concession = ProduitConcession.get(db, produit_concession_id)
             if not produit_concession:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession does not exist")
+            valid_products.append(produit_concession)
         try:
             campagne = CampagnePub(**campagne_data.model_dump(exclude={"produits_ids"}))
+            for p in valid_products:
+                campagne.produits.append(p)
             campagne = CampagnePub.create(db, campagne)
 
             # create campagne produits for this campagne
@@ -57,7 +61,7 @@ class CampagnePubController:
                     "IDCampagnePub": campagne.IDCampagnePub,
                     "IDProduitConcession": produit_concession_id
                 })
-                CampagneProduit.create(db, campagne_produit)
+                res = CampagneProduit.create(db, campagne_produit)
 
             return CampagnePubSchema.model_validate(campagne)
         except Exception as e:

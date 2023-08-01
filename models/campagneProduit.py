@@ -15,7 +15,7 @@ class CampagneProduit(Base):
     IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"))
 
     # Clé étrangère, identifiant unique de la table CampagnePub
-    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="SET NULL"))
+    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"))
 
     # get by id
     @classmethod
