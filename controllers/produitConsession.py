@@ -86,6 +86,6 @@ class ProduitConcessionController:
         if not produitConcession:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession not found")
         try:
-            return ProduitConcession.delete(db, produitConcession)
+            return ProduitConcession.delete(db, produitConcession_id)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

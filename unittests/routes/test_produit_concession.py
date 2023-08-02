@@ -1,3 +1,11 @@
+import asyncio
+import datetime
+from unittest import TestCase
+import unittest
+from fastapi.encoders import jsonable_encoder
+from fastapi.testclient import TestClient
+import sys
+sys.path.append("../..")
 from db.Connexion import SessionLocal
 from main import app
 from models.tiers import Tiers, TypeTiers
@@ -6,16 +14,8 @@ from models.typeDispositif import TypeDispositif
 from models.dispositifs import DispositifPub
 from models.produitConcession import ProduitConcession
 from schemas.CampagneProduitSchema import ProduitConsessionSchema
-import asyncio
-import datetime
-from unittest import TestCase
-import unittest
-from fastapi.encoders import jsonable_encoder
-from fastapi.testclient import TestClient
-import sys
 from models.quartierAffichage import QuartierAffichage
 from models.zoneAffichage import ZoneAffichage
-sys.path.append("../..")
 
 
 class TestProduitConcession(TestCase):
@@ -79,55 +79,56 @@ class TestProduitConcession(TestCase):
         self.db.commit()
         self.db.close()
 
-    async def test_get_produit_concession_id(self):
+    def test_get_produit_concession_id(self):
         # Test case 1: Valid produit_concession_id
         produit_concession_id = self.produit_concession.IDProduitConcession
-        response = self.client.get(f'/produitConcessions/{produit_concession_id}')
-        self.assertEqual(response.status_code, 200)
+        response = self.client.get(f'/produitConsession/{produit_concession_id}')
         expected_result = ProduitConsessionSchema.model_validate(self.produit_concession)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid produit_concession_id
         produit_concession_id = 100000
-        response = self.client.get(f'/produitConcessions/{produit_concession_id}')
+        response = self.client.get(f'/produitConsession/{produit_concession_id}')
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(), {'detail': 'ProduitConcession not found'})
     
-    async def test_get_produit_concession_by_code(self):
+    def test_get_produit_concession_by_code(self):
         # Test case 1: Valid produit_concession_code
         produit_concession_code = self.produit_concession.CodeProduitConcession
-        response = self.client.get(f'/produitConcessions/code', params={"CodeProduitConsession": produit_concession_code})
+        response = self.client.get(f'/produitConsession/code', params={"CodeProduitConsession": produit_concession_code})
         self.assertEqual(response.status_code, 200)
         expected_result = ProduitConsessionSchema.model_validate(self.produit_concession)
         self.assertEqual(response.json(), expected_result.model_dump())
 
         # Test case 2: Invalid produit_concession_code
         produit_concession_code = "ZYX"
-        response = self.client.get(f'/produitConcessions/code', params={"CodeProduitConsession": produit_concession_code})
+        response = self.client.get(f'/produitConsession/code', params={"CodeProduitConsession": produit_concession_code})
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(), {'detail': 'ProduitConcession not found'})
 
-    async def get_all_poduit_concessions(self):
-        response = self.client.get(f'/produitConcessions')
-        self.assertEqual(response.status_code, 200)
+    def test_get_all_produit_concession(self):
+        response = self.client.get(f'/produitConsession')
         expected_result = [ProduitConsessionSchema.model_validate(self.produit_concession).model_dump()]
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_result)
     
-    async def test_create_produit_concession(self):
+    def test_create_produit_concession(self):
         post_data ={
             "CodeProduitConcession": "LMN",
             "ObservationsProduit": "Test C ObservationsProduit",
             "DureeMinimaleFacturation": 1,
+            "HasSpecificiteFacturation": True,
             "IDDispositifPub": self.dispositif.IDDispositifPub
         }
-        response = self.client.post(f'/produitConcessions', json=post_data)
+        response = self.client.post(f'/produitConsession', json=post_data)
         self.assertEqual(response.status_code, 201)
-        expected_result = self.client.get(f'/produitConcessions/code', params={"CodeProduitConsession": post_data["CodeProduitConcession"]})
+        expected_result = self.client.get(f'/produitConsession/code', params={"CodeProduitConsession": post_data["CodeProduitConcession"]})
         self.assertEqual(expected_result.status_code, 200)
         self.assertEqual(response.json(), expected_result.json())
 
         # clean up through delete endpoint
-        response = self.client.delete(f'/produitConcessions/{self.produit_concession.IDProduitConcession}')
+        response = self.client.delete(f'/produitConsession/{self.produit_concession.IDProduitConcession}')
         self.assertEqual(response.status_code, 204)
 
     async def test_update_produit_concession(self):
@@ -138,9 +139,9 @@ class TestProduitConcession(TestCase):
             "DureeMinimaleFacturation": 2,
             "IDDispositifPub": self.dispositif.IDDispositifPub
         }
-        response = self.client.put(f'/produitConcessions/{self.produit_concession.IDProduitConcession}', json=post_data)
+        response = self.client.put(f'/produitConsession/{self.produit_concession.IDProduitConcession}', json=post_data)
         self.assertEqual(response.status_code, 200)
-        expected_result = self.client.get(f'/produitConcessions/{self.produit_concession.IDProduitConcession}')
+        expected_result = self.client.get(f'/produitConsession/{self.produit_concession.IDProduitConcession}')
         self.assertEqual(expected_result.status_code, 200)
         self.assertEqual(response.json(), expected_result.json())
 
