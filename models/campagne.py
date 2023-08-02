@@ -24,7 +24,7 @@ class CampagnePub(Base):
     SurfaceDispositif = Column(Float)
 
     # Relation avec la table Produit
-    produits = relationship("ProduitConcession", secondary="CampagneProduit", lazy="joined", cascade="save-update, merge")
+    produits = relationship("CampagneProduit", lazy="joined", back_populates="campagne_pub")
 
     # get by ID
     @classmethod

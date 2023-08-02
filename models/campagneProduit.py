@@ -2,6 +2,8 @@ from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKe
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
+# from models.campagne import CampagnePub
+
 class CampagneProduit(Base):
     __tablename__ = "CampagneProduit"
 
@@ -12,10 +14,17 @@ class CampagneProduit(Base):
     SurfaceFacturable = Column(Float, nullable=True)
 
     # Clé étrangère identifiant unique de la table Produit
-    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"))
+    IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"), nullable=False)
 
     # Clé étrangère, identifiant unique de la table CampagnePub
-    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"))
+    IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"), nullable=False)
+
+    # Relation avec la table Campagne
+    campagne_pub = relationship("CampagnePub", back_populates="produits")
+
+    # Relation avec la table ProduitConcession
+    produit_concession = relationship("ProduitConcession", back_populates="campagnes")
+
 
     # get by id
     @classmethod
@@ -32,6 +41,11 @@ class CampagneProduit(Base):
     def get_by_IDCampagnePub(cls, db: Session, IDCampagnePub: int):
         return db.query(cls).filter(cls.IDCampagnePub == IDCampagnePub).all()
     
+    # get all
+    @classmethod
+    def get_all(cls, db: Session):
+        return db.query(cls).all()
+
     # create
     @classmethod
     def create(cls, db: Session, campagne_produit):

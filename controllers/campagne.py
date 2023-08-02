@@ -58,12 +58,17 @@ class CampagnePubController:
             # TODO::create doc_ligne and doc_entete
 
             # create campagne produits for this campagne
-            for produit_concession_id in campagne_data.produits_ids:
-                campagne_produit = CampagneProduit(**{
-                    "IDCampagnePub": campagne.IDCampagnePub,
-                    "IDProduitConcession": produit_concession_id
-                })
-                res = CampagneProduit.create(db, campagne_produit)
+            print(f"New campagne ID: {campagne.IDCampagnePub}")
+            print("before")
+            all_pro = db.query(CampagneProduit).all()
+            print([CampagneProduitSchema.model_validate(p) for p in all_pro])
+            print("after")
+            # for produit_concession_id in campagne_data.produits_ids:
+            #     campagne_produit = CampagneProduit(**{
+            #         "IDCampagnePub": campagne.IDCampagnePub,
+            #         "IDProduitConcession": produit_concession_id
+            #     })
+            #     res = CampagneProduit.create(db, campagne_produit)
 
             return CampagnePubSchema.model_validate(campagne)
         except Exception as e:

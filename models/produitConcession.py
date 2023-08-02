@@ -36,7 +36,7 @@ class ProduitConcession(Base):
     dispositif_pub = relationship("DispositifPub", backref="produits", lazy="joined", cascade="save-update, merge")
 
     # Relation avec la table CampagnePub
-    campagnes = relationship("CampagnePub", secondary="CampagneProduit", lazy="joined", cascade="save-update, merge")
+    campagnes = relationship("CampagneProduit", lazy="joined", back_populates="produit_concession")
 
     # get method
     @classmethod
