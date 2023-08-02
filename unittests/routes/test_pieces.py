@@ -49,8 +49,8 @@ class TestPieces(TestCase):
         self.db.refresh(self.tiers)
         self.db.refresh(self.doc_entete)
         self.db.refresh(self.reglement)
-        self.db.refresh(self.pieces)
         self.db.refresh(self.type_pieces)
+        self.db.refresh(self.pieces)
     
     def tearDown(self):
         # remove test data
@@ -63,13 +63,13 @@ class TestPieces(TestCase):
         self.db.commit()
         self.db.close()
     
-    async def test_get_by_NumPiece(self):
+    def test_get_by_NumPiece(self):
         # Test case 1: valid NumPiece
         num_piece = self.pieces.NumPiece
+        expected_result = PiecesSchema.model_validate(self.pieces).model_dump()
+        # expected_result["DateEmmission"] = expected_result["DateEmmission"].isoformat()
         response = self.client.get(f"/pieces/numPiece", params={"NumPiece": num_piece})
         self.assertEqual(response.status_code, 200)
-        expected_result = PiecesSchema.model_validate(self.pieces).model_dump()
-        expected_result["DateReglt"] = expected_result["DateReglt"].isoformat()
         self.assertEqual(response.json(), expected_result)
 
         # Test case 2: invalid NumPiece
@@ -78,13 +78,13 @@ class TestPieces(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(), {"detail": "Piece not found"})
 
-    async def test_get_by_id(self):
+    def test_get_by_id(self):
         # Test case 1: valid ID
         id_piece = self.pieces.IDPiece
         response = self.client.get(f"/pieces/{id_piece}")
         self.assertEqual(response.status_code, 200)
         expected_result = PiecesSchema.model_validate(self.pieces).model_dump()
-        expected_result["DateReglt"] = expected_result["DateReglt"].isoformat()
+        # expected_result["DateReglt"] = expected_result["DateReglt"].isoformat()
         self.assertEqual(response.json(), expected_result)
 
         # Test case 2: invalid ID
@@ -93,16 +93,16 @@ class TestPieces(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(), {"detail": "Piece not found"})
 
-    async def test_get_all(self):
+    def test_get_all(self):
         response = self.client.get("/pieces")
         self.assertEqual(response.status_code, 200)
         expected_result = [PiecesSchema.model_validate(self.pieces).model_dump()]
         self.assertEqual(response.json(), expected_result)
 
-    async def test_create_piece(self):
+    def test_create_piece(self):
         post_data = {
             "NumPiece": "Test C Num",
-            "DateEmmission": datetime.datetime.utcnow(),
+            "DateEmmission": datetime.datetime.utcnow().isoformat(),
             "IDReglement": self.reglement.IDReglement,
             "IDTypePiece": self.type_pieces.IDTypePiece
         }
@@ -116,16 +116,16 @@ class TestPieces(TestCase):
         response = self.client.delete(f"/pieces/{expected_result.json()['IDPiece']}")
         self.assertEqual(response.status_code, 204)
 
-    async def test_update_piece(self):
+    def test_update_piece(self):
         post_data = {
             "IDPiece": self.pieces.IDPiece,
             "NumPiece": "Test U Num",
-            "DateEmmission": datetime.datetime.utcnow(),
+            "DateEmmission": datetime.datetime.utcnow().isoformat(),
             "IDReglement": self.reglement.IDReglement,
             "IDTypePiece": self.type_pieces.IDTypePiece
         }
         response = self.client.put(f"/pieces/{self.pieces.IDPiece}", json=post_data)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         expected_result = self.client.get("/pieces/numPiece", params={"NumPiece": post_data["NumPiece"]})
         self.assertEqual(expected_result.status_code, 200)
         self.assertEqual(response.json(), expected_result.json())

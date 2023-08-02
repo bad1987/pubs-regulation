@@ -6,7 +6,6 @@ from schemas.ReglementSchema import ReglementSchema
 
 class TypePieceSchema(BaseModel):
     IDTypePiece: int
-    CodeTypePiece: str
     LibelleTypePiece: str
 
     class Config:
@@ -14,12 +13,10 @@ class TypePieceSchema(BaseModel):
         from_attributes = True
 
 class TypePieceCreateSchema(BaseModel):
-    CodeTypePiece: str
     LibelleTypePiece: str
 
 class TypePieceUpdateSchema(BaseModel):
     IDTypePiece: int
-    CodeTypePiece: str
     LibelleTypePiece: str
 
 class PiecesSchema(BaseModel):
@@ -28,7 +25,7 @@ class PiecesSchema(BaseModel):
     DateEmmission: datetime
     IDTypePiece: int
     IDReglement: int
-    tpye_piece: TypePieceSchema
+    type_piece: TypePieceSchema
     reglement: ReglementSchema
 
     class Config:
