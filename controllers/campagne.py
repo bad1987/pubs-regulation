@@ -6,7 +6,7 @@ from models.campagne import CampagnePub
 from models.produitConcession import ProduitConcession
 from models.campagneProduit import CampagneProduit
 
-from schemas.CampagneProduitSchema import CampagneProduitSchema, CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema
+from schemas.CampagneProduitSchema import CampagneProduitSchema, CampagnePubSchema, CampagnePubCreateSchema, CampagnePubUpdateSchema, CampagneProduitCreateSchema
 
 class CampagnePubController:
     # get
@@ -43,32 +43,23 @@ class CampagnePubController:
     @classmethod
     def create(cls, db: Session, campagne_data: CampagnePubCreateSchema) -> CampagnePubSchema:
         # check if the products for this campagne exist
-        valid_products = []
-        for produit_concession_id in campagne_data.produits_ids:
-            produit_concession = ProduitConcession.get(db, produit_concession_id)
+        valid_products: list[ProduitConcession, CampagneProduitCreateSchema] = []
+        for produit_campagne in campagne_data.produits_campagne:
+            produit_concession = ProduitConcession.get(db, produit_campagne.IDProduitConcession)
             if not produit_concession:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ProduitConcession does not exist")
-            valid_products.append(produit_concession)
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"ProduitConcession with ID {produit_campagne.IDProduitConcession} does not exist")
+            valid_products.append([produit_concession, produit_campagne])
         try:
-            campagne = CampagnePub(**campagne_data.model_dump(exclude={"produits_ids"}))
-            for p in valid_products:
-                campagne.produits.append(p)
-            campagne = CampagnePub.create(db, campagne)
+            campagne = CampagnePub(**campagne_data.model_dump(exclude={"produits_campagne"}))
 
             # TODO::create doc_ligne and doc_entete
 
             # create campagne produits for this campagne
-            print(f"New campagne ID: {campagne.IDCampagnePub}")
-            print("before")
-            all_pro = db.query(CampagneProduit).all()
-            print([CampagneProduitSchema.model_validate(p) for p in all_pro])
-            print("after")
-            # for produit_concession_id in campagne_data.produits_ids:
-            #     campagne_produit = CampagneProduit(**{
-            #         "IDCampagnePub": campagne.IDCampagnePub,
-            #         "IDProduitConcession": produit_concession_id
-            #     })
-            #     res = CampagneProduit.create(db, campagne_produit)
+            for produit_campagne in valid_products:
+                campagne_produit = CampagneProduit(SurfaceFacturable=produit_campagne[1].SurfaceFacturable,)
+                campagne_produit.campagne_pub = campagne
+                campagne_produit.produit_concession = produit_campagne[0]
+                res = CampagneProduit.create(db, campagne_produit)
 
             return CampagnePubSchema.model_validate(campagne)
         except Exception as e:
@@ -108,6 +99,7 @@ class CampagnePubController:
 
         # Try to delete the campagne from the database
         try:
+            print("Deleting campagne...")
             return CampagnePub.delete(db, IDCampagnePub)
         except Exception as e:
             # If there is an error, raise an HTTPException with a 500 status code

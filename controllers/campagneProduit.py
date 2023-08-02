@@ -38,19 +38,21 @@ class CampagneProduitController:
     
     # create
     @classmethod
-    def create(cls, db: Session, campagneProduit: CampagneProduitCreateSchema) -> CampagneProduitSchema:
+    def create(cls, db: Session, IDCampagnePub: int, campagneProduit: CampagneProduitCreateSchema) -> CampagneProduitSchema:
         # check if IDProduitConcession and IDCampagnePub exist
         try:
             produit_concession = ProduitConcession.get(db, campagneProduit.IDProduitConcession)
-            campagne_pub = CampagnePub.get(db, campagneProduit.IDCampagnePub)
+            campagne_pub = CampagnePub.get(db, IDCampagnePub)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         if not produit_concession:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {campagneProduit.IDProduitConcession}")
         if not campagne_pub:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {campagneProduit.IDCampagnePub}")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid foreign key {IDCampagnePub}")
         try:
             campagneProduit = CampagneProduit(**campagneProduit.model_dump())
+            campagneProduit.produit_concession = produit_concession
+            campagneProduit.campagne_pub = campagne_pub
             campagneProduit = CampagneProduit.create(db, campagneProduit)
             return CampagneProduitSchema.model_validate(campagneProduit)
         except Exception as e:

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from dependencies.db_dependencies import get_db
 
 from controllers.campagne import CampagnePubController
-from schemas.CampagneProduitSchema import CampagnePubSchema, CampagnePubUpdateSchema, CampagnePubCreateSchema
+from schemas.CampagneProduitSchema import CampagnePubSchema, CampagnePubUpdateSchema, CampagnePubCreateSchema, CampagneProduitCreateSchema
 
 router = APIRouter(
     tags=["Campagne"],

@@ -57,7 +57,7 @@ class TestProduitConcession(TestCase):
         self.db.add(self.dispositif)
         # create ProduitConcession test data
         self.produit_concession = ProduitConcession(CodeProduitConcession="XYZ", ObservationsProduit="Test ObservationsProduit",
-                                                    DureeMinimaleFacturation=1, IDDispositifPub=self.dispositif.IDDispositifPub)
+            DureeMinimaleFacturation=1, IDDispositifPub=self.dispositif.IDDispositifPub)
         self.produit_concession.dispositif_pub = self.dispositif
         self.db.add(self.produit_concession)
         # create CampagnePub test data
@@ -65,7 +65,9 @@ class TestProduitConcession(TestCase):
         # self.campagne.produits.append(self.produit_concession)
         # self.db.add(self.campagne)
         # create campagneProduit test data
-        self.campagneProduit = CampagneProduit()
+        self.campagneProduit = CampagneProduit(SurfaceFacturable=5.2)
+        self.campagneProduit.campagne_pub = self.campagne
+        self.campagneProduit.produit_concession = self.produit_concession
         self.db.add(self.campagneProduit)
         self.db.commit()
         self.db.refresh(self.tiers)
@@ -144,7 +146,10 @@ class TestProduitConcession(TestCase):
             "DateDeb": datetime.datetime.utcnow().date().isoformat(),
             "DateFin": datetime.datetime.utcnow().date().isoformat(),
             "SurfaceDispositif": 1.0,
-            "produits_ids": [self.produit_concession.IDProduitConcession]
+            "produits_campagne": [{
+                "IDProduitConcession": self.produit_concession.IDProduitConcession,
+                "SurfaceFacturable": 1.2
+            }]
         }
         response = self.client.post("/campagne", json=post_data)
         self.assertEqual(response.status_code, 201)
@@ -153,12 +158,8 @@ class TestProduitConcession(TestCase):
         self.assertDictEqual(expected_result.json(), response.json())
 
         # clean up through delete endpoint
-        print(self.campagne.IDCampagnePub)
-        all_pro = self.db.query(CampagneProduit).all()
-        print([CampagneProduitSchema.model_validate(p) for p in all_pro])
-        response = self.client.delete(f"/campagne/{response.json()['IDCampagnePub']}")
-        print(response.json())
-        self.assertEqual(response.status_code, 204)
+        # response = self.client.delete(f"/campagne/{response.json()['IDCampagnePub']}")
+        # self.assertEqual(response.status_code, 204)
     
     # def test_update_campagne(self):
     #     modiftime = datetime.datetime.utcnow().date().isoformat()

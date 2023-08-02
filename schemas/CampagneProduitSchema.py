@@ -5,6 +5,28 @@ from pydantic import BaseModel, field_validator
 from schemas.DispositifPubSchema import DispositifPubSchema
 ProduitConsessionSchemaRef = ForwardRef('ProduitConsessionSchema')
 
+
+class CampagneProduitSchema(BaseModel):
+    IDCampagneProduit: int
+    SurfaceFacturable: Optional[float] = None
+    IDProduitConcession: int
+    IDCampagnePub: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+    
+
+class CampagneProduitCreateSchema(BaseModel):
+    SurfaceFacturable: Optional[float] = None
+    IDProduitConcession: int
+
+class CampagneProduitUpdateSchema(BaseModel):
+    IDCampagneProduit: int
+    SurfaceFacturable: Optional[float] = None
+    IDProduitConcession: int
+    IDCampagnePub: int
+
 class CampagnePubSchema(BaseModel):
     IDCampagnePub: int
     CodeCampagne: str
@@ -12,7 +34,7 @@ class CampagnePubSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispositif: float
-    produits: List[ProduitConsessionSchemaRef] = []
+    produits: List[CampagneProduitSchema] = []
 
     class Config:
         orm_mode = True
@@ -33,9 +55,9 @@ class CampagnePubCreateSchema(BaseModel):
     DateDeb: date
     DateFin: date
     SurfaceDispositif: float
-    produits_ids: List[int] = []
+    produits_campagne: List[CampagneProduitCreateSchema] = []
 
-    @field_validator('produits_ids', mode='before')
+    @field_validator('produits_campagne', mode='before')
     def validate_produits_ids(cls, v):
         # Add your validation logic here
         # For example, you could check if the integers in v correspond to valid primary keys of ProduitConsession instances
@@ -78,13 +100,13 @@ class ProduitConsessionSchema(BaseModel):
     IDDispositifPub: int
     dispositif_pub: DispositifPubSchema
 
-    # campagnes: List[CampagnePubSchema] = []
+    campagnes: List[CampagneProduitSchema] = []
 
     class Config:
         orm_mode = True
         from_attributes = True
 
-CampagnePubSchema.model_rebuild()
+# CampagnePubSchema.model_rebuild()
 # CampagnePubSchema.update_forward_refs()
 
 class ProduitConsessionCreateSchema(BaseModel):
@@ -105,24 +127,3 @@ class ProduitConsessionUpdateSchema(BaseModel):
     SurfaceMinSpecificiteFact: Optional[float] = None
     TauxApplicableSpecificiteFact: Optional[float] = None
     IDDispositifPub: int
-
-class CampagneProduitSchema(BaseModel):
-    IDCampagneProduit: int
-    SurfaceFacturable: Optional[float] = None
-    IDProduitConcession: int
-    IDCampagnePub: int
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
-
-class CampagneProduitCreateSchema(BaseModel):
-    SurfaceFacturable: Optional[float] = None
-    IDProduitConcession: int
-    IDCampagnePub: int
-
-class CampagneProduitUpdateSchema(BaseModel):
-    IDCampagneProduit: int
-    SurfaceFacturable: Optional[float] = None
-    IDProduitConcession: int
-    IDCampagnePub: int
