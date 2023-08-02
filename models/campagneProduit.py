@@ -20,10 +20,10 @@ class CampagneProduit(Base):
     IDCampagnePub = Column(Integer, ForeignKey("CampagnePub.IDCampagnePub", ondelete="CASCADE"), nullable=False)
 
     # Relation avec la table Campagne
-    campagne_pub = relationship("CampagnePub", back_populates="produits")
+    campagne_pub = relationship("CampagnePub", back_populates="produits", lazy="joined")
 
     # Relation avec la table ProduitConcession
-    produit_concession = relationship("ProduitConcession", back_populates="campagnes")
+    produit_concession = relationship("ProduitConcession", back_populates="campagnes", lazy="joined")
 
 
     # get by id
