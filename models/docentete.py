@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey, CHAR
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
@@ -32,11 +33,39 @@ class DocEntete(Base):
     # Pénalités pour le cas d’une commande
     PenalitesDoc = Column(Integer)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Clé étrangère, identifiant unique de la table Tiers
     IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers", ondelete="CASCADE"))
 
     # Relation avec la table Tiers
     tiers = relationship("Tiers", backref="documents", lazy="joined", cascade="save-update, merge")
+
+    """
+    Generate NumDocEntete automatically.
+    it should start with DOC, the next 2 digits should be the year's last 2 digits and theremaining 4 digits should be incremental starting from the last generated one plus one
+    for the last part, given that it is 4 digits, i should have something like 0001,0002,0003,etc
+    """
+    @classmethod
+    def generateNumDocEntete(cls, db: Session):
+        # get the current year's last 2 digits
+        year = str(datetime.now().year)[-2:]
+
+        # Query the database to get the last generated NumDocEntete
+        lastGeneratedNumDocEntete = db.query(cls).order_by(cls.IDDocEntete.desc()).first()
+
+        # extract the last 4 digits from the last generated NumDocEntete
+        if lastGeneratedNumDocEntete:
+            lastGeneratedNumDocEntete = lastGeneratedNumDocEntete.NumDocEntete[-4:]
+            lastGeneratedNumDocEntete = str(int(lastGeneratedNumDocEntete) + 1).zfill(4)
+        else:
+            lastGeneratedNumDocEntete = "0001"
+        
+        return "DOC" + year + lastGeneratedNumDocEntete
 
     # get
     @classmethod
@@ -55,7 +84,15 @@ class DocEntete(Base):
     
     # create
     @classmethod
-    def create(cls, db: Session, doc_entete):
+    def create(cls, db: Session, doc_entete: 'DocEntete') -> 'DocEntete':
+        # Generate the NumDocEntete automatically
+        doc_entete.NumDocEntete = cls.generateNumDocEntete(db)
+        # set the DateDocEntete
+        doc_entete.DateDocEntete = datetime.utcnow().isoformat()
+        # set the UpdatedAt
+        doc_entete.UpdatedAt = datetime.utcnow().isoformat()
+        # set CreatedAt
+        doc_entete.CreatedAt = datetime.utcnow().isoformat()
         db.add(doc_entete)
         db.commit()
         db.refresh(doc_entete)
@@ -64,6 +101,8 @@ class DocEntete(Base):
     # update
     @classmethod
     def update(cls, db: Session, doc_entete):
+        # set the UpdatedAt
+        doc_entete.UpdatedAt = datetime.utcnow().isoformat()
         db.add(doc_entete)
         db.commit()
         db.refresh(doc_entete)

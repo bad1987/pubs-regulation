@@ -39,9 +39,6 @@ class DocEnteteController:
     # create
     @classmethod
     def create(cls, db: Session, doc_entete: DocEnteteCreateSchema) -> DocEnteteSchema:
-        # check if NumDocEntete is unique
-        if DocEntete.getByNumDocEntete(db, doc_entete.NumDocEntete):
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="DocEntete already exists")
         # check if IDTiers exists
         tiers = Tiers.get(db, doc_entete.IDTiers)
         if not tiers:
@@ -56,7 +53,7 @@ class DocEnteteController:
         
     # update
     @classmethod
-    def update(cls, db: Session, IDDocEntete: int, updateDocEntete: DocEnteteCreateSchema) -> DocEnteteSchema:
+    def update(cls, db: Session, IDDocEntete: int, updateDocEntete: DocEnteteUpdateSchema) -> DocEnteteSchema:
         try:
             doc_entete = DocEntete.get(db, IDDocEntete)
         except Exception as e:
@@ -67,9 +64,10 @@ class DocEnteteController:
             update_data = updateDocEntete.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 setattr(doc_entete, key, value)
-            doc_entete = DocEntete.update(db, updateDocEntete)
+            doc_entete = DocEntete.update(db, doc_entete)
             return DocEnteteSchema.model_validate(doc_entete)
         except Exception as e:
+            print(str(e))
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
     # delete

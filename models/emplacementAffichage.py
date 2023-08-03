@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
@@ -10,6 +11,12 @@ class EmplacementAffichage(Base):
 
     # Clé unique, Code de l’emplacement 
     CodeEmplacement = Column(String(3), unique=True)
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé étrangère, identifiant unique de la table Quartier
     IDQuartierAffichage = Column(Integer, ForeignKey("QuartierAffichage.IDQuartierAffichage", ondelete="CASCADE"))
@@ -40,6 +47,8 @@ class EmplacementAffichage(Base):
     # create
     @classmethod
     def create(cls, db: Session, emplacementAffichage):
+        # set CreatedAt and UpdatedAt
+        emplacementAffichage.CreatedAt = emplacementAffichage.UpdatedAt = datetime.now().isoformat()
         db.add(emplacementAffichage)
         db.commit()
         db.refresh(emplacementAffichage)
@@ -48,6 +57,8 @@ class EmplacementAffichage(Base):
     # update
     @classmethod
     def update(cls, db: Session, emplacementAffichage):
+        # set UpdatedAt
+        emplacementAffichage.UpdatedAt = datetime.now().isoformat()
         db.add(emplacementAffichage)
         db.commit()
         db.refresh(emplacementAffichage)

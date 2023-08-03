@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
 
@@ -22,6 +23,12 @@ class DocLigne(Base):
 
     # Montant Hors Taxes de la ligne
     MontantHTLigne = Column(Integer)
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé etrangère, identifiant unique du Document entete
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
@@ -52,6 +59,8 @@ class DocLigne(Base):
     # create
     @classmethod
     def create(cls, db: Session, doc_ligne):
+        # set CreatedAt and UpdatedAt
+        doc_ligne.CreatedAt = doc_ligne.UpdatedAt = datetime.now().isoformat()
         db.add(doc_ligne)
         db.commit()
         db.refresh(doc_ligne)
@@ -60,6 +69,8 @@ class DocLigne(Base):
     # update
     @classmethod
     def update(cls, db:Session, doc_ligne):
+        # set UpdatedAt
+        doc_ligne.UpdatedAt = datetime.now().isoformat()
         db.add(doc_ligne)
         db.commit()
         db.refresh(doc_ligne)

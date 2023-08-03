@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
@@ -12,6 +13,12 @@ class CampagneProduit(Base):
 
     # surface facturable
     SurfaceFacturable = Column(Float, nullable=True)
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé étrangère identifiant unique de la table Produit
     IDProduitConcession = Column(Integer, ForeignKey("ProduitConcession.IDProduitConcession", ondelete="CASCADE"), nullable=False)
@@ -49,6 +56,8 @@ class CampagneProduit(Base):
     # create
     @classmethod
     def create(cls, db: Session, campagne_produit):
+        # set CreatedAt and UpdatedAt
+        campagne_produit.CreatedAt = campagne_produit.UpdatedAt = datetime.now().isoformat()
         db.add(campagne_produit)
         db.commit()
         db.refresh(campagne_produit)
@@ -57,6 +66,8 @@ class CampagneProduit(Base):
     # update
     @classmethod
     def update(cls, db: Session, campagne_produit):
+        # set UpdatedAt
+        campagne_produit.UpdatedAt = datetime.now().isoformat()
         db.add(campagne_produit)
         db.commit()
         db.refresh(campagne_produit)

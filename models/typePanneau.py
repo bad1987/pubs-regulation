@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -14,6 +15,12 @@ class TypePanneau(Base):
 
     # Libelle 
     LibelleType = Column(String(64))
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # get method
     @classmethod
@@ -33,13 +40,23 @@ class TypePanneau(Base):
     # create method
     @classmethod
     def create(cls, db: Session, type_panneau):
-        # Begin a transaction with the database
-        with db.begin():
-            # Add the 'type_panneau' object to the database session
-            db.add(type_panneau)
-            # Flush the session to persist the changes to the database
-            db.flush()
-        # Return the 'type_panneau' object
+        # set CreatedAt and UpdatedAt
+        type_panneau.CreatedAt = type_panneau.UpdatedAt = datetime.now()
+        # Add the 'type_panneau' object to the database session
+        db.add(type_panneau)
+        db.commit()
+        db.refresh(type_panneau)
+        return type_panneau
+
+    # update
+    @classmethod
+    def update(cls, db: Session, type_panneau: 'TypePanneau'):
+        # set UpdatedAt
+        type_panneau.UpdatedAt = datetime.now()
+        # Add the 'type_panneau' object to the database session
+        db.add(type_panneau)
+        db.commit()
+        db.refresh(type_panneau)
         return type_panneau
 
     # delete method

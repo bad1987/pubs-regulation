@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -20,6 +21,12 @@ class QuartierAffichage(Base):
 
     # Arrondissement
     ArrondissementQuartier = Column(String(65))
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé étrangère, Identifiant unique de la table ZoneAffichage 
     IDZoneAffichage = Column(Integer, ForeignKey("ZoneAffichage.IDZoneAffichage", ondelete="CASCADE"))
@@ -45,6 +52,8 @@ class QuartierAffichage(Base):
     # create an instance of the class
     @classmethod
     def create(cls, db: Session, quartierAffichage):
+        # set CreatedAt and UpdatedAt
+        quartierAffichage.CreatedAt = quartierAffichage.UpdatedAt = datetime.now()
         db.add(quartierAffichage)
         db.commit()
         db.refresh(quartierAffichage)
@@ -63,6 +72,8 @@ class QuartierAffichage(Base):
     # update
     @classmethod
     def update(cls, db: Session, quartierAffichage):
+        # set UpdatedAt
+        quartierAffichage.UpdatedAt = datetime.now()
         db.add(quartierAffichage)
         db.commit()
         db.refresh(quartierAffichage)

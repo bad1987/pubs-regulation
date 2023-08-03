@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
@@ -57,6 +58,12 @@ class Piece(Base):
     # Date de création de la pièce
     DateEmmission = Column(DateTime)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Clé étrangère, identifiant unique de la table Règlement
     IDReglement = Column(Integer, ForeignKey("Reglement.IDReglement", ondelete="CASCADE"))
 
@@ -85,6 +92,10 @@ class Piece(Base):
     # create
     @classmethod
     def create(cls, db: Session, piece):
+        # set CreatedAt and UpdatedAt
+        piece.CreatedAt = piece.UpdatedAt = datetime.now().isoformat()
+        # set DateEmmission
+        piece.DateEmmission = datetime.now().isoformat()
         db.add(piece)
         db.commit()
         db.refresh(piece)
@@ -93,6 +104,8 @@ class Piece(Base):
     # update
     @classmethod
     def update(cls, db: Session, piece):
+        # set UpdatedAt
+        piece.UpdatedAt = datetime.now().isoformat()
         db.add(piece)
         db.commit()
         db.refresh(piece)

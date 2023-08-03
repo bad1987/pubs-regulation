@@ -1,12 +1,8 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
-from sqlalchemy import LargeBinary
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 from db.Connexion import Base
-
-from models.docentete import DocEntete
-from models.taxTiers import TaxTiers
-from models.taxTiersDocEntete import TaxTiersDocEntete
 
 class TypeTiers(Base):
     __tablename__ = "TypeTiers"
@@ -66,6 +62,12 @@ class Tiers(Base):
     # Téléphone
     TelephoneTiers = Column(Integer)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Type de tiers Cle etrangere (Régisseur, Régulateur, Annonceur, etc…)  
     IDTypeTiers = Column(Integer, ForeignKey("TypeTiers.IDTypeTiers", ondelete="CASCADE"))
 
@@ -102,6 +104,8 @@ class Tiers(Base):
     # create method
     @classmethod
     def create(cls, db: Session, tiers):
+        # set CreatedAt and UpdatedAt
+        tiers.CreatedAt = tiers.UpdatedAt = datetime.now()
         db.add(tiers)
         db.commit()
         db.refresh(tiers)
@@ -200,6 +204,8 @@ class Tiers(Base):
     # update method
     @classmethod
     def update(cls, db: Session, tiers):
+        # set UpdatedAt
+        tiers.UpdatedAt = datetime.now()
         db.add(tiers)
         db.commit()
         db.refresh(tiers)

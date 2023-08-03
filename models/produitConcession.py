@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, Float, Integer, String, ForeignKey
+from datetime import datetime
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -29,6 +30,12 @@ class ProduitConcession(Base):
     # Taux applicable de la specificite de facturation
     TauxApplicableSpecificiteFact = Column(Float, nullable=True)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Clé étrangère, identifiant unique de la table TypDispositif
     IDDispositifPub = Column(Integer, ForeignKey("DispositifPub.IDDispositifPub", ondelete="CASCADE"))
 
@@ -56,6 +63,8 @@ class ProduitConcession(Base):
     # create
     @classmethod
     def create(cls, db: Session, produitConcession):
+        # set CreatedAt and UpdatedAt
+        produitConcession.CreatedAt = produitConcession.UpdatedAt = datetime.now().isoformat()
         db.add(produitConcession)
         db.commit()
         db.refresh(produitConcession)
@@ -74,6 +83,8 @@ class ProduitConcession(Base):
     # update
     @classmethod
     def update(cls, db: Session, produitConcession):
+        # set UpdatedAt
+        produitConcession.UpdatedAt = datetime.now().isoformat()
         db.add(produitConcession)
         db.commit()
         db.refresh(produitConcession)

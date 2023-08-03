@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -11,6 +12,12 @@ class TaxTiersDocEntete(Base):
 
     # Taux de taxe du tiers sur le document Entete
     TauxTaxeTiersDocEnt = Column(Float)
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé Etrangère, identifiant unique de la table tiers
     IDTiers = Column(Integer, ForeignKey("Tiers.IDTiers", ondelete="CASCADE"))
@@ -53,6 +60,8 @@ class TaxTiersDocEntete(Base):
     # create
     @classmethod
     def create(cls, db: Session, tax_tiers_doc_entete):
+        # set CreatedAt and UpdatedAt
+        tax_tiers_doc_entete.CreatedAt = tax_tiers_doc_entete.UpdatedAt = datetime.now()
         db.add(tax_tiers_doc_entete)
         db.commit()
         db.refresh(tax_tiers_doc_entete)
@@ -61,6 +70,8 @@ class TaxTiersDocEntete(Base):
     # update
     @classmethod
     def update(cls, db: Session, tax_tiers_doc_entete):
+        # set UpdatedAt
+        tax_tiers_doc_entete.UpdatedAt = datetime.now()
         db.add(tax_tiers_doc_entete)
         db.commit()
         db.refresh(tax_tiers_doc_entete)

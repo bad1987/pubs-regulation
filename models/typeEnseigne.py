@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 from db.Connexion import Base
@@ -14,6 +15,12 @@ class TypeEnseigne(Base):
 
     # Libellé
     LibelleTypeEnseigne = Column(String(64))
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # get method
     @classmethod
@@ -33,12 +40,26 @@ class TypeEnseigne(Base):
     # create method
     @classmethod
     def create(cls, db: Session, type_enseigne):
-        # Begin a transaction with the database
-        with db.begin():
-            # Add the 'type_enseigne' object to the database session
-            db.add(type_enseigne)
-            # Flush the session to persist the changes to the database
-            db.flush()
+        # set CreatedAt and UpdatedAt
+        type_enseigne.CreatedAt = type_enseigne.UpdatedAt = datetime.now()
+        # Add the 'type_enseigne' object to the database session
+        db.add(type_enseigne)
+        # Flush the session to persist the changes to the database
+        db.flush()
+        # Return the 'type_enseigne' object
+        return type_enseigne
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, type_enseigne: 'TypeEnseigne'):
+        # set UpdatedAt
+        type_enseigne.UpdatedAt = datetime.now()
+        # Add the 'type_enseigne' object to the database session
+        db.add(type_enseigne)
+        # Commit the changes to the database
+        db.commit()
+        # Flush the session to persist the changes to the database
+        db.flush()
         # Return the 'type_enseigne' object
         return type_enseigne
     

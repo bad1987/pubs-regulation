@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, Date
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, Float, Date
 from db.Connexion import Base
 from sqlalchemy.orm import Session
 
@@ -17,6 +18,12 @@ class RepartitionFrais(Base):
     # Année en cours.
     AnneeRepart = Column(Date)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # get by id
     @classmethod
     def get(cls, db: Session, IDRepartitionFrais: int):
@@ -30,6 +37,8 @@ class RepartitionFrais(Base):
     # create
     @classmethod
     def create(cls, db: Session, rep_frais):
+        # set CreatedAt and UpdatedAt
+        rep_frais.CreatedAt = rep_frais.UpdatedAt = datetime.now()
         db.add(rep_frais)
         db.commit()
         db.refresh(rep_frais)
@@ -38,6 +47,8 @@ class RepartitionFrais(Base):
     # update
     @classmethod
     def update(cls, db: Session, rep_frais):
+        # set UpdatedAt
+        rep_frais.UpdatedAt = datetime.now()
         db.add(rep_frais)
         db.commit()
         db.refresh(rep_frais)

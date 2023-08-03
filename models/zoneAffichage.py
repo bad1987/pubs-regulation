@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -14,6 +15,12 @@ class ZoneAffichage(Base):
 
     # Libellé
     LibelleZone = Column(String(64))
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # get an instance of the class
     @classmethod
@@ -32,7 +39,10 @@ class ZoneAffichage(Base):
 
     # create an instance of the class
     @classmethod
-    def create(cls, db: Session, zoneAffichage):
+    def create(cls, db: Session, zoneAffichage: 'ZoneAffichage'):
+        # set CreatedAt and UpdatedAt
+        zoneAffichage.CreatedAt = zoneAffichage.UpdatedAt = datetime.now()
+        # Add the 'zoneAffichage' object to the database session
         db.add(zoneAffichage)
         db.commit()
         db.refresh(zoneAffichage)
@@ -50,7 +60,9 @@ class ZoneAffichage(Base):
     
     # update
     @classmethod
-    def update(cls, db: Session, zoneAffichage):
+    def update(cls, db: Session, zoneAffichage: 'ZoneAffichage'):
+        # set UpdatedAt
+        zoneAffichage.UpdatedAt = datetime.now()
         db.add(zoneAffichage)
         db.commit()
         db.refresh(zoneAffichage)

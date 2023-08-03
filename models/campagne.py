@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from db.Connexion import Base
@@ -23,6 +24,12 @@ class CampagnePub(Base):
     # Surface à occuper
     SurfaceDispositif = Column(Float)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Relation avec la table Produit
     produits = relationship("CampagneProduit", lazy="joined", back_populates="campagne_pub")
 
@@ -44,6 +51,8 @@ class CampagnePub(Base):
     # create
     @classmethod
     def create(cls, db: Session, campagne):
+        # set CreatedAt and UpdatedAt
+        campagne.CreatedAt = campagne.UpdatedAt = datetime.now().isoformat()
         db.add(campagne)
         db.commit()
         db.refresh(campagne)
@@ -52,6 +61,8 @@ class CampagnePub(Base):
     # update
     @classmethod
     def update(cls, db:Session, campagne):
+        # set UpdatedAt
+        campagne.UpdatedAt = datetime.now().isoformat()
         db.add(campagne)
         db.commit()
         db.refresh(campagne)

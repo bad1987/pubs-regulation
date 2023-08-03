@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, SmallInteger, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -14,6 +15,12 @@ class TypeDispositif(Base):
 
     # Libellé
     LibelleTypeDispo = Column(String(25))
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
     
     # get method
     @classmethod
@@ -33,6 +40,8 @@ class TypeDispositif(Base):
     # create method
     @classmethod
     def create(cls, db: Session, type_dispositif):
+        # set CreatedAt and UpdatedAt
+        type_dispositif.CreatedAt = type_dispositif.UpdatedAt = datetime.now()
         # Begin a transaction with the database
         with db.begin():
             # Add the 'type_dispositif' object to the database session
@@ -69,6 +78,8 @@ class TypeDispositif(Base):
     # update
     @classmethod
     def update(cls, db: Session, type_dispositif):
+        # set UpdatedAt
+        type_dispositif.UpdatedAt = datetime.now()
         # Add the new type_dispositif to the database session
         db.add(type_dispositif)
         # Commit the changes to the database

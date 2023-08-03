@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -20,6 +21,12 @@ class Taxes(Base):
     # Define the TauxTaxe column which is a floating-point number
     TauxTaxe = Column(Float)
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Define a class method to get a Taxes object by its IDTaxes
     @classmethod
     def get(cls, db: Session, IDTaxes: int):
@@ -38,6 +45,18 @@ class Taxes(Base):
     # Define a class method to create a new Taxes object
     @classmethod
     def create(cls, db: Session, tax_tiers):
+        # set CreatedAt and UpdatedAt
+        tax_tiers.CreatedAt = tax_tiers.UpdatedAt = datetime.now()
+        db.add(tax_tiers)
+        db.commit()
+        db.refresh(tax_tiers)
+        return tax_tiers
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, tax_tiers):
+        # set UpdatedAt
+        tax_tiers.UpdatedAt = datetime.now()
         db.add(tax_tiers)
         db.commit()
         db.refresh(tax_tiers)

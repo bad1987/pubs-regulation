@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
@@ -27,6 +28,12 @@ class Reglement(Base):
     # Mode règlement
     ModeRglt = Column(String(9))
 
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
+
     # Clé étrangère, identifiant unique du DocEntete associé
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
 
@@ -51,6 +58,8 @@ class Reglement(Base):
     # create
     @classmethod
     def create(cls, db: Session, reglement):
+        # set CreatedAt and UpdatedAt
+        reglement.CreatedAt = reglement.UpdatedAt = datetime.now()
         db.add(reglement)
         db.commit()
         db.refresh(reglement)
@@ -59,6 +68,8 @@ class Reglement(Base):
     # update
     @classmethod
     def update(cls, db: Session, reglement):
+        # set UpdatedAt
+        reglement.UpdatedAt = datetime.now()
         db.add(reglement)
         db.commit()
         db.refresh(reglement)

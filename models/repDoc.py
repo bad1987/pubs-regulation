@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from sqlalchemy.orm import Session
@@ -10,6 +11,12 @@ class RepDoc(Base):
     IDRepDoc = Column(Integer, primary_key=True)
     # Montant issue de la répartition
     MontantReparti = Column(Float)
+
+    # UpdatedAt
+    UpdatedAt = Column(DateTime)
+
+    # CreatedAt
+    CreatedAt = Column(DateTime)
 
     # Clé étrangère identifiant unique de la table DocEntete associé
     IDDocEntete = Column(Integer, ForeignKey("DocEntete.IDDocEntete", ondelete="CASCADE"))
@@ -36,6 +43,8 @@ class RepDoc(Base):
     # create
     @classmethod
     def create(cls, db: Session, rep_doc):
+        # set CreatedAt and UpdatedAt
+        rep_doc.CreatedAt = rep_doc.UpdatedAt = datetime.now()
         db.add(rep_doc)
         db.commit()
         db.refresh(rep_doc)
@@ -44,6 +53,8 @@ class RepDoc(Base):
     # update
     @classmethod
     def update(cls, db: Session, rep_doc):
+        # set UpdatedAt
+        rep_doc.UpdatedAt = datetime.now()
         db.add(rep_doc)
         db.commit()
         db.refresh(rep_doc)
