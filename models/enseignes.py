@@ -1,5 +1,4 @@
-from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import Session, relationship
 from db.Connexion import Base
 from models.dispositifs import DispositifPub
@@ -24,12 +23,6 @@ class Enseigne(DispositifPub):
 
     # Unité de facturation
     UniteFacturationEnseigne = Column(String(13))
-
-    # UpdatedAt
-    UpdatedAt = Column(DateTime)
-
-    # CreatedAt
-    CreatedAt = Column(DateTime)
 
     # Clé etrangère, identifiant unique de la table typeEnseigne
     IDTypeEnseigne = Column(Integer, ForeignKey("TypeEnseigne.IDTypeEnseigne", ondelete="CASCADE"))
@@ -60,8 +53,6 @@ class Enseigne(DispositifPub):
     # create
     @classmethod
     def create(cls, db: Session, dispositif_pub):
-        # set CreatedAt and UpdatedAt
-        dispositif_pub.CreatedAt = dispositif_pub.UpdatedAt = datetime.now().isoformat()
         db.add(dispositif_pub)
         db.commit()
         db.refresh(dispositif_pub)
@@ -70,8 +61,6 @@ class Enseigne(DispositifPub):
     # update
     @classmethod
     def update(cls, db: Session, dispositif_pub):
-        # set UpdatedAt
-        dispositif_pub.UpdatedAt = datetime.now().isoformat()
         db.add(dispositif_pub)
         db.commit()
         db.refresh(dispositif_pub)

@@ -1,5 +1,4 @@
-from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from db.Connexion import Base
 from models.dispositifs import DispositifPub
@@ -27,12 +26,6 @@ class PanneauAffich(DispositifPub):
 
     # Unité de facturation
     UniteFacturationPanneau = Column(String(13))
-
-    # UpdatedAt
-    UpdatedAt = Column(DateTime)
-
-    # CreatedAt
-    CreatedAt = Column(DateTime)
 
     # Clé etrangère, identifiant unique de la table TypePanneau
     IDTypePanneau = Column(Integer, ForeignKey("TypePanneau.IDTypePanneau", ondelete="CASCADE"), primary_key=True)
@@ -63,8 +56,6 @@ class PanneauAffich(DispositifPub):
     # create
     @classmethod
     def create(cls, db: Session, panneauAffich):
-        # set CreatedAt and UpdatedAt
-        panneauAffich.CreatedAt = panneauAffich.UpdatedAt = datetime.now().isoformat()
         db.add(panneauAffich)
         db.commit()
         db.refresh(panneauAffich)
@@ -73,8 +64,6 @@ class PanneauAffich(DispositifPub):
     # update
     @classmethod
     def update(cls, db: Session, panneauAffich):
-        # set UpdatedAt
-        panneauAffich.UpdatedAt = datetime.now().isoformat()
         db.add(panneauAffich)
         db.commit()
         db.refresh(panneauAffich)
