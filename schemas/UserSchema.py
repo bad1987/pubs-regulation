@@ -5,13 +5,40 @@ from Enums.UserRoleEnum import UserRoleEnum
 from Enums.LanguageEnum import LanguageEnum
 from models.users import User
 
+class PermissionSchema(BaseModel):
+    id: Optional[int]
+    name: Optional[str] 
+    description: Optional[str]
+    mode: Optional[str] 
+    model_name: Optional[str] 
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
+class PermissionReturnModel(BaseModel):
+    text: Optional[str]
+    description: Optional[str]
+    value: Optional[int]
+        
+class ApiSetting(BaseModel):
+    api_token: Optional[str]
+
+class UserCreateSchema(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+    status: UserStatusEnum
+    permissions: List[int] = []
+    roles: UserRoleEnum
+
 class UserSchema(BaseModel):
     id: Optional[int]
     email: Optional[str]
     username: Optional[str]
-    roles: Optional[UserRoleEnum] = None
+    roles: Optional[UserRoleEnum]
     status: Optional[UserStatusEnum]
-    permissions: Optional[List]
+    permissions: List[PermissionSchema] = []
     firstname: Optional[str]
     lastname: Optional[str]
     
@@ -32,32 +59,6 @@ class UserSchema(BaseModel):
             firstname=user.firstname,
             lastname=user.lastname,
         )
-
-class PermissionSchema(BaseModel):
-    id: Optional[int]
-    name: Optional[str] 
-    description: Optional[str]
-    mode: Optional[str] 
-    model_name: Optional[str] 
-
-    class Config:
-        orm_mode = True
-
-class PermissionReturnModel(BaseModel):
-    text: Optional[str]
-    description: Optional[str]
-    value: Optional[int]
-        
-class ApiSetting(BaseModel):
-    api_token: Optional[str]
-
-class UserCreateSchema(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
-    status: UserStatusEnum
-    permissions: List[int] = []
-    roles: UserRoleEnum
 
 class UserUpdateSchema(BaseModel):
     status: Optional[UserStatusEnum] = None

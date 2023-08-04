@@ -50,7 +50,7 @@ class UserController:
         if User.get_user_by_email(db, user_data.email) or User.get_user_by_username(db, user_data.username):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
         try:
-            user = User(**user_data.model_dump())
+            user = User(**user_data.model_dump(exclude={"permissions"}))
             user.set_password(user_data.password)
             for permission_id in user_data.permissions:
                 permission = Permission.get(db, permission_id)
@@ -73,8 +73,9 @@ class UserController:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
         try:
-            for key, value in updateUser.dict().items():
-                setattr(user, key, value)
+            update_data = updateUser.model_dump(exclude_unset=True)
+            for key,value in update_data.items():
+                setattr(user, key,value)
             user = User.update(db, user)
             return UserSchema.model_validate(user)
         except Exception as e:

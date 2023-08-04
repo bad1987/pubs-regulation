@@ -39,7 +39,7 @@ class User(Base):
         return db.query(cls).filter(cls.email == email).first()
 
     @classmethod
-    def create(cls, db: Session, user) -> 'User':
+    def create(cls, db: Session, user: 'User') -> 'User':
         db.add(user)
         db.commit()
         db.refresh(user)
