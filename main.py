@@ -18,6 +18,7 @@ from routes.system.taxTiersDocEntete import router as taxTiersDocEnteteRouter
 from routes.system.produitConcession import router as ProduitConcessionRouter
 from routes.system.campagne import router as CampagneRouter
 from routes.system.docligne import router as DocLigneRouter
+from routes.system.user_routes import router as UsersRouter
 
 from dotenv import load_dotenv
 import os
@@ -48,6 +49,7 @@ app.include_router(taxTiersDocEnteteRouter)
 app.include_router(ProduitConcessionRouter)
 app.include_router(CampagneRouter)
 app.include_router(DocLigneRouter)
+app.include_router(UsersRouter)
 
 # cors
 app.add_middleware( 
