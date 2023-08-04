@@ -59,6 +59,10 @@ class UserCreateSchema(BaseModel):
     permissions: List[int] = []
     roles: UserRoleEnum
 
+class UserUpdateSchema(BaseModel):
+    status: Optional[UserStatusEnum] = None
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
 
 class UserListSchema(BaseModel):
     users: List[UserSchema] = []

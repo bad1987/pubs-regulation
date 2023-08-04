@@ -12,7 +12,7 @@ class DocEntete(Base):
 
     # Type de document de type Integer, ici la codification peut être 1 pour l’Enrôlement, 2 pour la Commande, 3 pour une Facture Doit, 4 pour une Facture d’Avoir
     # Take its values from TypeDocEnteteENum
-    TypeDocEntete = Column(Enum(TypeDocEnteteENum, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
+    TypeDocEntete = Column(Integer, nullable=False)
 
     # Numéro de document, Clé unique
     NumDocEntete = Column(String(9), nullable=False, unique=True)

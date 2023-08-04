@@ -27,26 +27,34 @@ class User(Base):
 
 
     @classmethod
-    def get(cls, db: Session, user_id: int):
+    def get(cls, db: Session, user_id: int) -> 'User':
         return db.query(cls).filter(cls.id == user_id).first()
 
     @classmethod
-    def get_user_by_username(cls, db: Session, username: str):
+    def get_user_by_username(cls, db: Session, username: str) -> 'User':
         return db.query(cls).filter(cls.username == username).first()
 
     @classmethod
-    def get_user_by_email(cls, db: Session, email: str):
+    def get_user_by_email(cls, db: Session, email: str) -> 'User':
         return db.query(cls).filter(cls.email == email).first()
 
     @classmethod
-    def create(cls, db: Session, user):
+    def create(cls, db: Session, user) -> 'User':
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+    
+    # update
+    @classmethod
+    def update(cls, db: Session, user: 'User') -> 'User':
         db.add(user)
         db.commit()
         db.refresh(user)
         return user
 
     @classmethod
-    def delete(cls, db: Session, user_id: int):
+    def delete(cls, db: Session, user_id: int) -> bool:
         user = cls.get(db, user_id)
         if user:
             db.delete(user)
@@ -55,7 +63,7 @@ class User(Base):
         return False
     
     @classmethod
-    def add_permission(cls, db: Session, user_id: int, permission_id: int):
+    def add_permission(cls, db: Session, user_id: int, permission_id: int) -> bool:
         user = cls.get(db, user_id)
         permission = Permission.get(db, permission_id)
         if user and permission:
@@ -65,7 +73,7 @@ class User(Base):
         return False
 
     @classmethod
-    def remove_permission(cls, db: Session, user_id: int, permission_id: int):
+    def remove_permission(cls, db: Session, user_id: int, permission_id: int) -> bool:
         user = cls.get(db, user_id)
         permission = Permission.get(db, permission_id)
         if user and permission:
@@ -75,7 +83,7 @@ class User(Base):
         return False
 
     @classmethod
-    def has_permission(cls, db: Session, user_id: int, permission_name: str):
+    def has_permission(cls, db: Session, user_id: int, permission_name: str) -> bool:
         user = cls.get(db, user_id)
         if user:
             for permission in user.permissions:
@@ -84,7 +92,7 @@ class User(Base):
         return False
     
     @classmethod
-    def authenticate(cls, db: Session, email: str, password: str):
+    def authenticate(cls, db: Session, email: str, password: str) -> 'User':
         user = cls.get_user_by_email(db, email)
         if not user:
             return None
@@ -92,10 +100,10 @@ class User(Base):
             return None
         return user
 
-    def verify_password(self, password: str):
+    def verify_password(self, password: str) -> bool:
         return pwd_context.verify(password, self.password)
 
-    def set_password(self, password: str):
+    def set_password(self, password: str) -> None:
         self.password = pwd_context.hash(password)
     
 class Permission(Base):
