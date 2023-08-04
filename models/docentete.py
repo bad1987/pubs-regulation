@@ -58,16 +58,23 @@ class DocEntete(Base):
         year = str(datetime.now().year)[-2:]
 
         # Query the database to get the last generated NumDocEntete
-        lastGeneratedNumDocEntete = db.query(cls).order_by(cls.IDDocEntete.desc()).first()
+        lastGeneratedNumDocEntete: DocEntete = db.query(cls).order_by(cls.IDDocEntete.desc()).first()
 
-        # extract the last 4 digits from the last generated NumDocEntete
+        # extract the last 5 digits from the last generated NumDocEntete
         if lastGeneratedNumDocEntete:
-            lastGeneratedNumDocEntete = lastGeneratedNumDocEntete.NumDocEntete[-4:]
-            lastGeneratedNumDocEntete = str(int(lastGeneratedNumDocEntete) + 1).zfill(4)
+            # check if the year in the last generated code matches the current year
+            if lastGeneratedNumDocEntete.NumDocEntete[2:4] == year:
+                # increment the four digits by one
+                lastGeneratedNumDocEntete = lastGeneratedNumDocEntete.NumDocEntete[-5:]
+                lastGeneratedNumDocEntete = str(int(lastGeneratedNumDocEntete) + 1).zfill(5)
+            else:
+                # reset the four digits to "00001"
+                lastGeneratedNumDocEntete = "00001"
         else:
-            lastGeneratedNumDocEntete = "0001"
+            # use "00001" as the default value
+            lastGeneratedNumDocEntete = "00001"
         
-        return "DOC" + year + lastGeneratedNumDocEntete
+        return "DO" + year + lastGeneratedNumDocEntete
 
     # get
     @classmethod

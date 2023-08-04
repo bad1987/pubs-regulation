@@ -40,13 +40,20 @@ class CampagnePub(Base):
         year = str(datetime.now().year)[-2:]
         # Query the database to get the last generated CodeCampagne
         lastGeneratedCodeCampagne: CampagnePub = db.query(cls).order_by(cls.IDCampagnePub.desc()).first()
-        # extract the last 4 digits from the last generated CodeCampagne
+        # extract the last 5 digits from the last generated CodeCampagne
         if lastGeneratedCodeCampagne:
-            lastGeneratedCodeCampagne = lastGeneratedCodeCampagne.CodeCampagne[-4:]
-            lastGeneratedCodeCampagne = str(int(lastGeneratedCodeCampagne) + 1).zfill(4)
+            # check if the year in the last generated code matches the current year
+            if lastGeneratedCodeCampagne.CodeCampagne[2:4] == year:
+                # increment the four digits by one
+                lastGeneratedCodeCampagne = lastGeneratedCodeCampagne.CodeCampagne[-5:]
+                lastGeneratedCodeCampagne = str(int(lastGeneratedCodeCampagne) + 1).zfill(5)
+            else:
+                # reset the four digits to "00001"
+                lastGeneratedCodeCampagne = "00001"
         else:
-            lastGeneratedCodeCampagne = "0001"
-        return "CAP" + year + lastGeneratedCodeCampagne
+            # use "00001" as the default value
+            lastGeneratedCodeCampagne = "00001"
+        return "CA" + year + lastGeneratedCodeCampagne
 
     # get by ID
     @classmethod
