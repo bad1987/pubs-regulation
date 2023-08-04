@@ -50,7 +50,6 @@ class CampagnePubSchema(BaseModel):
             raise ValueError('Invalid date format')
         
 class CampagnePubCreateSchema(BaseModel):
-    CodeCampagne: str
     LibelleCampagne: str
     DateDeb: date
     DateFin: date
@@ -74,7 +73,6 @@ class CampagnePubCreateSchema(BaseModel):
 
 class CampagnePubUpdateSchema(BaseModel):
     IDCampagnePub: int
-    CodeCampagne: str
     LibelleCampagne: str
     DateDeb: date
     DateFin: date
@@ -107,7 +105,6 @@ class ProduitConsessionSchema(BaseModel):
         from_attributes = True
 
 class ProduitConsessionCreateSchema(BaseModel):
-    CodeProduitConcession: str
     ObservationsProduit: str
     DureeMinimaleFacturation: int
     HasSpecificiteFacturation: bool
@@ -117,7 +114,6 @@ class ProduitConsessionCreateSchema(BaseModel):
 
 class ProduitConsessionUpdateSchema(BaseModel):
     IDProduitConcession: int
-    CodeProduitConcession: str
     ObservationsProduit: str
     DureeMinimaleFacturation: int
     HasSpecificiteFacturation: bool
