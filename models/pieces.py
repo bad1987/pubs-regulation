@@ -74,24 +74,47 @@ class Piece(Base):
     reglement = relationship("Reglement", backref="pieces", lazy="joined", cascade="save-update, merge")
     type_piece = relationship("TypePiece", backref="pieces", lazy="joined", cascade="save-update, merge")
 
+    # Generate num piece
+    @classmethod
+    def generateNumPiece(cls, db: Session) -> str:
+        # get the current year's last 2 digits
+        year = str(datetime.now().year)[-2:]
+        # Query the database to get the last generated NumPiece
+        lastGeneratedNumPiece: Piece = db.query(cls).order_by(cls.NumPiece.desc()).first()
+        # extract the last 5 digits from the last generated NumPiece
+        if lastGeneratedNumPiece:
+            # check if the year in the last generated code matches the current year
+            if lastGeneratedNumPiece.NumPiece[2:4] == year:
+                # increment the five digits by one
+                lastGeneratedNumPiece = lastGeneratedNumPiece.NumPiece[-5:]
+                lastGeneratedNumPiece = str(int(lastGeneratedNumPiece) + 1).zfill(5)
+            else:
+                # reset the five digits to "00001"
+                lastGeneratedNumPiece = "00001"
+        else:
+            # use "00001" as the default value
+            lastGeneratedNumPiece = "00001"
+        return "PI" + year + lastGeneratedNumPiece
+
     # get by ID
     @classmethod
-    def get(cls, db: Session, IDPiece: int):
+    def get(cls, db: Session, IDPiece: int) -> 'Piece':
         return db.query(cls).filter_by(IDPiece=IDPiece).first()
 
     # get by NumPiece
     @classmethod
-    def getByNum(cls, db: Session, NumPiece: str):
+    def getByNum(cls, db: Session, NumPiece: str) -> 'Piece':
         return db.query(cls).filter_by(NumPiece=NumPiece).first()
     
     # get all
     @classmethod
-    def getAll(cls, db: Session):
+    def getAll(cls, db: Session) -> 'Piece':
         return db.query(cls).all()
     
     # create
     @classmethod
-    def create(cls, db: Session, piece):
+    def create(cls, db: Session, piece: 'Piece') -> 'Piece':
+        piece.NumPiece = Piece.generateNumPiece(db)
         # set CreatedAt and UpdatedAt
         piece.CreatedAt = piece.UpdatedAt = datetime.now().isoformat()
         # set DateEmmission
@@ -103,7 +126,7 @@ class Piece(Base):
     
     # update
     @classmethod
-    def update(cls, db: Session, piece):
+    def update(cls, db: Session, piece: 'Piece') -> 'Piece':
         # set UpdatedAt
         piece.UpdatedAt = datetime.now().isoformat()
         db.add(piece)
@@ -113,7 +136,7 @@ class Piece(Base):
     
     # delete
     @classmethod
-    def delete(cls, db: Session, IDPiece):
+    def delete(cls, db: Session, IDPiece: int) -> bool:
         # get the object
         piece = cls.get(db, IDPiece)
         if piece:
