@@ -1,6 +1,7 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String, Date, Float, ForeignKey, CHAR
+from sqlalchemy import Column, DateTime, Enum, Integer, String, Date, Float, ForeignKey, CHAR
 from sqlalchemy.orm import relationship, Session
+from Enums.TypeDocEnteteENum import TypeDocEnteteENum
 from db.Connexion import Base
 
 class DocEntete(Base):
@@ -10,7 +11,8 @@ class DocEntete(Base):
     IDDocEntete = Column(Integer, primary_key=True)
 
     # Type de document de type Integer, ici la codification peut être 1 pour l’Enrôlement, 2 pour la Commande, 3 pour une Facture Doit, 4 pour une Facture d’Avoir
-    TypeDocEntete = Column(Integer)
+    # Take its values from TypeDocEnteteENum
+    TypeDocEntete = Column(Enum(TypeDocEnteteENum, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
 
     # Numéro de document, Clé unique
     NumDocEntete = Column(String(9), nullable=False, unique=True)
