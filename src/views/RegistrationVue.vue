@@ -106,8 +106,9 @@ const register = async (event) => {
         })
         .catch((_error) => {
             // if network error
-            if (_error.code && _error.code === 'ERROR_NETWORK') {
-                error.value = 'Network Error';
+            console.log(_error);
+            if (_error.code && _error.code === 'ERROR_NETWORK' || _error.code === "ERR_NETWORK") {
+                error.value = _error.message;
             } else {
                 console.log(_error);
                 if('data' in _error.response && 'detail' in _error.response.data) {
@@ -130,7 +131,7 @@ const register = async (event) => {
 
 <template>
     <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" />
-    <div class="flex items-center justify-center h-screen dark">
+    <div class="flex items-center justify-center dark">
         <div class="rounded-sm bg-white shadow-default dark:bg-boxdark w-2/4">
             <div class="w-full p-4 sm:p-12.5 xl:p-17.5">
 
