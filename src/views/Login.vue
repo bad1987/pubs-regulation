@@ -2,6 +2,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import axios from 'axios'
+import { useTokenStore } from '../stores/token';
 
 const error = ref(null);
 const loading = ref(false);
@@ -60,6 +61,11 @@ const login = async (event) => {
     axios.post('http://localhost:8000/login', formData)
         .then((response) => {
             console.log(response);
+            // get token from response
+            const token = response.data.access_token;
+            const authStore = useTokenStore();
+            authStore.setToken(token);
+
         })
         .catch((_error) => {
             // if network error
