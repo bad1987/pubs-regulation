@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import Login from '../views/Login.vue'
-import RegistrationVue from '../views/RegistrationVue.vue'
+import { defineAsyncComponent } from 'vue'
+
+// define components as async components
+const HomeView = defineAsyncComponent(() => import('../views/HomeView.vue'))
+const Login = defineAsyncComponent(() => import('../views/Login.vue'))
+const RegistrationVue = defineAsyncComponent(() => import('../views/RegistrationVue.vue'))
+const Navbar = defineAsyncComponent(() => import('../components/Navbar.vue'))
+const Sidebar = defineAsyncComponent(() => import('../components/Sidebar.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +14,11 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      components: {
+        default: HomeView,
+        navbar: Navbar,
+        sidebar: Sidebar
+      }
     },
     {
       path: '/login',
