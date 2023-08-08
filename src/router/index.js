@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
 
-// define components as async components
+// Define components as async
 const HomeView = defineAsyncComponent(() => import('../views/HomeView.vue'))
-const Login = defineAsyncComponent(() => import('../views/Login.vue'))
-const RegistrationVue = defineAsyncComponent(() => import('../views/RegistrationVue.vue'))
 const Navbar = defineAsyncComponent(() => import('../components/Navbar.vue'))
 const Sidebar = defineAsyncComponent(() => import('../components/Sidebar.vue'))
+const RegistrationVue = defineAsyncComponent(() => import('../views/RegistrationVue.vue'))
+const Login = defineAsyncComponent(() => import('../views/Login.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,9 +15,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       components: {
-        default: HomeView,
         navbar: Navbar,
-        sidebar: Sidebar
+        sidebar: Sidebar,
+        default: HomeView
       }
     },
     {
@@ -28,7 +28,11 @@ const router = createRouter({
     {
       path: '/registration',
       name: 'registration',
-      component: RegistrationVue
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: RegistrationVue
+      }
     }
   ]
 })
