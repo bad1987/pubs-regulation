@@ -111,10 +111,10 @@ const register = async (event) => {
                 error.value = _error.message;
             } else {
                 console.log(_error);
-                if('data' in _error.response && 'detail' in _error.response.data) {
+                if ('data' in _error.response && 'detail' in _error.response.data) {
                     error.value = _error.response.data.detail;
                 }
-                else{
+                else {
                     error.value = _error.message;
                 }
 
@@ -130,7 +130,8 @@ const register = async (event) => {
 </script>
 
 <template>
-    <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" />
+    <Notification v-if="show_notification" :type="notification_type" :message="notification_message"
+        :duration="notification_duration" />
     <div class="flex items-center justify-center dark">
         <div class="rounded-sm bg-white shadow-default dark:bg-boxdark w-2/4">
             <div class="w-full p-4 sm:p-12.5 xl:p-17.5">
