@@ -23,6 +23,10 @@ export const useTokenStore = defineStore('token', {
         },
         getUser() {
             return this.user_data
+        },
+        logout() {
+            this.clearToken()
+            this.user_data = null
         }
     }
 })

@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia';
 import { useThemeStore } from '../stores/darkmode.js'
 import { initFlowbite } from 'flowbite'
 import { onBeforeMount, onMounted, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../stores/token';
 
 // initialize components based on data attribute selectors
@@ -12,6 +12,9 @@ import { useTokenStore } from '../stores/token';
   // })
 const themeStore = useThemeStore();
 const authStore = useTokenStore();
+
+// use useRouter to get a router instance
+const router = useRouter();
 
 const { isDark } = storeToRefs(themeStore)
 const actual = 'en'
@@ -50,6 +53,8 @@ onMounted(async () => {
 
 // logout
 const handleLogout = event => {
+  authStore.logout()
+  router.push('/login')
 }
 </script>
 
