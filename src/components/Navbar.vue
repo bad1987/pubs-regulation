@@ -16,8 +16,8 @@ const authStore = useTokenStore();
 const { isDark } = storeToRefs(themeStore)
 const actual = 'en'
 
-const user = ref(authStore.user)
-
+const user = ref(null)
+user.value = authStore.getUser()
 function changeLanguage (lang) {
 
 }

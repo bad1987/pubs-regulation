@@ -149,9 +149,11 @@ const register = async (event) => {
                 <form>
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                         <div>
-                            <label for="username" class="mb-2.5 block font-medium text-black dark:text-white">username</label>
+                            <label for="username"
+                                class="mb-2.5 block font-medium text-black dark:text-white">Username</label>
                             <input type="text" placeholder="Enter your username" v-model="username"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="username" required/>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="username" required />
                         </div>
 
                         <div>
@@ -161,7 +163,8 @@ const register = async (event) => {
                         </div>
 
                         <div>
-                            <label for="password" class="mb-2.5 block font-medium text-black dark:text-white">Password</label>
+                            <label for="password"
+                                class="mb-2.5 block font-medium text-black dark:text-white">Password</label>
                             <input type="password" id="password" placeholder="Enter your password" v-model="password"
                                 :class="[passwordError ? 'border-red-500' : '', 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500']" />
                         </div>
@@ -179,7 +182,7 @@ const register = async (event) => {
                                 <option v-for="role in userRoles" :value="role" :key="role">{{ role }}</option>
                             </select>
                             <!-- <div class="relative">
-                        </div> -->
+                            </div> -->
                         </div>
 
                         <div>
@@ -192,16 +195,20 @@ const register = async (event) => {
                             </select>
 
                         </div>
+                        <div>
 
-                        <button @click="register"
-                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-                            Sign Up
-                        </button>
+                            <button @click="register"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                                Sign Up
+                            </button>
+                        </div>
 
                         <div class="mt-6 text-center">
                             <p class="font-medium text-sm text-gray-900 dark:text-white">
                                 Already have an account?
-                                <RouterLink to="/login" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign in</RouterLink>
+                                <RouterLink to="/login"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Sign in</RouterLink>
                             </p>
                         </div>
                     </div>
@@ -237,5 +244,4 @@ select::after {
     right: 1.2rem;
     top: 50%;
     transform: translateY(-50%);
-}
-</style>
+}</style>

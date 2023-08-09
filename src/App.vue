@@ -37,7 +37,7 @@ onBeforeMount(() => {
   
   <!-- Render the sidebar component -->
   <router-view name="sidebar"></router-view>
-  <div :class="{'mt-14': $route.name !== 'login'}" class="rounded-lg dark:border-gray-700">
+  <div :class="{'mt-14': $route.name !== 'login'}" class="rounded-lg bg-gray-50 dark:bg-gray-900">
     <!-- Render the default component -->
     <router-view class="min-h-screen"></router-view>
   </div>
