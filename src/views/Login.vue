@@ -64,14 +64,12 @@ const login = async (event) => {
 
     axios.post('http://localhost:8000/login', formData)
         .then((response) => {
-            console.log(response);
             // get token from response
             const token = response.data.access_token;
             const user = response.data.user;
             const authStore = useTokenStore();
             authStore.setToken(token);
             authStore.setUser(user);
-            console.log(user);
             router.push('/');
         })
         .catch((_error) => {
