@@ -54,6 +54,7 @@ def logout(request: Request, response: Response):
     response.delete_cookie(Settings.COOKIE_NAME, domain='localhost', path='/', samesite='None', secure=secure_cookie)
     return {"message": "Logged out"}
 
+@route.get("/user/token")
 def get_user_from_token(token: str = Depends(get_token), db: Session = Depends(get_db)):
     # Decode the access token to get the user's email
     email = verify_token(token)
@@ -62,6 +63,7 @@ def get_user_from_token(token: str = Depends(get_token), db: Session = Depends(g
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
 
 @route.get('/auth/refresh')
 async def refresh_token(request: Request, db: Session = Depends(get_db)):
