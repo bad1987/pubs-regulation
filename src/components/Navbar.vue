@@ -4,17 +4,19 @@ import { useThemeStore } from '../stores/darkmode.js'
 import { initFlowbite } from 'flowbite'
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useTokenStore } from '../stores/token';
 
 // initialize components based on data attribute selectors
-  onMounted(() => {
-      initFlowbite();
-  })
-const themeStore = useThemeStore()
+  // onMounted(() => {
+  //     initFlowbite();
+  // })
+const themeStore = useThemeStore();
+const authStore = useTokenStore();
 
 const { isDark } = storeToRefs(themeStore)
 const actual = 'en'
 
-const user = ref(null)
+const user = ref(authStore.user)
 
 function changeLanguage (lang) {
 

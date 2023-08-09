@@ -3,6 +3,10 @@
 import { ref, watch } from 'vue';
 import axios from 'axios'
 import { useTokenStore } from '../stores/token';
+import { useRouter } from 'vue-router';
+
+// use useRouter to get a router instance
+const router = useRouter();
 
 const error = ref(null);
 const loading = ref(false);
@@ -63,9 +67,12 @@ const login = async (event) => {
             console.log(response);
             // get token from response
             const token = response.data.access_token;
+            const user = response.data.user;
             const authStore = useTokenStore();
             authStore.setToken(token);
-
+            authStore.setUser(user);
+            console.log(user);
+            router.push('/');
         })
         .catch((_error) => {
             // if network error
