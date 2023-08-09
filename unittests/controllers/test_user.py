@@ -2,9 +2,9 @@ import datetime
 from unittest import TestCase
 import unittest
 import sys
+sys.path.append("../..")
 from Enums.UserEnums import UserStatusEnum
 from Enums.UserRoleEnum import UserRoleEnum
-sys.path.append("../..")
 from db.Connexion import SessionLocal
 
 from models.users import Permission, User

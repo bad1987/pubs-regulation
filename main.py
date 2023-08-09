@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
+from routes.system.login_routes import route as LoginRouter
 from routes.system.taxes import router as taxesRouter
 from routes.system.quartierAffichage import router as quartierAffichageRouter
 from routes.system.tiers import router as tiersRouter
@@ -50,6 +51,7 @@ app.include_router(ProduitConcessionRouter)
 app.include_router(CampagneRouter)
 app.include_router(DocLigneRouter)
 app.include_router(UsersRouter)
+app.include_router(LoginRouter)
 
 # cors
 app.add_middleware( 

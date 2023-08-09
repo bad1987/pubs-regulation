@@ -8,11 +8,12 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from dotenv import load_dotenv
 import os
-from auth.Configs import Settings
+from auth.Configs.Settings import Settings
 from auth.auth import create_access_token, get_token, verify_token
 
 from dependencies.db_dependencies import get_db
 from models.users import User
+from schemas.UserSchema import UserSchema
 
 load_dotenv()
 secure_cookie = os.getenv('COOKIE_SECURE')
@@ -29,6 +30,7 @@ console = Console()
 @route.post("/login")
 def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Authenticate the user
+    print(f"username: {form_data.username} password: {form_data.password}")
     user = User.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Invalid email or password")
@@ -41,7 +43,8 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
     response.set_cookie(key=Settings.COOKIE_NAME, value=access_token, domain='localhost', path='/', max_age=max_age, samesite='None', secure=secure_cookie)
 
     # Return the access token
-    return {Settings.COOKIE_NAME: access_token, "token_type": "bearer"}
+    user = UserSchema.model_validate(user).model_dump()
+    return {Settings.COOKIE_NAME: access_token, "token_type": "bearer", "user":user}
 
 # --------------------------------------------------------------------------
 # Logout

@@ -4,17 +4,16 @@ from jwt import InvalidTokenError
 import os, dotenv
 from fastapi import Depends, HTTPException, Request, Security, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
-from auth.Configs import Settings
+from auth.Configs.Settings import Settings
 from models.users import User
 
-dotenv.load_dotenv()
 # Define a secret key for signing the tokens (use a more secure value in production)
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = Settings.SECRET_KEY
 
 # Define an algorithm for encoding and decoding the tokens
 ALGORITHM = "HS256"
 
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(Settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
 # Define a dependency for getting the token from the request header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -44,6 +43,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    print(expire)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
