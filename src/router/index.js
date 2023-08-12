@@ -11,6 +11,8 @@ const ListePanneau = defineAsyncComponent(() => import('../views/ListePanneau.vu
 const ListeAnnonceur = defineAsyncComponent(() => import('../views/ListeAnnonceur.vue'))
 const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseur.vue'))
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
+const Error403 = defineAsyncComponent(() => import('../components/errors/Error403.vue'))
+const Error404 = defineAsyncComponent(() => import('../components/errors/Error404.vue'))
 
 
 const router = createRouter({
@@ -73,7 +75,17 @@ const router = createRouter({
         sidebar: Sidebar,
         default: ListePanneau
       }
-    }
+    }, 
+    {
+      path: '/error/403',
+      name: '403',
+      component: Error403
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: '404',
+      component: Error404
+    },
   ]
 })
 
