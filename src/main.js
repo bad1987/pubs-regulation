@@ -23,4 +23,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
+axios.defaults.baseURL = 'http://localhost:8000/'
+
 app.mount('#app')

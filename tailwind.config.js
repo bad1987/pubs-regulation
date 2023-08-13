@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}',"./node_modules/flowbite/**/*.js"], // specify the paths to your pages and components
+    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}','node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}'], // specify the paths to your pages and components
     darkMode: "class",
     theme: {
         extend: {

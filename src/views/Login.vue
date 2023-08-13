@@ -72,7 +72,7 @@ const login = async (event) => {
     formData.append('username', email.value);
     formData.append('password', password.value);
 
-    axios.post('http://localhost:8000/login', formData)
+    axios.post('login', formData)
         .then((response) => {
             // get token from response
             const token = response.data.access_token;
