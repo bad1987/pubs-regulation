@@ -11,6 +11,9 @@ const ListePanneau = defineAsyncComponent(() => import('../views/ListePanneau.vu
 const ListeAnnonceur = defineAsyncComponent(() => import('../views/ListeAnnonceur.vue'))
 const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseur.vue'))
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
+const CreatePanneau = defineAsyncComponent(() => import('../views/CreatePanneau.vue'))
+const CreateAnnonceur = defineAsyncComponent(() => import('../views/CreateAnnonceur.vue'))
+
 
 
 const router = createRouter({
@@ -63,6 +66,22 @@ const router = createRouter({
       components: {
         navbar: Navbar,
         default: DashBoard
+      }
+    },
+    {
+      path: '/CreatePanneau',
+      name: 'CreatePanneau',
+      components: {
+        navbar: Navbar,
+        default: CreatePanneau
+      }
+    },
+    {
+      path: '/CreateAnnonceur',
+      name: 'CreateAnnonceur',
+      components: {
+        navbar: Navbar,
+        default: CreateAnnonceur
       }
     },
     {
