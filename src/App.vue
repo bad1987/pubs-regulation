@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 
+const excluded_route_names = ['login', '404', '403'];
 onBeforeMount(() => {
   // use useRouter to get a router instance
   const router = useRouter();
@@ -37,7 +38,7 @@ onBeforeMount(() => {
   
   <!-- Render the sidebar component -->
   <router-view name="sidebar"></router-view>
-  <div :class="{'mt-14': $route.name !== 'login'}" class="rounded-lg bg-gray-50 dark:bg-gray-900">
+  <div :class="{'mt-14': !excluded_route_names.includes($route.name)}" class="rounded-lg bg-gray-50 dark:bg-gray-900">
     <!-- Render the default component -->
     <router-view class="min-h-screen"></router-view>
   </div>

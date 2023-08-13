@@ -13,7 +13,7 @@ const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseu
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
 const Error403 = defineAsyncComponent(() => import('../components/errors/Error403.vue'))
 const Error404 = defineAsyncComponent(() => import('../components/errors/Error404.vue'))
-
+const ZoneView = defineAsyncComponent(() => import('../views/ZoneView.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -85,6 +85,15 @@ const router = createRouter({
       path: '/:catchAll(.*)',
       name: '404',
       component: Error404
+    },
+    {
+      path: '/zones',
+      name: 'ZoneView',
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: ZoneView
+      }
     },
   ]
 })

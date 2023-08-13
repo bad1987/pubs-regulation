@@ -97,7 +97,7 @@ const register = async (event) => {
         roles: roles.value
     }
 
-    axios.post('http://localhost:8000/user', postData)
+    axios.post('user', postData)
         .then((response) => {
             console.log(response);
             // set the notification message
