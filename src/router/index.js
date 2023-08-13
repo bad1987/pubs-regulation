@@ -11,6 +11,11 @@ const ListePanneau = defineAsyncComponent(() => import('../views/ListePanneau.vu
 const ListeAnnonceur = defineAsyncComponent(() => import('../views/ListeAnnonceur.vue'))
 const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseur.vue'))
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
+const CreatePanneau = defineAsyncComponent(() => import('../views/CreatePanneau.vue'))
+const CreateAnnonceur = defineAsyncComponent(() => import('../views/CreateAnnonceur.vue'))
+const Error403 = defineAsyncComponent(() => import('../components/errors/Error403.vue'))
+const Error404 = defineAsyncComponent(() => import('../components/errors/Error404.vue'))
+const ZoneView = defineAsyncComponent(() => import('../views/ZoneView.vue'))
 
 
 const router = createRouter({
@@ -61,6 +66,7 @@ const router = createRouter({
       path: '/DashBoard',
       name: 'DashBoard',
       components: {
+        sidebar: Sidebar,
         navbar: Navbar,
         default: DashBoard
       }
@@ -69,6 +75,7 @@ const router = createRouter({
       path: '/CreatePanneau',
       name: 'CreatePanneau',
       components: {
+        sidebar: Sidebar,
         navbar: Navbar,
         default: CreatePanneau
       }
@@ -77,6 +84,7 @@ const router = createRouter({
       path: '/CreateAnnonceur',
       name: 'CreateAnnonceur',
       components: {
+        sidebar: Sidebar,
         navbar: Navbar,
         default: CreateAnnonceur
       }
@@ -91,6 +99,15 @@ const router = createRouter({
       }
     }, 
     {
+      path: '/zones',
+      name: 'ZoneView',
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: ZoneView
+      }
+    },
+    {
       path: '/error/403',
       name: '403',
       component: Error403
@@ -99,15 +116,6 @@ const router = createRouter({
       path: '/:catchAll(.*)',
       name: '404',
       component: Error404
-    },
-    {
-      path: '/zones',
-      name: 'ZoneView',
-      components: {
-        navbar: Navbar,
-        sidebar: Sidebar,
-        default: ZoneView
-      }
     },
   ]
 })
