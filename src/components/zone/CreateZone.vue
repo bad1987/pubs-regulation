@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted, defineAsyncComponent, defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import { Modal } from 'flowbite-vue'
 import VueBasicAlert from 'vue-basic-alert'
 import axios from 'axios'
 
+const router = useRouter()
 const alert = ref(null)
 
 const props = defineProps({
@@ -64,6 +66,14 @@ const createZone = () => {
             props.onZoneCreated()
         })
         .catch((error) => {
+            // if the status code is 401, redirect to the login page
+            if (error.response.status === 401) {
+                router.push('/login')
+            }
+            // if the status code is 403, redirect to the forbidden page
+            if (error.response.status === 403) {
+                router.push('/error/403')
+            }
             console.log(error)
             if ('data' in error.response && 'detail' in error.response.data) {
                 alert.value.showAlert("error", error.response.data.detail, "error!!")                
