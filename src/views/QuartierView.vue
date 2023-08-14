@@ -18,7 +18,7 @@ const onQuartierCreated = () => {
     <vue-basic-alert ref="alert" :duration="1000" :closeIn="5000" />
     <!-- Add and style the main container -->
     <div class="flex flex-col flex-1 p-4 overflow-y-auto ml-64 min-h-screen dark:bg-gray-900 dark:border-gray-700">
-        <!-- Add and style the main header for this page with the page title:Zones. And a button to create a new zone at the right -->
+        <!-- Add and style the main header for this page with the page title:Quartier. And a button to create a new quartier at the right -->
         <header class="flex items-center justify-between w-full px-4 py-2 bg-white dark:bg-gray-800 shadow-lg">
             <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">Quartier</h1>
             <button @click="toggleCreateQuartier"
@@ -26,7 +26,7 @@ const onQuartierCreated = () => {
                 quartier</button>
         </header>
         <main class="px-4 py-4 text-gray-800 dark:text-gray-200">
-            <!-- create zone component -->
+            <!-- create quartier component -->
             <div class="flex items-center justify-center  overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-around text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -55,7 +55,7 @@ const onQuartierCreated = () => {
         </tbody>
     </table>
 </div>
-            <CreateZone v-if="showCreateQuartier" :onQuartierCreated="onQuartierCreated" :show="showCreateQuartier" />
+            <CreateQuartier v-if="showCreateQuartier" :onQuartierCreated="onQuartierCreated" :show="showCreateQuartier" />
         </main>
     </div>
 
