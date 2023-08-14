@@ -8,11 +8,10 @@ const Sidebar = defineAsyncComponent(() => import('../components/Sidebar.vue'))
 const RegistrationVue = defineAsyncComponent(() => import('../views/RegistrationVue.vue'))
 const Login = defineAsyncComponent(() => import('../views/Login.vue'))
 const ListePanneau = defineAsyncComponent(() => import('../views/ListePanneau.vue'))
-const ListeAnnonceur = defineAsyncComponent(() => import('../views/ListeAnnonceur.vue'))
 const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseur.vue'))
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
 const CreatePanneau = defineAsyncComponent(() => import('../components/panneau/CreatePanneau.vue'))
-const CreateAnnonceur = defineAsyncComponent(() => import('../views/CreateAnnonceur.vue'))
+const AnnonceurView = defineAsyncComponent(() => import('../views/AnnonceurView.vue'))
 const Error403 = defineAsyncComponent(() => import('../components/errors/Error403.vue'))
 const Error404 = defineAsyncComponent(() => import('../components/errors/Error404.vue'))
 const ZoneView = defineAsyncComponent(() => import('../views/ZoneView.vue'))
@@ -46,12 +45,12 @@ const router = createRouter({
       }
     },
     {
-      path: '/ListeAnnonceur',
-      name: 'ListeAnnonceur',
+      path: '/annonceur',
+      name: 'AnnonceurView',
       components: {
         navbar: Navbar,
         sidebar: Sidebar,
-        default: ListeAnnonceur
+        default: AnnonceurView
       }
     },
     {
@@ -82,12 +81,12 @@ const router = createRouter({
       }
     },
     {
-      path: '/CreateAnnonceur',
-      name: 'CreateAnnonceur',
+      path: '/annonceur',
+      name: 'AnnonceurView',
       components: {
         sidebar: Sidebar,
         navbar: Navbar,
-        default: CreateAnnonceur
+        default: AnnonceurView
       }
     },
     {

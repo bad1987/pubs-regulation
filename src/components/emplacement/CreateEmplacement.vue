@@ -91,30 +91,40 @@ const createZone = () => {
         <template #body>
 
             <div class="px-6 py-6 lg:px-8">
-                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create a new zone</h3>
+                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Fiche Emplacement</h3>
 
                 <div v-if="loading"
                     class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
                     <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
                 </div>
 
-                <form class="space-y-6" @submit.prevent="createZone">
+                <form class="space-y-6" @submit.prevent="createEmplacement">
                     <div>
-                        <label for="codeZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Emplacement</label>
-                        <input type="text" v-model="codeZone" name="codeZone" id="codeZone" placeholder="code zone"
+                        <label for="CodeEmplacement" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Emplacement</label>
+                        <input type="text" v-model="CodeEmplacement" name="CodeEmplacement" id="CodeEmplacement" placeholder="code Emplacement"
                             maxlength="6"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
                     <div>
-                        <label for="libelleZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle Emplacement</label>
-                        <input type="text" v-model="libelleZone" name="libelleZone" id="libelleZone" placeholder="Libelle zone"
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quartier</label>
+                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option selected="">Choisir le quartier</option>
+                            <option value="TV">Bonanjo</option>
+                            <option value="PC">Makepe</option>
+                            <option value="GA">Yassa</option>
+                            <option value="PH">Akwa</option>
+                        </select>
+                    </div>
+<!--                     <div>
+                        <label for="quartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle Emplacement</label>
+                        <input type="text" v-model="quartier" name="quartier" id="quartier" placeholder="Quartier"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
-                    </div>
+                    </div> -->
                     <button type="submit" :disabled="buttonDisabled"
                         class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
-                        new zone</button>
+                        Nouvel Emplacement</button>
                 </form>
             </div>
         </template>

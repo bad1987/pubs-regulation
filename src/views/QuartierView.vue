@@ -55,7 +55,7 @@ const onQuartierCreated = () => {
         </tbody>
     </table>
 </div>
-            <CreateZone v-if="showCreateQuartier" :onQuartierCreated="onQuartierCreated" :show="showCreateQuartier" />
+            <CreateQuartier v-if="showCreateQuartier" :onQuartierCreated="onQuartierCreated" :show="showCreateQuartier" />
         </main>
     </div>
 

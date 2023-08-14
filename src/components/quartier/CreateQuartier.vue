@@ -98,7 +98,7 @@ const createQuartier = () => {
         <template #body>
 
             <div class="px-6 py-6 lg:px-8">
-                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create a new zone</h3>
+                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Fiche quartier</h3>
 
                 <div v-if="loading"
                     class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
@@ -107,18 +107,31 @@ const createQuartier = () => {
 
                 <form class="space-y-6" @submit.prevent="createQuartier">
                     <div>
-                        <label for="codeZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Zone</label>
-                        <input type="text" v-model="codeZone" name="codeZone" id="codeZone" placeholder="code zone"
+                        <label for="NomQuartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom du Quartier</label>
+                        <input type="text" v-model="NomQuartier" name="NomQuartier" id="NomQuartier" placeholder="Nom du quartier"
                             maxlength="6"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
                     <div>
-                        <label for="libelleZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle Zone</label>
-                        <input type="text" v-model="libelleZone" name="libelleZone" id="libelleZone" placeholder="Libelle zone"
+                        <label for="SousQuartierAffich" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sous-quartier</label>
+                        <input type="text" v-model="SousQuartierAffich" name="SousQuartierAffich" id="SousQuartierAffich" placeholder="Sous quartier"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
+                    <div>
+                        <label for="ObservationsQuartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observations</label>
+                        <input type="text" v-model="ObservationsQuartier" name="ObservationsQuartier" id="ObservationsQuartier" placeholder="Observations"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            required>
+                    </div>
+                    <div>
+                        <label for="ArrondissementQuartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Arrondissement</label>
+                        <input type="text" v-model="ArrondissementQuartier" name="ArrondissementQuartier" id="ArrondissementQuartier" placeholder="Arrondissement"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            required>
+                    </div>
+
                     <button type="submit" :disabled="buttonDisabled"
                         class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Créer
                         Nouveau Quartier</button>
