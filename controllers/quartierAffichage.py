@@ -21,7 +21,7 @@ class QuartierAffichageController:
     @classmethod
     def getAll(cls, db: Session) -> list[QuartierAffichageSchema]:
         try:
-            return [QuartierAffichageSchema.model_validate(quartierAffichage) for quartierAffichage in QuartierAffichage.getAll(db)]
+            return [QuartierAffichageSchema.model_validate(quartierAffichage) for quartierAffichage in QuartierAffichage.get_all(db)]
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
