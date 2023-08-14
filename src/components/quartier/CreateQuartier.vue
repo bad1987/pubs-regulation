@@ -5,7 +5,12 @@ import { initFlowbite } from 'flowbite'
 import { Modal } from 'flowbite-vue'
 import VueBasicAlert from 'vue-basic-alert'
 import axios from 'axios'
+import { quartierApi } from '../../api/api'
+import { useQuartierStore } from "../stores/quartierStore";
 
+const quartierStore = useQuartierStore()
+const zones = ref(quartierStore.getZones())
+const router = useRouter()
 const alert = ref(null)
 
 const props = defineProps({
@@ -13,13 +18,6 @@ const props = defineProps({
     show: Boolean
 })
 const showModal = ref(props.show)
-const openModal = () => {
-    showModal.value = true
-}
-const onConfirm = () => {
-    showModal.value = false
-    // TODO: perform some action
-}
 const onCancel = () => {
     console.log("cancelling the modal");
     showModal.value = false
@@ -29,8 +27,9 @@ const onCancel = () => {
 onMounted(() => {
     // initialize flowbite
     initFlowbite()
-    // open the modal
-    // openModal()
+
+    // load zones
+    quartierApi.getZones()
 
     // close the modal when component is unmounted
     return () => {
@@ -66,7 +65,7 @@ const createQuartier = () => {
 
     // post request to the server
     axios.post('quartierAffichages', newQuartier)
-    .then((response) => {
+        .then((response) => {
             console.log(response)
             // notify the parent component
             props.onQuartierCreated()
@@ -74,7 +73,7 @@ const createQuartier = () => {
         .catch((error) => {
             console.log(error)
             if ('data' in error.response && 'detail' in error.response.data) {
-                alert.value.showAlert("error", error.response.data.detail, "error!!")                
+                alert.value.showAlert("error", error.response.data.detail, "error!!")
             }
             else {
                 alert.value.showAlert("error", error.message, "error!!")
@@ -99,7 +98,7 @@ const createQuartier = () => {
         <template #body>
 
             <div class="px-6 py-6 lg:px-8">
-                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create a new zone</h3>
+                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Creer un nouveau quartier</h3>
 
                 <div v-if="loading"
                     class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
@@ -108,29 +107,58 @@ const createQuartier = () => {
 
                 <form class="space-y-6" @submit.prevent="createQuartier">
                     <div>
-                        <label for="codeZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Zone</label>
-                        <input type="text" v-model="codeZone" name="codeZone" id="codeZone" placeholder="code zone"
-                            maxlength="6"
+                        <label for="nomQuartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom
+                            Quartier</label>
+                        <input type="text" v-model="nomQuartier" name="nomQuartier" id="nomQuartier"
+                            placeholder="nom quartier"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
                     <div>
-                        <label for="libelleZone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle Zone</label>
-                        <input type="text" v-model="libelleZone" name="libelleZone" id="libelleZone" placeholder="Libelle zone"
+                        <label for="sousQuartierAffiche"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sous Quartier
+                            Affichage</label>
+                        <input type="text" v-model="sousQuartierAffich" name="sousQuartierAffiche" id="sousQuartierAffiche"
+                            placeholder="sous quartier"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
+                    <div>
+                        <label for="observationQuartier"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observations
+                            Quartier</label>
+                        <input type="text" v-model="observationsQuartier" name="observationQuartier"
+                            id="observationQuartier" placeholder="observations quartier"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            required>
+                    </div>
+                    <div>
+                        <label for="arrondissementQuartier"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Arrondissement
+                            Quartier</label>
+                        <input type="text" v-model="arrondissementQuartier" name="arrondissementQuartier"
+                            id="arrondissementQuartier" placeholder="arrondissement quartier"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            required>
+                    </div>
+                    <!-- a selection list of zones -->
+                    <label for="zoneAffichages" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Zone
+                        Affichage</label>
+                    <select id="zoneAffichages" v-model="iDZoneAffichage"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option v-for="zone in zones" :key="zone.id" :value="zone.IDZoneAffichage">{{ zone.LibelleZone }}</option>
+                    </select>
+
                     <button type="submit" :disabled="buttonDisabled"
                         class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Créer
-                        Nouveau Quartier</button>
-                </form>
-            </div>
-        </template>
-        <template #footer>
-            <button @click="onCancel" type="button" :disabled="buttonDisabled"
-                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                Decline
-            </button>
-        </template>
-    </Modal>
-</template>
+                    Nouveau Quartier</button>
+            </form>
+        </div>
+    </template>
+    <template #footer>
+        <button @click="onCancel" type="button" :disabled="buttonDisabled"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+            Decline
+        </button>
+    </template>
+</Modal></template>
