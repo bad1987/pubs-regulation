@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import VueBasicAlert from 'vue-basic-alert'
 
-const quartiers = ref([])
+const zones = ref([])
 const loading = ref(true)
 const alert = ref(null)
 const router = useRouter()
@@ -13,11 +13,11 @@ const router = useRouter()
 onMounted(() => {
     initFlowbite()
 
-    // load quartiers from the database
+    // load zones from the database
     loading.value = true
-    axios.get('quartierAffichages')
+    axios.get('zoneAffichages')
         .then(response => {
-            quartiers.value = response.data
+            zones.value = response.data
         })
         .catch(error => {
             if ('response' in error && error.response.status === 401) {
@@ -39,6 +39,7 @@ onMounted(() => {
 })
 </script>
 
+
 <template>
     <vue-basic-alert ref="alert" :duration="1000" :closeIn="5000" />
     <main class="mx-auto my-auto">
@@ -47,32 +48,25 @@ onMounted(() => {
             <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>
         <div v-if="!loading">
-            <table v-if="quartiers.length > 0" class="w-around text-sm text-left text-gray-500 dark:text-gray-400">
+            <table v-if="zones.length > 0" class="w-around text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">N°</th>
-                        <th scope="col" class="px-6 py-3">Nom</th>
-                        <th scope="col" class="px-6 py-3">Sous Quartier</th>
-                        <th scope="col" class="px-6 py-3">Observations</th>
-                        <th scope="col" class="px-6 py-3">Arrondissement</th>
-                        <th scope="col" class="px-6 py-3">Zone</th>
+                        <th scope="col" class="px-6 py-3">Code Zone</th>
+                        <th scope="col" class="px-6 py-3">Libelle Zone</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="quartier in quartiers" :key="quartier.IDQuartierAffichage">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{{
-                            quartier.IDQuartierAffichage }}</th>
-                        <td class="px-6 py-4">{{ quartier.NomQuartier }}</td>
-                        <td class="px-6 py-4">{{ quartier.SousQuartierAffich }}</td>
-                        <td class="px-6 py-4">{{ quartier.ObservationsQuartier }}</td>
-                        <td class="px-6 py-4">{{ quartier.ArrondissementQuartier }}</td>
-                        <td class="px-6 py-4">{{ quartier.zone_affichage.LibelleZone }}</td>
+                    <tr v-for="zone in zones" :key="zone.IDZoneAffichage">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ zone.IDZoneAffichage }}</th>
+                        <td class="px-6 py-4">{{ zone.CodeZone }}</td>
+                        <td class="px-6 py-4">{{ zone.LibelleZone }}</td>
                     </tr>
                 </tbody>
             </table>
             <!-- if no quartiers in the database show a message -->
             <div v-else>
-                <p>Aucun quartier enregistrée pour le moment</p>
+                <p>Aucune zone enregistrée pour le moment</p>
             </div>
         </div>
     </main>
