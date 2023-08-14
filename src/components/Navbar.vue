@@ -5,6 +5,7 @@ import { initFlowbite } from 'flowbite';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../stores/token';
+import Logo from '../assets/images/logo.svg';
 
 // initialize components based on data attribute selectors
   // onMounted(() => {
@@ -75,8 +76,7 @@ const handleLogout = event => {
             </svg>
           </button>
           <RouterLink to="/" class="flex ml-2 md:mr-24">
-            <img src="https://toolbrothers.com/images/toolbrothers_logo.jpeg" class="block h-6 mr-3 dark:hidden" alt="FlowBite Logo">
-            <img src="/logo.png" class="hidden mr-3 dark:block" alt="TB Logo">
+            <img :src="Logo" class="block h-12 mr-3" alt="DCC Logo">
           </RouterLink>
         </div>
         <div class="flex items-center">
