@@ -131,7 +131,7 @@ const register = async (event) => {
 
 <template>
     <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" />
-    <section class="bg-gray-50 dark:bg-gray-900 py-3 sm:py-5">
+    <section class="bg-gray-50 dark:bg-gray-900 ml-64 py-3 sm:py-5">
   <div class="px-4 mx-auto w-arround lg:px-12">
       <div class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
           <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">

@@ -1,141 +1,45 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { ref, watch } from 'vue';
-import axios from 'axios'
-import { UserRoleEnum, UserStatusEnum } from '../utils/userUtils.js'
-import Notification from '../components/Notification.vue'
+import { defineAsyncComponent, ref } from 'vue';
+import VueBasicAlert from 'vue-basic-alert';
 
-const userRoles = Object.values(UserRoleEnum)
-const userStatuses = Object.values(UserStatusEnum)
-const error = ref(null);
-const loading = ref(false);
-// define variables for the form data
-const username = ref('');
-const status = ref(UserStatusEnum.ACTIVE);
-const roles = ref(UserRoleEnum.OPERATOR);
-const email = ref('');
-const emailError = ref(false)
-function validateEmail() {
-    if (!email.value) {
-        emailError.value = true
-    }
-    else {
-        // make sure the follows a valid email format
-        emailError.value = !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email.value)
-    }
+const CreatePanneau = defineAsyncComponent(() => import('../components/panneau/CreatePanneau.vue'));
+const showCreatePanneau = ref(false);
+const alert = ref(null);
+const toggleCreatePanneau = () => {
+  showCreatePanneau.value = !showCreatePanneau.value;
 }
-const password = ref('');
-const passwordError = ref(false)
-function validatePassword() {
-    if (!password.value) {
-        passwordError.value = true
-    } else {
-        passwordError.value = false
-    }
+const onZoneCreated = () => {
+  showCreatePanneau.value = false;
+    alert.value.showAlert("Enregistrement effectué avec succès", "Nouveau Panneau crée", "success!!")
 }
 
-// repeatPassword
-const repeatPassword = ref('');
-const repeatPasswordError = ref(false)
-function validateRepeatPassword() {
-    if (!repeatPassword.value) {
-        repeatPasswordError.value = true
-    }
-    else if (password.value !== repeatPassword.value) {
-        repeatPasswordError.value = true
-    }
-    else {
-        repeatPasswordError.value = false
-    }
-}
-
-// make email and password fields appear normal when the user start typing
-watch(email, () => {
-    validateEmail()
-})
-watch(password, () => {
-    validatePassword()
-})
-watch(repeatPassword, () => {
-    validateRepeatPassword()
-})
-
-// notification variables
-const notification_type = ref('info')
-const notification_message = ref('registration successful')
-const notification_duration = ref(5000)
-const show_notification = ref(false)
-
-const register = async (event) => {
-    event.preventDefault();
-    // validate email
-    validateEmail();
-    if (emailError.value) {
-        return;
-    }
-    // validate password
-    validatePassword();
-    if (passwordError.value) {
-        return;
-    }
-    // validate repeat password
-    validateRepeatPassword();
-    if (repeatPasswordError.value) {
-        return;
-    }
-
-    loading.value = true;
-    error.value = null;
-    show_notification.value = false
-
-    // build the form data
-    const postData = {
-        email: email.value,
-        password: password.value,
-        username: username.value,
-        status: status.value,
-        roles: roles.value
-    }
-
-    axios.post('http://localhost:8000/user', postData)
-        .then((response) => {
-            console.log(response);
-            // set the notification message
-            notification_message.value = 'registration successful';
-            notification_type.value = 'success';
-        })
-        .catch((_error) => {
-            // if network error
-            console.log(_error);
-            if (_error.code && _error.code === 'ERROR_NETWORK' || _error.code === "ERR_NETWORK") {
-                error.value = _error.message;
-            } else {
-                console.log(_error);
-                if ('data' in _error.response && 'detail' in _error.response.data) {
-                    error.value = _error.response.data.detail;
-                }
-                else {
-                    error.value = _error.message;
-                }
-
-            }
-            notification_message.value = error.value;
-            notification_type.value = 'error';
-        })
-        .finally(() => {
-            loading.value = false;
-            show_notification.value = true;
-        })
-}
 </script>
 
 <template>
     <!-- <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" /> -->
     <!--  -->
+
+    <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" />
+    <vue-basic-alert ref="alert" :duration="1000" :closeIn="5000" />
+    <!-- Add and style the main container -->
+    <div class="flex flex-col flex-1 p-4 overflow-y-auto ml-64 min-h-screen dark:bg-gray-900 dark:border-gray-700">
+        <!-- Add and style the main header for this page with the page title:Zones. And a button to create a new zone at the right -->
+        <header class="flex items-center justify-between w-full px-4 py-2 bg-white dark:bg-gray-800 shadow-lg">
+            <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">Liste des Annonceurs</h1>
+            <button @click="toggleCreateZone"
+                class="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">Créer un Annonceur</button>
+        </header>
+        <main class="px-4 py-4 text-gray-800 dark:text-gray-200">
+            <!-- create zone component -->
+            <CreateZone v-if="showCreateZone" :onZoneCreated="onZoneCreated" :show="showCreateZone" />
+        </main>
+    </div>
+
     <section class="bg-gray-50 dark:bg-gray-900  flex items-center">
   <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
     <!-- Start coding here -->
-    <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
+    <div class="flex flex-col flex-1 p-4 overflow-y-auto ml-64 min-h-screen dark:bg-gray-900 dark:border-gray-700">
+    <!-- <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"> -->
       <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
         <div class="w-full md:w-1/2">
           <form class="flex items-center">
@@ -151,7 +55,7 @@ const register = async (event) => {
           </form>
         </div>
         <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
-            <RouterLink to="/" :class="{ 'dark:bg-green-700 bg-green-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Zone</RouterLink>
+            <RouterLink to="/createpanneau" :class="{ 'dark:bg-green-700 bg-green-100' : $route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Zone</RouterLink>
             <button type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
             <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
@@ -186,9 +90,6 @@ const register = async (event) => {
             </button>
             <!-- Dropdown menu -->
             <div id="filterDropdown" class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-              <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
-                Category
-              </h6>
               <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
                 <li class="flex items-center">
                   <input id="apple" type="checkbox" value=""

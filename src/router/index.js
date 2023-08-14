@@ -11,12 +11,13 @@ const ListePanneau = defineAsyncComponent(() => import('../views/ListePanneau.vu
 const ListeAnnonceur = defineAsyncComponent(() => import('../views/ListeAnnonceur.vue'))
 const ListeRegisseur = defineAsyncComponent(() => import('../views/ListeRegisseur.vue'))
 const DashBoard = defineAsyncComponent(() => import('../views/DashBoard.vue'))
-const CreatePanneau = defineAsyncComponent(() => import('../views/CreatePanneau.vue'))
+const CreatePanneau = defineAsyncComponent(() => import('../components/panneau/CreatePanneau.vue'))
 const CreateAnnonceur = defineAsyncComponent(() => import('../views/CreateAnnonceur.vue'))
 const Error403 = defineAsyncComponent(() => import('../components/errors/Error403.vue'))
 const Error404 = defineAsyncComponent(() => import('../components/errors/Error404.vue'))
 const ZoneView = defineAsyncComponent(() => import('../views/ZoneView.vue'))
-
+const QuartierView = defineAsyncComponent(() => import('../views/QuartierView.vue'))
+const EmplacementView = defineAsyncComponent(() => import('../views/EmplacementView.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -72,8 +73,8 @@ const router = createRouter({
       }
     },
     {
-      path: '/CreatePanneau',
-      name: 'CreatePanneau',
+      path: '/createpanneau',
+      name: 'createpanneau',
       components: {
         sidebar: Sidebar,
         navbar: Navbar,
@@ -107,6 +108,25 @@ const router = createRouter({
         default: ZoneView
       }
     },
+    {
+      path: '/quartier',
+      name: 'QuartierView',
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: QuartierView
+      }
+    },
+    {
+      path: '/emplacement',
+      name: 'EmplacementView',
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: EmplacementView
+      }
+    },
+
     {
       path: '/error/403',
       name: '403',

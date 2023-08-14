@@ -1,131 +1,16 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { ref, watch } from 'vue';
-import axios from 'axios'
-import { UserRoleEnum, UserStatusEnum } from '../utils/userUtils.js'
-import Notification from '../components/Notification.vue'
+import { defineAsyncComponent, ref } from 'vue';
+import VueBasicAlert from 'vue-basic-alert';
 
-const userRoles = Object.values(UserRoleEnum)
-const userStatuses = Object.values(UserStatusEnum)
-const error = ref(null);
-const loading = ref(false);
-// define variables for the form data
-const username = ref('');
-const status = ref(UserStatusEnum.ACTIVE);
-const roles = ref(UserRoleEnum.OPERATOR);
-const email = ref('');
-const emailError = ref(false)
-function validateEmail() {
-    if (!email.value) {
-        emailError.value = true
-    }
-    else {
-        // make sure the follows a valid email format
-        emailError.value = !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email.value)
-    }
+const CreateRegisseur = defineAsyncComponent(() => import('../components/zone/CreateZone.vue'));
+const showCreateZone = ref(false);
+const alert = ref(null);
+const toggleCreateZone = () => {
+    showCreateZone.value = !showCreateZone.value;
 }
-const password = ref('');
-const passwordError = ref(false)
-function validatePassword() {
-    if (!password.value) {
-        passwordError.value = true
-    } else {
-        passwordError.value = false
-    }
-}
-
-// repeatPassword
-const repeatPassword = ref('');
-const repeatPasswordError = ref(false)
-function validateRepeatPassword() {
-    if (!repeatPassword.value) {
-        repeatPasswordError.value = true
-    }
-    else if (password.value !== repeatPassword.value) {
-        repeatPasswordError.value = true
-    }
-    else {
-        repeatPasswordError.value = false
-    }
-}
-
-// make email and password fields appear normal when the user start typing
-watch(email, () => {
-    validateEmail()
-})
-watch(password, () => {
-    validatePassword()
-})
-watch(repeatPassword, () => {
-    validateRepeatPassword()
-})
-
-// notification variables
-const notification_type = ref('info')
-const notification_message = ref('registration successful')
-const notification_duration = ref(5000)
-const show_notification = ref(false)
-
-const register = async (event) => {
-    event.preventDefault();
-    // validate email
-    validateEmail();
-    if (emailError.value) {
-        return;
-    }
-    // validate password
-    validatePassword();
-    if (passwordError.value) {
-        return;
-    }
-    // validate repeat password
-    validateRepeatPassword();
-    if (repeatPasswordError.value) {
-        return;
-    }
-
-    loading.value = true;
-    error.value = null;
-    show_notification.value = false
-
-    // build the form data
-    const postData = {
-        email: email.value,
-        password: password.value,
-        username: username.value,
-        status: status.value,
-        roles: roles.value
-    }
-
-    axios.post('http://localhost:8000/user', postData)
-        .then((response) => {
-            console.log(response);
-            // set the notification message
-            notification_message.value = 'registration successful';
-            notification_type.value = 'success';
-        })
-        .catch((_error) => {
-            // if network error
-            console.log(_error);
-            if (_error.code && _error.code === 'ERROR_NETWORK' || _error.code === "ERR_NETWORK") {
-                error.value = _error.message;
-            } else {
-                console.log(_error);
-                if ('data' in _error.response && 'detail' in _error.response.data) {
-                    error.value = _error.response.data.detail;
-                }
-                else {
-                    error.value = _error.message;
-                }
-
-            }
-            notification_message.value = error.value;
-            notification_type.value = 'error';
-        })
-        .finally(() => {
-            loading.value = false;
-            show_notification.value = true;
-        })
+const onZoneCreated = () => {
+    showCreateZone.value = false;
+    alert.value.showAlert("success", "Zone created successfully", "success!!")
 }
 </script>
 
@@ -133,7 +18,7 @@ const register = async (event) => {
     <!-- <Notification v-if="show_notification" :type="notification_type" :message="notification_message" :duration="notification_duration" /> -->
     <!--  -->
     <section class="bg-gray-50 dark:bg-gray-900  flex items-center">
-  <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
+  <div class="max-w-screen-xl px-4 mx-auto ml-64 lg:px-12 w-full">
     <!-- Start coding here -->
     <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
       <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
@@ -151,11 +36,11 @@ const register = async (event) => {
           </form>
         </div>
         <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
-          <button type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+          <button @click="toggleCreateZone" type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
             <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
             </svg>
-            Add product
+            Créer un Régisseur
           </button>
           <div class="flex items-center w-full space-x-3 md:w-auto">
             <button id="actionsDropdownButton" data-dropdown-toggle="actionsDropdown" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
@@ -226,10 +111,10 @@ const register = async (event) => {
   </div>
 </section>
     <!--  -->
-    <div class="flex items-center justify-center mt-25px bg-yellow-300 dark:border-gray-700">
+    <div class="flex items-center ml-64  justify-center mt-25px bg-yellow-300 dark:border-gray-700">
 Liste des regisseurs
     </div>
-<div class="flex items-center justify-center  overflow-x-auto shadow-md sm:rounded-lg">
+<div class="flex items-center justify-center ml-64 overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-around text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>

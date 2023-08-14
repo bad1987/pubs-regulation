@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia';
-import { useThemeStore } from '../stores/darkmode.js'
-import { initFlowbite } from 'flowbite'
+import { useThemeStore } from '../stores/darkmode.js';
+import { initFlowbite } from 'flowbite';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../stores/token';
