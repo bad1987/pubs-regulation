@@ -1,26 +1,24 @@
 <script setup>
-import { ref, onMounted, defineAsyncComponent, defineProps } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import { Modal } from 'flowbite-vue'
 import VueBasicAlert from 'vue-basic-alert'
 import axios from 'axios'
+import { quartierApi } from '../../api/api'
+import { useQuartierStore } from "../../stores/quartierStore";
 
+const quartierStore = useQuartierStore()
+const quartiers = ref(quartierStore.quartiers)
+const router = useRouter()
 const alert = ref(null)
 
 const props = defineProps({
-    onZoneCreated: Function,
+    onEmplacementCreated: Function,
     show: Boolean
 })
 const showModal = ref(props.show)
-const openModal = () => {
-    showModal.value = true
-}
-const onConfirm = () => {
-    showModal.value = false
-    // TODO: perform some action
-}
 const onCancel = () => {
-    console.log("cancelling the modal");
     showModal.value = false
     // TODO: perform some action
 }
@@ -28,8 +26,26 @@ const onCancel = () => {
 onMounted(() => {
     // initialize flowbite
     initFlowbite()
-    // open the modal
-    // openModal()
+
+    // load quartiers if not loaded
+    if (!quartiers.value.length) {
+        loading.value = true
+        quartierApi.getQuartiers().then(response => {
+            if ('error' in response) {
+                if (response.status && response.status === 401) {
+                    router.push('/login')
+                } else if (response.status && response.status === 403) {
+                    router.push('/error/403')
+                } else {
+                    alert.value.showAlert("error", response.message, "error!!")
+                }
+                document.querySelector('button[type="submit"]').disabled = true
+            } else {
+                quartiers.value = response
+            }
+            loading.value = false
+        })
+    }
 
     // close the modal when component is unmounted
     return () => {
@@ -37,36 +53,46 @@ onMounted(() => {
     }
 })
 
-const codeZone = ref('')
-const libelleZone = ref('')
+const CodeEmplacement = ref('')
+const IDQuartierAffichage = ref('')
 const loading = ref(false)
 const buttonDisabled = ref(false)
 
 // define a function to create a new zone
-const createZone = () => {
+const createEmplacement = () => {
     // TODO: perform some action to create a new zone
-    if (!codeZone.value || !libelleZone.value) {
+    if (!CodeEmplacement.value) {
+        alert.value.showAlert("error", "Veuillez renseigner le code de l'emplacement", "error!!")
+        return
+    }
+    if (!IDQuartierAffichage.value) {
+        alert.value.showAlert("error", "Veuillez selectionner un quartier", "error!!")
         return
     }
     loading.value = true
     buttonDisabled.value = true
-    // create a new zone
-    const newZone = {
-        CodeZone: codeZone.value,
-        LibelleZone: libelleZone.value
+    // create a new emplacement
+    const newEmplacement = {
+        CodeEmplacement: CodeEmplacement.value,
+        IDQuartierAffichage: IDQuartierAffichage.value
     }
 
     // post request to the server
-    axios.post('zoneAffichages', newZone)
-    .then((response) => {
-            console.log(response)
+    axios.post('emplacementAffichage', newEmplacement)
+        .then((response) => {
             // notify the parent component
-            props.onZoneCreated()
+            props.onEmplacementCreated()
         })
         .catch((error) => {
             console.log(error)
-            if ('data' in error.response && 'detail' in error.response.data) {
-                alert.value.showAlert("error", error.response.data.detail, "error!!")                
+            if (error.response.status === 401) {
+                router.push('/login')
+            }
+            else if (error.response.status === 403) {
+                router.push('/error/403')
+            }
+            else if ('data' in error.response && 'detail' in error.response.data) {
+                alert.value.showAlert("error", error.response.data.detail, "error!!")
             }
             else {
                 alert.value.showAlert("error", error.message, "error!!")
@@ -100,28 +126,26 @@ const createZone = () => {
 
                 <form class="space-y-6" @submit.prevent="createEmplacement">
                     <div>
-                        <label for="CodeEmplacement" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Emplacement</label>
-                        <input type="text" v-model="CodeEmplacement" name="CodeEmplacement" id="CodeEmplacement" placeholder="code Emplacement"
-                            maxlength="6"
+                        <label for="CodeEmplacement"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Emplacement</label>
+                        <input type="text" v-model="CodeEmplacement" name="CodeEmplacement" id="CodeEmplacement"
+                            placeholder="code emplacement"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quartier</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Choisir le quartier</option>
-                            <option value="TV">Bonanjo</option>
-                            <option value="PC">Makepe</option>
-                            <option value="GA">Yassa</option>
-                            <option value="PH">Akwa</option>
+                        <label for="quartier"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quartier</label>
+                        <select id="quartier" v-model="IDQuartierAffichage"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option value="" disabled selected>selectionner un quartier</option>
+                            <option v-for="quartier in quartiers" :key="quartier.IDQuartierAffichage"
+                                :value="quartier.IDZoneAffichage">{{ quartier.NomQuartier }}</option>
                         </select>
+                        <div v-if="quartiers.length === 0" class="text-red-500 text-sm m-0">
+                            No quartier found.
+                        </div>
                     </div>
-<!--                     <div>
-                        <label for="quartier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle Emplacement</label>
-                        <input type="text" v-model="quartier" name="quartier" id="quartier" placeholder="Quartier"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                            required>
-                    </div> -->
                     <button type="submit" :disabled="buttonDisabled"
                         class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
                         Nouvel Emplacement</button>
@@ -134,4 +158,5 @@ const createZone = () => {
                 Decline
             </button>
         </template>
-</Modal></template>
+    </Modal>
+</template>

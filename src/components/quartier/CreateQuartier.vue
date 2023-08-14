@@ -30,7 +30,7 @@ onMounted(() => {
     initFlowbite()
 
     // load zones only if not loaded
-    if (!loadingZones.value.length){
+    if (!zones.value.length){
         loading.value = true
         quartierApi.getZones().then(response => {
             if ('error' in response) {
@@ -180,7 +180,7 @@ const createQuartier = () => {
                         :class="zones.length === 0 ? 'border-red-500' : 'border-gray-300'"
                         class="bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="" disabled selected>Select a zone</option>
-                        <option v-for="zone in zones" :key="zone.id" :value="zone.IDZoneAffichage">{{ zone.LibelleZone }}
+                        <option v-for="zone in zones" :key="zone.IDZoneAffichage" :value="zone.IDZoneAffichage">{{ zone.LibelleZone }}
                         </option>
                     </select>
                     <div v-if="zones.length === 0" class="text-red-500 text-sm m-0">
