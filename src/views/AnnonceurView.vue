@@ -25,7 +25,7 @@ const onAnnonceurCreated = () => {
                 class="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">Créer Annonceur
             </button>
         </header>
-        <main class="px-4 py-4 text-gray-800 dark:text-gray-200">
+        <main class="my-auto px-4 py-4 text-gray-800 dark:text-gray-200">
             <!-- create zone component -->
             <div class="flex items-center justify-center  overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-around text-sm text-left text-gray-500 dark:text-gray-400">

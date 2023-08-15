@@ -12,13 +12,6 @@ const props = defineProps({
     show: Boolean
 })
 const showModal = ref(props.show)
-const openModal = () => {
-    showModal.value = true
-}
-const onConfirm = () => {
-    showModal.value = false
-    // TODO: perform some action
-}
 const onCancel = () => {
     console.log("cancelling the modal");
     showModal.value = false
