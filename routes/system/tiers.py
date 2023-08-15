@@ -1,5 +1,5 @@
 import asyncio
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, UploadFile, status
 from fastapi.params import Body, Path, Query
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
@@ -18,7 +18,7 @@ async def get_tiers_by_code(CodeTiers: str = Query(...), db: Session = Depends(g
     return await asyncio.to_thread(TiersController.getByCode, db, CodeTiers)
 
 # get tiers logo
-@router.get("/tiers/{tiers_id}/logo", response_model=FileResponse, status_code=status.HTTP_200_OK)
+@router.get("/tiers/{tiers_id}/logo", response_class=FileResponse, status_code=status.HTTP_200_OK)
 async def get_tiers_logo(tiers_id: int = Path(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.getLogo, db, tiers_id)
 
@@ -41,7 +41,7 @@ async def update_tiers(tiers_id: int = Path(...), tiers: TiersUpdateSchema = Bod
 
 # update Logo
 @router.put("/tiers/{tiers_id}/logo", response_model=TiersSchema, status_code=status.HTTP_200_OK)
-async def update_logo(tiers_id: int = Path(...), logo: str = Body(...), db: Session = Depends(get_db)):
+async def update_logo(tiers_id: int = Path(...), logo: UploadFile = Body(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.updateLogo, db, tiers_id, logo)
 
 @router.patch("/tiers/{tiers_id}", response_model=TiersSchema, status_code=status.HTTP_200_OK)

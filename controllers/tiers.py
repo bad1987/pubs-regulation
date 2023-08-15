@@ -1,5 +1,5 @@
 import os
-from fastapi import HTTPException, status
+from fastapi import HTTPException, UploadFile, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from pathlib import Path
@@ -161,12 +161,29 @@ class TiersController:
     
     # update Logo method
     @classmethod
-    def updateLogo(cls, db: Session, tiers_id: int, logo: str) -> TiersSchema:
+    def updateLogo(cls, db: Session, tiers_id: int, logo: UploadFile) -> TiersSchema:
         tiers = Tiers.get(db, tiers_id)
         if not tiers:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
         try:
-            tiers = Tiers.updateLogo(db, tiers_id, logo)
+            if logo is not None:
+                # validate the uploaded logo file
+                # check the file size (max 2MB)
+                if logo.size > 2*1024*1024:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Logo file size must be less than 2MB")
+                # check the file extension
+                allowed_extensions = [".png", ".jpg", ".jpeg"]
+                _,ext = os.path.splitext(logo.filename)
+                if ext.lower() not in allowed_extensions:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid logo file extension")
+                # save the uploaded logo file to the LOGO_DIR directory
+                logo_filename = f"{tiers.CodeTiers}_{logo.filename}"
+                logo_path = LOGO_DIR / logo_filename
+                with open(logo_path, "wb") as f:
+                    f.write(logo.read())
+            else:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid logo file: no file provided")
+            tiers = Tiers.updateLogo(db, tiers_id, logo_filename)
             return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
