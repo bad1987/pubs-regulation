@@ -224,3 +224,16 @@ class TiersController:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
     
+    @classmethod
+    def cleanup_logos(db: Session):
+        # Get a list of all logo file names that are currently referenced by Tiers records
+        referenced_logos = db.query(Tiers.Logo).filter(Tiers.Logo != None).all()
+        referenced_logos = [logo[0] for logo in referenced_logos]
+
+        # Get a list of all logo files stored on the server
+        stored_logos = [f.name for f in LOGO_DIR.glob("*")]
+
+        # Delete any logo files on the server that are not in the list of referenced file names
+        for logo in stored_logos:
+            if logo not in referenced_logos:
+                (LOGO_DIR / logo).unlink()
