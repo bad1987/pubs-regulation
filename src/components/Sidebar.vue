@@ -70,10 +70,11 @@
                     <li><RouterLink to="/emplacement" :class="{ 'dark:bg-gray-700 bg-green-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Emplacement</RouterLink></li>
                     <li><RouterLink to="/annonceur" :class="{ 'dark:bg-gray-700 bg-blue-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Annonceur</RouterLink></li>
                     <li><RouterLink to="/ListeRegisseur" :class="{ 'dark:bg-gray-700 bg-blue-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Regisseur</RouterLink></li>
-                    <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Type Panneau</RouterLink></li>
+                    <li><RouterLink to="/typepanneau" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Type Panneau</RouterLink></li>
                     <li><RouterLink to="/ListePanneau" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Panneau</RouterLink></li>
-                    <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Type Enseigne</RouterLink></li>
+                    <li><RouterLink to="/typeenseigne" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Type Enseigne</RouterLink></li>
                     <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Enseigne</RouterLink></li>
+                    <li><RouterLink to="/produit" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Produit Concession</RouterLink></li>
                     <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-yellow-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Autres dispositifs publicitaires</RouterLink></li>
                     <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-red-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Taxe</RouterLink></li>
                     <li><RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-cyan-100' : route.fullPath == '/'  }" class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Table de répartition</RouterLink></li>
@@ -96,7 +97,14 @@
                       <span class="flex-1 ml-3 whitespace-nowrap">Traitement</span>
                     </RouterLink>
                   </li>
-
+                  <li v-if="!userRef.isAdmin">
+                    <RouterLink to="/" :class="{ 'dark:bg-gray-700 bg-gray-100' : route.fullPath == '/orders'  }" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
+                        </svg>
+                      <span class="flex-1 ml-3 whitespace-nowrap">Campagne</span>
+                    </RouterLink>
+                  </li>
                 <li v-if="!userRef.isAdmin">
                     <RouterLink to="/products" :class="{ 'dark:bg-gray-700 bg-gray-100' : route.fullPath == '/products'  }" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg fill="none" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

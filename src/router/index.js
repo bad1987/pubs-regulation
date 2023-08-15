@@ -17,6 +17,10 @@ const Error404 = defineAsyncComponent(() => import('../components/errors/Error40
 const ZoneView = defineAsyncComponent(() => import('../views/ZoneView.vue'))
 const QuartierView = defineAsyncComponent(() => import('../views/QuartierView.vue'))
 const EmplacementView = defineAsyncComponent(() => import('../views/EmplacementView.vue'))
+const ProduitView = defineAsyncComponent(() => import('../views/ProduitView.vue'))
+const TypeenseigneView = defineAsyncComponent(() => import('../views/TypeenseigneView.vue'))
+const TypepanneauView = defineAsyncComponent(() => import('../views/TypepanneauView.vue'))
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,6 +82,33 @@ const router = createRouter({
         sidebar: Sidebar,
         navbar: Navbar,
         default: CreatePanneau
+      }
+    },
+    {
+      path: '/typeenseigne',
+      name: 'TypeenseigneView',
+      components: {
+        sidebar: Sidebar,
+        navbar: Navbar,
+        default: TypeenseigneView
+      }
+    },
+    {
+      path: '/typepanneau',
+      name: 'TypepanneauView',
+      components: {
+        sidebar: Sidebar,
+        navbar: Navbar,
+        default: TypepanneauView
+      }
+    },
+    {
+      path: '/produit',
+      name: 'ProduitView',
+      components: {
+        sidebar: Sidebar,
+        navbar: Navbar,
+        default: ProduitView
       }
     },
     {
