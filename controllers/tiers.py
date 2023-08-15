@@ -1,8 +1,14 @@
+import os
 from fastapi import HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from pathlib import Path
 
 from models.tiers import Tiers, TypeTiers
 from schemas.TiersSchema import TiersCreateSchema, TiersSchema, TypeTiersSchema
+
+# set the path to the directory where the logo images will be stored
+LOGO_DIR = Path(__file__).parent / "logos"
 
 class TiersController:
 
@@ -35,6 +41,22 @@ class TiersController:
             return TiersSchema.model_validate(tiers)
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+    # get the logo of a Tiers
+    @classmethod
+    def getLogo(cls, db: Session, tiers_id: int) -> FileResponse:
+        try:
+            tiers = Tiers.get(db, tiers_id)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        if not tiers:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tiers not found")
+        try:
+            logo_filename = tiers.Logo
+            logo_path = LOGO_DIR / logo_filename
+            return FileResponse(logo_path)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         
     # create
     @classmethod
@@ -47,7 +69,24 @@ class TiersController:
         if Tiers.getByCode(db, tiers.CodeTiers):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="CodeTiers already exists")
         try:
-            tiers = Tiers(**tiers.model_dump())
+            tiers_data = tiers.model_dump()
+            if tiers.Logo is not None:
+                # validate the uploaded logo file
+                # check the file size (max 2MB)
+                if tiers.Logo.size > 2*1024*1024:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Logo file size must be less than 2MB")
+                # check the file extension
+                allowed_extensions = [".png", ".jpg", ".jpeg"]
+                _,ext = os.path.splitext(tiers.Logo.filename)
+                if ext.lower() not in allowed_extensions:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid logo file extension")
+                # save the uploaded logo file to the LOGO_DIR directory
+                logo_filename = f"{tiers.CodeTiers}_{tiers.Logo.filename}"
+                logo_path = LOGO_DIR / logo_filename
+                with open(logo_path, "wb") as f:
+                    f.write(tiers.Logo.read())
+                tiers_data["Logo"] = logo_filename
+            tiers = Tiers(**tiers_data)
             tiers.type_tiers = type_tiers
             tiers = Tiers.create(db, tiers)
             return TiersSchema.model_validate(tiers)

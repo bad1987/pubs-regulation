@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import APIRouter, Depends, status
 from fastapi.params import Body, Path, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from dependencies.db_dependencies import get_db
 
@@ -15,6 +16,11 @@ router = APIRouter(
 @router.get("/tiers/code", response_model=TiersSchema, status_code=status.HTTP_200_OK)
 async def get_tiers_by_code(CodeTiers: str = Query(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.getByCode, db, CodeTiers)
+
+# get tiers logo
+@router.get("/tiers/{tiers_id}/logo", response_model=FileResponse, status_code=status.HTTP_200_OK)
+async def get_tiers_logo(tiers_id: int = Path(...), db: Session = Depends(get_db)):
+    return await asyncio.to_thread(TiersController.getLogo, db, tiers_id)
 
 @router.get("/tiers/{tiers_id}", response_model=TiersSchema, status_code=status.HTTP_200_OK)
 async def get_tiers_by_id(tiers_id: int = Path(...), db: Session = Depends(get_db)):

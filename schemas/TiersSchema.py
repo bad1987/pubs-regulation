@@ -1,4 +1,5 @@
 from typing import List, Optional
+from fastapi import UploadFile
 from pydantic import BaseModel
 
 class TypeTiersSchema(BaseModel):
@@ -40,6 +41,7 @@ class TiersCreateSchema(BaseModel):
     NumCont: Optional[str]
     EmailTiers: Optional[str]
     SigleTiers: Optional[str]
+    Logo: Optional[UploadFile] = None
 
 class TiersUpdateSchema(BaseModel):
     IDTiers: Optional[int]
