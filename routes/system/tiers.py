@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from dependencies.db_dependencies import get_db
 
 from controllers.tiers import TiersController
-from schemas.TiersSchema import TiersSchema, TiersCreateSchema, TiersUpdateSchema
+from schemas.TiersSchema import TiersSchema, TiersCreateSchema, TiersUpdateSchema, TypeTiersSchema
 
 router = APIRouter(
     tags=["Tiers"],
@@ -51,3 +51,8 @@ async def update_tiers(tiers_id: int = Path(...), tiers: TiersUpdateSchema = Bod
 @router.delete("/tiers/{tiers_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_tiers(tiers_id: int = Path(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.delete, db, tiers_id)
+
+# get all type tiers
+@router.get("/tiers/type", response_model=list[TypeTiersSchema], status_code=status.HTTP_200_OK)
+async def get_all_type_tiers(db: Session = Depends(get_db)):
+    return await asyncio.to_thread(TiersController.getAllTypeTiers, db)

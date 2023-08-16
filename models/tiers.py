@@ -7,7 +7,7 @@ from db.Connexion import Base
 class TypeTiers(Base):
     __tablename__ = "TypeTiers"
     IDTypeTiers = Column(Integer, primary_key=True)
-    LibelleTypeTiers = Column(String(255))
+    LibelleTypeTiers = Column(String(255), unique=True)
 
     # get method
     @classmethod
