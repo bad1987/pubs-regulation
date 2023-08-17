@@ -20,7 +20,7 @@ const EmplacementView = defineAsyncComponent(() => import('../views/EmplacementV
 const ProduitView = defineAsyncComponent(() => import('../views/ProduitView.vue'))
 const TypeenseigneView = defineAsyncComponent(() => import('../views/TypeenseigneView.vue'))
 const TypepanneauView = defineAsyncComponent(() => import('../views/TypepanneauView.vue'))
-
+const TiersView = defineAsyncComponent(() => import('../views/TiersView.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -156,7 +156,15 @@ const router = createRouter({
         default: EmplacementView
       }
     },
-
+    {
+      path: '/tiers',
+      name: 'TiersView',
+      components: {
+        navbar: Navbar,
+        sidebar: Sidebar,
+        default: TiersView
+      }
+    },
     {
       path: '/error/403',
       name: '403',

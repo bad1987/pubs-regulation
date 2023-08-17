@@ -31,7 +31,7 @@ onMounted(() => {
 
     // Load types of tiers only if not loaded
     if (!typesOfTiers.value.length) {
-        loadingTypesOfTiers.value = true
+        loading.value = true
         quartierApi.getTypesOfTiers()
             .then(response => {
                 if ('error' in response) {
@@ -46,7 +46,6 @@ onMounted(() => {
                 } else {
                     typesOfTiers.value = response
                 }
-                loadingTypesOfTiers.value = false
                 loading.value = false
             })
     }
@@ -128,6 +127,7 @@ const createTiers = () => {
 </script>
 
 <template>
+    <vue-basic-alert ref="alert" :duration="1000" :closeIn="5000" />
     <Modal persistent v-if="showModal" @close="onCancel">
         <template #header>
             <div class="flex items-center text-lg text-center">
@@ -135,7 +135,7 @@ const createTiers = () => {
             </div>
         </template>
         <template #body>
-            <div class="px-6 py-6 lg:px-8">
+            <div class="px-6 py-6 lg:px-8 modal-body max-h-[calc(100vh-7rem)] overflow-y-auto">
                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Créer un nouveau Tiers</h3>
 
                 <div v-if="loading"
@@ -220,6 +220,12 @@ const createTiers = () => {
                     </div>
                 </form>
             </div>
+        </template>
+        <template #footer>
+            <button @click="onCancel" type="button" :disabled="buttonDisabled"
+                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                Decline
+            </button>
         </template>
     </Modal>
 </template>
