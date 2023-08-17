@@ -17,6 +17,11 @@ router = APIRouter(
 async def get_tiers_by_code(CodeTiers: str = Query(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.getByCode, db, CodeTiers)
 
+# get all type tiers
+@router.get("/tiers/type", response_model=list[TypeTiersSchema], status_code=status.HTTP_200_OK)
+async def get_all_type_tiers(db: Session = Depends(get_db)):
+    return await asyncio.to_thread(TiersController.getAllTypeTiers, db)
+
 # get tiers logo
 @router.get("/tiers/{tiers_id}/logo", response_class=FileResponse, status_code=status.HTTP_200_OK)
 async def get_tiers_logo(tiers_id: int = Path(...), db: Session = Depends(get_db)):
@@ -51,8 +56,3 @@ async def update_tiers(tiers_id: int = Path(...), tiers: TiersUpdateSchema = Bod
 @router.delete("/tiers/{tiers_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_tiers(tiers_id: int = Path(...), db: Session = Depends(get_db)):
     return await asyncio.to_thread(TiersController.delete, db, tiers_id)
-
-# get all type tiers
-@router.get("/tiers/type", response_model=list[TypeTiersSchema], status_code=status.HTTP_200_OK)
-async def get_all_type_tiers(db: Session = Depends(get_db)):
-    return await asyncio.to_thread(TiersController.getAllTypeTiers, db)
